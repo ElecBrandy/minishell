@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 20:06:11 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/07 18:22:01 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:52:53 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@
 // 	현재 일단 입력 받은 다음에, 임시파일 만들고, 그 파일에 임시 저장
 // */
 
-// char	*here_doc(t_cmd *node)
+// char	*here_doc(t_node *node)
 // {
 // 	int		out_fd;
 // 	char	*line;

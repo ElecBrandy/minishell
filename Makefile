@@ -5,8 +5,8 @@ CC = cc
 CFLAGS = -g # if with (export MallocStackLogging=1) -> catch memory leaks
 
 # Readline
-COMFILE_FLAGS = -lreadline -L${HOME}/.brew/opt/readline/lib
-OBJ_FLAGS = -I${HOME}/.brew/opt/readline/include
+COMFILE_FLAGS = -lreadline -L/usr/local/lib
+OBJ_FLAGS = -I/usr/local/include/readline
 
 # Directories
 LIB_DIR = libft/
@@ -29,6 +29,7 @@ SRCS_E = \
 	srcs/builtin/ft_cd.c        \
 	srcs/builtin/ft_env.c       \
 	srcs/builtin/ft_exit.c      \
+	srcs/builtin/ft_echo.c      \
 	srcs/builtin/ft_export.c    \
 	srcs/builtin/ft_pwd.c       \
 	srcs/builtin/ft_unset.c     \
@@ -42,9 +43,13 @@ SRCS_E = \
 	srcs/exec/process.c         \
 	srcs/exec/redirection.c     \
 	\
-	srcs/utils/node_cmd.c       
+	srcs/utils/node_cmd.c		\
+	srcs/utils/ft_free.c		\
 
-SRCS = $(SRCS_E) $(SRCS_P)
+SRCS_M = \
+	srcs/minishell.c
+
+SRCS = $(SRCS_E) $(SRCS_P) $(SRCS_M)
 
 # Objects
 OBJS = $(SRCS:.c=.o)

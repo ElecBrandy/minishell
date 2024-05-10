@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/07 19:58:25 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:52:53 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 static void close_pipe(int *fd);
 static void	wait_process(int cnt);
-static void	child_solo(t_env *env_head, t_cmd *first_node, int *cnt);
-static void	child_normal(t_env *env_head, t_cmd *node, int *cnt);
-static void	child_end(t_env *env_head, t_cmd *node, int *cnt);
+static void	child_solo(t_env *env_head, t_node *first_node, int *cnt);
+static void	child_normal(t_env *env_head, t_node *node, int *cnt);
+static void	child_end(t_env *env_head, t_node *node, int *cnt);
 // 일단 ; 제외하고... 생각ㅎ하기
 
-void	fork_process(t_env *env_head, t_cmd *node_head, int node_cnt)
+void	fork_process(t_env *env_head, t_node *node_head, int node_cnt)
 {
 	int		fork_cnt;
-	t_cmd	*cur;
+	t_node	*cur;
 
 	fork_cnt = 0;
 	cur = node_head->next;	// 첫번째 노드(헤드니까)
@@ -42,7 +42,7 @@ void	fork_process(t_env *env_head, t_cmd *node_head, int node_cnt)
 	}
 }
 
-static void	child_solo(t_env *env_head, t_cmd *node, int *cnt)
+static void	child_solo(t_env *env_head, t_node *node, int *cnt)
 {
 	pid_t	pid;
 
@@ -55,7 +55,7 @@ static void	child_solo(t_env *env_head, t_cmd *node, int *cnt)
 		(*cnt)++;
 }
 
-static void	child_normal(t_env *env_head, t_cmd *node, int *cnt)
+static void	child_normal(t_env *env_head, t_node *node, int *cnt)
 {
 	pid_t	pid;
 	int		fd[2];
@@ -79,7 +79,7 @@ static void	child_normal(t_env *env_head, t_cmd *node, int *cnt)
 	}
 }
 
-static void	child_end(t_env *env_head, t_cmd *node, int *cnt)
+static void	child_end(t_env *env_head, t_node *node, int *cnt)
 {
 	pid_t	pid;
 

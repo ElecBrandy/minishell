@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/10 16:31:58 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/10 18:38:46 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 # include <sys/wait.h>
 # include <stdio.h>
 # include <errno.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 #include <termios.h>
 # include "../libft/libft.h"
 
@@ -51,10 +51,8 @@ typedef struct s_util
 
 typedef struct s_env
 {
-	char	*line;
-	char	*key;
-	char	*value;
-	struct s_env	*next;
+	char	**array;
+    char	**array_export;
 }	t_env;
 
 /* builtin */
@@ -63,15 +61,13 @@ void	ft_cd(t_node *node);
 void	ft_echo(t_node *node);
 void	ft_env(t_env *env_head);
 void	ft_exit(t_node *node);
-void ft_export(t_env *env_head, t_node *node);
+void    ft_export(t_env *env_head, t_node *node);
 void	ft_pwd(t_node *node);
 void	ft_unset(t_node *node);
 
 /* env */
-t_env	*create_env_node(char *env_line);
-void	add_env_node_backward(t_env **head, t_env *new_node);
-int		count_env_node(t_env *head);
-t_env	*get_env(t_env *head, char **envp);
+void	*env_init(t_env *env, char **envp);
+void	copy_array(char **src, char **dst);
 
 /* node */
 t_node	*create_cmd_node(void);
@@ -89,6 +85,10 @@ void	fork_process(t_env *env_head, t_node *node_head, int node_cnt);
 char	**env_to_char(t_env *env_head);
 
 int		is_redirection(t_node *node);
+
+/* utils */
+void	ft_free(void **target);
+void	ft_free_2d(char **str);
 
 
 //minishell.c

@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 17:26:27 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/07 18:45:25 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:52:53 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	add_cmd_node_backward(t_node **head, t_node *new_node)
     }
 }
 
-int		count_cmd_node(t_node *head)
+int		count_node_node(t_node *head)
 {
 	int		count;
 	t_node	*current;

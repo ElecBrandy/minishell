@@ -6,11 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 15:14:34 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/10 17:45:59 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:57:17 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
 void	ft_free(void **target)
 {

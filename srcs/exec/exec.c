@@ -6,13 +6,13 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/10 16:33:05 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/10 17:52:53 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void exec_cmd(t_env *env_head, t_cmd *node);
+static void exec_cmd(t_env *env_head, t_node *node);
 static char	*check_path(t_env *env_head, char *cmd);
 static char	**split_paths(t_env *env_head);
 static char	*make_path(char *cmd, char **path_list);
@@ -22,7 +22,7 @@ static char	*make_path(char *cmd, char **path_list);
 	명령어 실행
 	run_cmd(env_head, node);
 */
-int run_cmd(t_env *env_head, t_cmd *node)
+int run_cmd(t_env *env_head, t_node *node)
 {
 	if (is_redirection(node) == 0) // redritection 존재하는 경우
 	{
@@ -44,7 +44,7 @@ int run_cmd(t_env *env_head, t_cmd *node)
 }
 
 // cmd 실행
-static void exec_cmd(t_env *env_head, t_cmd *node)
+static void exec_cmd(t_env *env_head, t_node *node)
 {
 	char	*path;
 	char	**cmd;

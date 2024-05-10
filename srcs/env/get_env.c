@@ -6,35 +6,59 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:19:07 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/10 15:50:00 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/10 19:02:36 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-t_env	*get_env(t_env *env_head, char **envp)
+static int count_str(char **str);
+
+int	env_init(t_env *env, char **envp)
 {
-	size_t	i;
-	t_env	*new;
-	char	**tmp;
+	if (!envp)
+		return (FALSE);
+	if (!copy_array(envp, env->array))
+		return (FALSE);
+	if (!copy_array(envp, env->array_export))
+		return (FALSE);
+	return (TRUE);
+}
+
+int	copy_array(char **src, char **dst)
+{
+	int i;
 
 	i = 0;
-	while (envp[i])
+	if (!src || !dst)
+		return (NULL);
+	while (src[i])
 	{
-		new = create_env_node(envp[i]);
-		if (!new)
-			exit(1); // Error
-		new->line = ft_strdup(envp[i]);
-		if (!new->line)
-			exit(1); // Error
-		tmp = ft_split(envp[i], '=');
-		if (!tmp)
-			exit(1); // Error
-		new->key = tmp[0];
-		new->value = tmp[1];
-		add_env_node_backward(&env_head, new);
+		dst[i] = ft_strdup(src[i]);
+		if (!dst[i])
+		{
+			while (--i >= 0)
+				ft_free((void **)&dst[i]);
+			return (FALSE);
+		}
 		i++;
 	}
-	return (env_head);
+	dst[i] = NULL;
+	return (TRUE);
+}
+
+static int count_str(char **str)
+{
+    int count;
+
+	count = 0;
+    if (str == NULL)
+        return (FALSE);
+    while (*str) // 포인터가 가리키는 곳이 NULL이 아닐 때까지 반복
+    {
+        count++;
+        str++; // 다음 문자열 포인터로 이동
+    }
+    return (count); // 문자열의 개수 반환
 }
 

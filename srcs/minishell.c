@@ -10,8 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/parsing.h"
-#include "../libft/libft.h"
+#include "minishell.h"
 
 void	sig_handler(int signal)
 {
@@ -23,14 +22,16 @@ void	sig_handler(int signal)
 	rl_redisplay();
 }
 
-void	minishell(char *av)
+void	minishell(char *av, char **envp)
 {
 	t_node	*head;
 	t_node	*node;
 	char	***str;
+	t_env	env;
 	t_util	u;
 
 	util_init(&u);
+	env_init(&env, envp);
 	str = parsing(av);
 	while (str[++u.i])
 	{
