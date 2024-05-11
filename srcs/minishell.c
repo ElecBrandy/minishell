@@ -37,56 +37,98 @@ void	sig_handler(int signal)
 	rl_redisplay();
 }
 
-void	minishell(char *av, char **envp)
-{
-	t_node	*head;
-	t_node	*node;
-	char	***str;
-	t_env	env;
-	t_util	u;
+// dongwook
 
-	util_init(&u);
-	env_init(&env, envp);
-	str = parsing(av);
-	while (str[++u.i])
-	{
-		head = make_node(head);
-		node = head;
-		while (str[u.i][++u.j])
-		{
-			if (u.j > 0)
-				node = make_node(head);
-			parsing_in_pipe(str[u.i][u.j], node);
-		}
-		u.cnt = count_node(head);
-		printf("cnt : %d\n", u.cnt);
-		fork_process(&env, node, u.cnt);
-		//execve("/usr/bin/sed", head->cmd, NULL);
-	 	//실행부
-		// int q;
-		// int k = 0;
-		// t_node *abc;
-		// abc = head;
-		// while (abc)
-		// {
-		//  	q = -1;
-		// 	printf("pipe line %d :--------\n", k++);
-		// 	if (!abc->cmd)
-		// 		printf("error\n");
-		// 	else{
-		// 		while (abc->cmd[++q])
-		// 			printf("%s  ", abc->cmd[q]);
-		// 		printf("\n");
-		// 	}
-		// 	abc = abc->next;
-		// }
-		unlink(".heredoc_tmp");
-		free_node(head);
-		head = NULL;
-	}
-	free_str_three(str);
-	str = NULL;
+// void	minishell(char *av, char **envp)
+// {
+// 	t_node	*head;
+// 	t_node	*node;
+// 	char	***str;
+// 	t_env	env;
+// 	t_util	u;
+
+// 	util_init(&u);
+// 	env_init(&env, envp);
+// 	str = parsing(av);
+// 	while (str[++u.i])
+// 	{
+// 		head = make_node(head); //dongwook
+// 		node = head;
+// 		while (str[u.i][++u.j])
+// 		{
+// 			if (u.j > 0)
+// 				node = make_node(head);
+// 			parsing_in_pipe(str[u.i][u.j], node);
+// 		}
+// 		u.cnt = count_node(head);
+// 		fprintf(stderr,"cnt : %d\n", u.cnt);
+// 		fork_process(&env, node, u.cnt);
+// 		//execve("/usr/bin/sed", head->cmd, NULL);
+// 	 	//실행부
+// 		// int q;
+// 		// int k = 0;
+// 		// t_node *abc;
+// 		// abc = head;
+// 		// while (abc)
+// 		// {
+// 		//  	q = -1;
+// 		// 	printf("pipe line %d :--------\n", k++);
+// 		// 	if (!abc->cmd)
+// 		// 		printf("error\n");
+// 		// 	else{
+// 		// 		while (abc->cmd[++q])
+// 		// 			printf("%s  ", abc->cmd[q]);
+// 		// 		printf("\n");
+// 		// 	}
+// 		// 	abc = abc->next;
+// 		// }
+// 		unlink(".heredoc_tmp");
+// 		free_node(head);
+// 		head = NULL;
+// 	}
+// 	free_str_three(str);
+// 	str = NULL;
+// }
+
+void minishell(char *av, char **envp)
+{
+    t_node *head = NULL; // 리스트의 헤드
+    t_node *node;
+    char ***str;
+    t_env env;
+    t_util u;
+
+    util_init(&u);
+    env_init(&env, envp);
+    str = parsing(av);
+    while (str[++u.i])
+    {
+        node = create_node(); // 새 노드 생성
+        if (!node) continue; // 메모리 할당 실패 시, 다음 반복으로 넘어감
+        append_node(&head, node); // 새 노드를 리스트에 추가
+
+        u.j = -1;
+        while (str[u.i][++u.j])
+        {
+            if (u.j > 0) {
+                node = create_node(); // 추가 노드 생성
+                if (!node) continue; // 메모리 할당 실패 시, 다음 반복으로 넘어감
+                append_node(&head, node); // 추가 노드를 리스트에 추가
+            }
+            parsing_in_pipe(str[u.i][u.j], node); // 파이프라인 파싱
+        }
+        u.cnt = count_node(head); // 노드 수 세기
+        fprintf(stderr, "cnt : %d\n", u.cnt);
+        fork_process(&env, node, u.cnt); // 프로세스 실행
+
+        unlink(".heredoc_tmp");
+        free_node(head); // 노드 메모리 해제
+        head = NULL; // 헤드 초기화
+    }
+    free_str_three(str); // 파싱된 문자열 해제
+    str = NULL;
 }
+
 
 int	main(int argc, char **argv, char **envp)
 {

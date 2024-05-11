@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/11 18:17:54 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/12 00:03:28 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,10 @@ void	save_in_node(t_node *node, char **cmd);
 int		find_flag(char *av, char flag);
 int		find_next_quote(char *av, int idx, char flag);
 void	util_init(t_util *util);
-t_node	*make_node(t_node *node);
+// t_node	*make_node(t_node *node); // dongwook
+t_node *create_node(void);
+void append_node(t_node **head, t_node *new_node);
+
 //parsing_free.c
 void	free_str(char **str);
 void	free_str_three(char ***str);

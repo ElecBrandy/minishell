@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 10:26:19 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/08 10:28:50 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/12 00:01:02 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,63 @@ void	util_init(t_util *util)
 	util->j = -1;
 }
 
-t_node	*make_node(t_node *head)
-{
-	t_node	*str;
-	t_node	*node;
+// dongwook
 
-	str = malloc(sizeof(t_node));
-	str->next = NULL;
-	str->cmd = NULL;
-	str->path = NULL;
-	str->in_fd = 0;
-	str->out_fd = 1;
-	if (head)
-	{
-		node = head;
-		while (node->next)
-			node = node->next;
-		node->next = str;
-	}
-	else
-		node = str;
-	return (str);
+// t_node	*make_node(t_node *head)
+// {
+// 	t_node	*str;
+// 	t_node	*node;
+
+// 	str = malloc(sizeof(t_node));
+// 	if (!str)
+// 		return (NULL);
+// 	str->next = NULL;
+// 	str->cmd = NULL;
+// 	str->path = NULL;
+// 	str->in_fd = 0;
+// 	str->out_fd = 1;
+// 	if (head)
+// 	{
+// 		node = head;
+// 		while (node->next)
+// 			node = node->next;
+// 		node->next = str;
+// 	}
+// 	else
+// 		node = str;
+// 	return (str);
+// }
+
+t_node *create_node(void)
+{
+	t_node *node;
+
+	node = malloc(sizeof(t_node));
+	if (!node)
+		return NULL;
+	node->next = NULL;
+	node->cmd = NULL;
+	node->path = NULL;
+	node->in_fd = 0;
+	node->out_fd = 1;
+	return (node);
 }
+
+void append_node(t_node **head, t_node *new_node)
+{
+	t_node	*cur;
+
+	if (!*head)
+		*head = new_node;
+	else
+	{
+		cur = *head;
+		while (cur->next)
+			cur = cur->next;
+		cur->next = new_node;
+	}
+}
+
 
 int	find_next_quote(char *av, int idx, char flag)
 {
