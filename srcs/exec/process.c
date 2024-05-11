@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/12 02:05:43 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/12 04:01:46 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,29 @@ static void	child_end(t_env *env, t_node *node, int *cnt);
 
 void	fork_process(t_env *env, t_node *node, int node_cnt)
 {
+	int	i;
 	int		fork_cnt;
 	t_node	*cur;
 
 	fork_cnt = 0;
 	cur = node;
-	fprintf(stderr, "node_cnt : %d\n", node_cnt);
+	// print_linked_list(cur);
+	// fprintf(stderr, "node_cnt : %d\n", node_cnt);
 	if (node_cnt == 0)		// 노드가 없는 경우
 		return ;
 	if (node_cnt == 1)		// pipe가 없는 경우
 		child_solo(env, cur, &fork_cnt);
 	else 					// pipe가 있는 경우
 	{
-		while (cur->next)
+		i = 0;
+		while (i < node_cnt - 1)
 		{
 			child_normal(env, cur, &fork_cnt);
 			cur = cur->next;
+			i++;
 		}
 		child_end(env, cur, &fork_cnt);
+		// fprintf(stderr, "fork_cnt : %d\n", fork_cnt);
 		wait_process(fork_cnt);
 	}
 }
@@ -50,7 +55,9 @@ static void	child_solo(t_env *env, t_node *node, int *cnt)
 		exit(1); // Error
 	if (pid == 0)
 	{
+		fprintf(stderr, "child_solo\n");
 		redirect_io(node->in_fd, node->out_fd);
+		system("lsof -p $$ >> log");
 		run_cmd(env, node);
 	}
 	else
@@ -69,6 +76,7 @@ static void	child_normal(t_env *env, t_node *node, int *cnt)
 		exit(1);	// Error
 	if (pid == 0)
 	{
+		fprintf(stderr, "child_normal\n");
 		redirect_io(node->in_fd, node->out_fd);
 		dup2(fd[1], STDOUT_FILENO);
 		close_pipe(fd);
@@ -92,6 +100,7 @@ static void	child_end(t_env *env, t_node *node, int *cnt)
 		exit(1);	// Error
 	if (pid == 0)
 	{
+		fprintf(stderr, "child_end\n");
 		system("lsof -p $$ >> log");
 		run_cmd(env, node);
 	}

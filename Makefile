@@ -5,12 +5,12 @@ CFLAGS = -g -fsanitize=address # catch segfault error
 # CFLAGS = -g # if with (export MallocStackLogging=1) -> catch memory leaks
 
 # Readline - Cluster ver
-# COMFILE_FLAGS = -lreadline -L/usr/local/lib
-# OBJ_FLAGS = -I/usr/local/include/readline
+COMFILE_FLAGS = -lreadline -L/usr/local/lib
+OBJ_FLAGS = -I/usr/local/include/readline
 
 # Readline - local ver
-COMFILE_FLAGS = -lreadline -L/opt/homebrew/opt/readline/lib
-OBJ_FLAGS = -I/opt/homebrew/opt/readline/include
+# COMFILE_FLAGS = -lreadline -L/opt/homebrew/opt/readline/lib
+# OBJ_FLAGS = -I/opt/homebrew/opt/readline/include
 
 # Directories
 LIB_DIR = libft/
@@ -46,6 +46,7 @@ SRCS_E = \
 	srcs/exec/process_utils.c   \
 	\
 	srcs/utils/ft_free.c		\
+	srcs/utils/tmp.c
 
 SRCS_M = \
 	srcs/minishell.c

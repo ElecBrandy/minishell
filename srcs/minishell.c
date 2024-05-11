@@ -23,7 +23,7 @@ void	sig_handler(int signal)
 }
 
 // dongwook
-
+// 밑밑에 수정된코드있고 아래 주석처리된 코드는 원래 코드
 // void	minishell(char *av, char **envp)
 // {
 // 	t_node	*head;
@@ -104,9 +104,9 @@ void minishell(char *av, char **envp)
 			parsing_in_pipe(str[u.i][u.j], node); // 파이프라인 파싱
 		}
 		u.cnt = count_node(head); // 노드 수 세기
-		fprintf(stderr, "cnt : %d\n", u.cnt);
+
 		// 실행하는 부분
-		fork_process(&env, node, u.cnt); // 프로세스 실행
+		fork_process(&env, head, u.cnt); // 프로세스 실행
 
 		unlink(".heredoc_tmp");
 		free_node(head); // 노드 메모리 해제
@@ -123,10 +123,10 @@ int	main(int argc, char **argv, char **envp)
 	struct termios	term;
 
 	// dongwook
-	// if (argc == 0 && argv && envp)
-	// 	exit (0);
 	if (argc != 1 && !argv && !envp)
 		exit (1); // Error
+	// if (argc == 0 && argv && envp)
+	// 	exit (0);
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
@@ -139,7 +139,7 @@ int	main(int argc, char **argv, char **envp)
 		{
 			printf("\033[1A");
 			printf("\033[10C");
-			printf(" exit\n");
+			printf(" exit\n"); // 의문의 종료
 			exit (0);
 		}
 		else if (*av == '\0')

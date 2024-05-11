@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/12 01:54:24 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/12 03:56:57 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,4 +127,6 @@ int		count_node(t_node *node);
 /* utils */
 void	ft_free(void **target);
 void	ft_free_2d(char **str);
+void	print_node_details(t_node *node);
+void	print_linked_list(t_node *head);
 #endif

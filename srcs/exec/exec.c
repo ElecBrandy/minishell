@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/12 01:22:36 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/12 03:35:52 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void exec_cmd(t_env *env, t_node *node);
 static char	*check_path(t_env *env, char *cmd);
 static char	**split_paths(t_env *env);
 static char	*make_path(char *cmd, char **path_list);
+static void	print_arry_2d(char **arr); // Error (나중에 지우기)
 
 /*
 	node 하나 잘라와서 (파이프 기준)
@@ -45,16 +46,32 @@ static void exec_cmd(t_env *env, t_node *node)
 
 	if (!env->arr)
 	{
+		fprintf(stderr, "env->arr is NULL\n");
 		exit(1); // Error
 	}
 	path = check_path(env, node->cmd[0]);
 	if (!path)
 	{
+		fprintf(stderr, "path is NULL\n");
 		exit(1); // Error
 	}
+	// fprintf(stderr, "path : %s\n", path);
+	// print_arry_2d(node->cmd);
 	if (execve(path, node->cmd, env->arr) == -1)
 	{
 		exit(1); // Error
+	}
+}
+
+static void	print_arry_2d(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i])
+	{
+		fprintf(stderr, "%s\n", arr[i]);
+		i++;
 	}
 }
 
@@ -120,7 +137,7 @@ static char	*make_path(char *cmd, char **path_list)
 		if (!tmp)
 			return (NULL);
 		path = ft_strjoin(tmp, cmd);
-		ft_free((void **)&tmp);
+		// ft_free((void **)&tmp);
 		if (!path)
 			return (NULL);
 		if (access(path, F_OK) == 0 && access(path, X_OK) == 0)
