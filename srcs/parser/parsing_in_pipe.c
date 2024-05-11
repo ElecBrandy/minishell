@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_in_pipe.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 10:26:26 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/08 10:29:41 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/12 02:49:45 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,54 +93,98 @@ char	**find_fd(char **str, t_node *node)
 	return (cmd);
 }
 
-char	*add_space(char *av)
+//dongwook
+char *add_space(char *av)
 {
-	t_util	u;
-	char	*str;
-
+	t_util u;
+	char *str;
+	int original_length;
+	// printf("원본 av : $%s$\n", av);
 	util_init(&u);
+	u.i = -1;  // 인덱스를 -1로 초기화
+
+	// 필요한 추가 공간 계산
+	original_length = ft_strlen(av);
 	while (av[++u.i])
 	{
-		if (av[u.i] == '<' || av[u.i] == '>')
+		if ((av[u.i] == '<' || av[u.i] == '>') &&
+			(av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
 		{
-			if (av[u.i + 1] != '<' && av[u.i + 1] != '>')
-				if (av[u.i + 1] != ' ')
-					u.flag++;
+			u.flag++;
 		}
 	}
-	str = malloc(sizeof(char) * ((u.flag * 2) + u.i));
+	// 메모리 할당
+	str = malloc(sizeof(char) * (original_length + (u.flag * 2) + 1));
+	if (!str)
+		return NULL;  // 메모리 할당 실패 시 NULL 반환
+
 	u.i = -1;
 	u.idx = 0;
 	while (av[++u.i])
 	{
-		if (av[u.i] == '<' || av[u.i] == '>')
+		str[u.idx++] = av[u.i];
+		if ((av[u.i] == '<' || av[u.i] == '>') &&
+			(av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
 		{
-			if (av[u.i - 1] != '<' && av[u.i - 1] != '>')
-			{
-				if (av[u.i - 1] != ' ' && u.i > 1)
-				{
-					str[u.idx] = ' ';
-					u.idx++;
-				}
-			}
+			str[u.idx++] = ' ';
 		}
-		str[u.idx] = av[u.i];
-		u.idx++;
-		if (av[u.i] == '<' || av[u.i] == '>')
-		{
-			if (!((av[u.i + 1] == '<') || (av[u.i + 1] == '>')))
-			{
-				if (av[u.i + 1] != ' ')
-				{
-					str[u.idx] = ' ';
-					u.idx++;
-				}
-			}
-		}	
 	}
-	str[u.idx] = '\0';
-	return (str);
+	str[u.idx] = '\0';  // 널 종료 문자 추가
+	// printf("변환 후str : $%s$\n", str);
+	return str;
 }
+
+
+
+// char	*add_space(char *av)
+// {
+// 	t_util	u;
+// 	char	*str;
+
+// 	printf("av : $%s$\n", av); // dongwook
+// 	util_init(&u);
+// 	while (av[++u.i])
+// 	{
+// 		if (av[u.i] == '<' || av[u.i] == '>')
+// 		{
+// 			if (av[u.i + 1] != '<' && av[u.i + 1] != '>')
+// 				if (av[u.i + 1] != ' ')
+// 					u.flag++;
+// 		}
+// 	}
+// 	str = malloc(sizeof(char) * ((u.flag * 2) + u.i));
+// 	u.i = -1;
+// 	u.idx = 0;
+// 	while (av[++u.i])
+// 	{
+// 		if (av[u.i] == '<' || av[u.i] == '>')
+// 		{
+// 			if (av[u.i - 1] != '<' && av[u.i - 1] != '>')
+// 			{
+// 				if (av[u.i - 1] != ' ' && u.i > 1)
+// 				{
+// 					str[u.idx] = ' ';
+// 					u.idx++;
+// 				}
+// 			}
+// 		}
+// 		str[u.idx] = av[u.i];
+// 		u.idx++;
+// 		if (av[u.i] == '<' || av[u.i] == '>')
+// 		{
+// 			if (!((av[u.i + 1] == '<') || (av[u.i + 1] == '>')))
+// 			{
+// 				if (av[u.i + 1] != ' ')
+// 				{
+// 					str[u.idx] = ' ';
+// 					u.idx++;
+// 				}
+// 			}
+// 		}
+// 	}
+// 	str[u.idx] = '\0';
+// 	return (str);
+// }
 
 void	parsing_in_pipe(char *av, t_node *node)
 {

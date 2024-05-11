@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:56:28 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/10 16:32:23 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/12 01:22:16 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		is_builtin(t_node *node)
 	return (0);
 }
 
-int		exec_builtin(t_env *env_head, t_node *node)
+int		exec_builtin(t_env *env, t_node *node)
 {
 	if (is_builtin(node) == 0)
 		return (0);
@@ -63,11 +63,11 @@ int		exec_builtin(t_env *env_head, t_node *node)
 	if (is_builtin(node) == 5)
 		ft_pwd(node);
 	if (is_builtin(node) == 4)
-		ft_export(env_head, node);
+		ft_export(env, node);
 	if (is_builtin(node) == 3)
 		ft_unset(node);
 	if (is_builtin(node) == 2)
-		ft_env(env_head);
+		ft_env(env);
 	if (is_builtin(node) == 1)
 		ft_exit(node);
 	return (1);

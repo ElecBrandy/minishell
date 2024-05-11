@@ -31,21 +31,20 @@ SRCS_P = \
 
 SRCS_E = \
 	srcs/builtin/ft_cd.c        \
+	srcs/builtin/ft_pwd.c       \
 	srcs/builtin/ft_env.c       \
 	srcs/builtin/ft_exit.c      \
 	srcs/builtin/ft_echo.c      \
-	srcs/builtin/ft_export.c    \
-	srcs/builtin/ft_pwd.c       \
 	srcs/builtin/ft_unset.c     \
+	srcs/builtin/ft_export.c    \
 	\
 	srcs/env/env_init.c			\
 	\
-	srcs/exec/builtin.c         \
 	srcs/exec/exec.c            \
+	srcs/exec/builtin.c         \
 	srcs/exec/process.c         \
-	srcs/exec/redirection.c     \
+	srcs/exec/process_utils.c   \
 	\
-	srcs/utils/node_cmd.c		\
 	srcs/utils/ft_free.c		\
 
 SRCS_M = \

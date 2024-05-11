@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_free.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/10 09:10:20 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/10 09:10:22 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/12 02:43:30 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	free_node(t_node *head)
 	{
 		node = head->next;
 		free_str(head->cmd);
-		free(head->path);
-		free(head);
+		ft_free((void **)&head->path);
+		ft_free((void **)&head);
 		head = node;
 	}
 }
@@ -33,7 +33,7 @@ void	free_str_three(char ***str)
 	i = -1;
 	while (str[++i])
 		free_str(str[i]);
-	free(str);
+	ft_free((void **)&str);
 }
 
 void	free_str(char **str)
@@ -41,11 +41,12 @@ void	free_str(char **str)
 	int	i;
 
 	i = -1;
+	if (!str)
+		return ;
 	while (str[++i])
 	{
-		free(str[i]);
+		ft_free((void **)&str[i]);
 		str[i] = NULL;
 	}
-	free(str);
-	str = NULL;
+	ft_free((void **)&str);
 }

@@ -12,21 +12,6 @@
 
 #include "minishell.h"
 
-int		count_node(t_node *node)
-{
-	int		cnt;
-	t_node	*cur;
-
-	cnt = 0;
-	cur = node;
-	while (cur != NULL)
-	{
-		cnt++;
-		cur = cur->next;
-	}
-	return (cnt);
-}
-
 void	sig_handler(int signal)
 {
 	if (signal == SIGINT)
@@ -92,41 +77,43 @@ void	sig_handler(int signal)
 
 void minishell(char *av, char **envp)
 {
-    t_node *head = NULL; // 리스트의 헤드
-    t_node *node;
-    char ***str;
-    t_env env;
-    t_util u;
+	t_node *head = NULL;
+	t_node *node;
+	char ***str;
+	t_env env;
+	t_util u;
 
-    util_init(&u);
-    env_init(&env, envp);
-    str = parsing(av);
-    while (str[++u.i])
-    {
-        node = create_node(); // 새 노드 생성
-        if (!node) continue; // 메모리 할당 실패 시, 다음 반복으로 넘어감
-        append_node(&head, node); // 새 노드를 리스트에 추가
+	util_init(&u);
+	env_init(&env, envp);
+	str = parsing(av);
+	while (str[++u.i])
+	{
+		node = create_node(); // 새 노드 생성
+		if (!node)
+			exit (1); // Error
+		append_node(&head, node); // 새 노드를 리스트에 추가
+		u.j = -1;
+		while (str[u.i][++u.j])
+		{
+			if (u.j > 0) {
+				node = create_node(); // 추가 노드 생성
+				if (!node)
+					exit (1); // Error
+				append_node(&head, node); // 추가 노드를 리스트에 추가
+			}
+			parsing_in_pipe(str[u.i][u.j], node); // 파이프라인 파싱
+		}
+		u.cnt = count_node(head); // 노드 수 세기
+		fprintf(stderr, "cnt : %d\n", u.cnt);
+		// 실행하는 부분
+		fork_process(&env, node, u.cnt); // 프로세스 실행
 
-        u.j = -1;
-        while (str[u.i][++u.j])
-        {
-            if (u.j > 0) {
-                node = create_node(); // 추가 노드 생성
-                if (!node) continue; // 메모리 할당 실패 시, 다음 반복으로 넘어감
-                append_node(&head, node); // 추가 노드를 리스트에 추가
-            }
-            parsing_in_pipe(str[u.i][u.j], node); // 파이프라인 파싱
-        }
-        u.cnt = count_node(head); // 노드 수 세기
-        fprintf(stderr, "cnt : %d\n", u.cnt);
-        fork_process(&env, node, u.cnt); // 프로세스 실행
-
-        unlink(".heredoc_tmp");
-        free_node(head); // 노드 메모리 해제
-        head = NULL; // 헤드 초기화
-    }
-    free_str_three(str); // 파싱된 문자열 해제
-    str = NULL;
+		unlink(".heredoc_tmp");
+		free_node(head); // 노드 메모리 해제
+		head = NULL; // 헤드 초기화
+	}
+	free_str_three(str); // 파싱된 문자열 해제
+	str = NULL;
 }
 
 
@@ -135,8 +122,11 @@ int	main(int argc, char **argv, char **envp)
 	char			*av;
 	struct termios	term;
 
-	if (argc == 0 && argv && envp)
-		exit (0);
+	// dongwook
+	// if (argc == 0 && argv && envp)
+	// 	exit (0);
+	if (argc != 1 && !argv && !envp)
+		exit (1); // Error
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
@@ -163,3 +153,4 @@ int	main(int argc, char **argv, char **envp)
 	}
 	exit (0);
 }
+
