@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/10 18:38:46 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/11 18:17:54 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,27 +32,28 @@
 
 typedef struct s_node
 {
-    char			**cmd;
-    char			*path;
-    int				in_fd;
+	char			**cmd;
+	char			*path;
+	int				in_fd;
 	int				out_fd;
-    struct s_node	*next; 
+	struct s_node	*next;
 }t_node;
 
 typedef struct s_util
 {
-    int start;
-    int end;
-    int idx;
-    int i;
-    int j;
-    int flag;
+	int	start;
+	int	end;
+	int	idx;
+	int	i;
+	int	j;
+	int	flag;
+	int	cnt;
 }t_util;
 
 typedef struct s_env
 {
-	char	**array;
-    char	**array_export;
+	char	**arr;
+	char	**arr_export;
 }	t_env;
 
 /* builtin */
@@ -61,13 +62,12 @@ void	ft_cd(t_node *node);
 void	ft_echo(t_node *node);
 void	ft_env(t_env *env_head);
 void	ft_exit(t_node *node);
-void    ft_export(t_env *env_head, t_node *node);
+void	ft_export(t_env *env_head, t_node *node);
 void	ft_pwd(t_node *node);
 void	ft_unset(t_node *node);
 
 /* env */
-void	*env_init(t_env *env, char **envp);
-void	copy_array(char **src, char **dst);
+int		env_init(t_env *env, char **envp);
 
 /* node */
 t_node	*create_cmd_node(void);
@@ -82,8 +82,6 @@ int		run_cmd(t_env *env_head, t_node *node);
 
 void	fork_process(t_env *env_head, t_node *node_head, int node_cnt);
 
-char	**env_to_char(t_env *env_head);
-
 int		is_redirection(t_node *node);
 
 /* utils */
@@ -92,7 +90,7 @@ void	ft_free_2d(char **str);
 
 
 //minishell.c
-void	minishell(char *str);
+void	minishell(char *str, char **evnp);
 void	sig_handler(int signal);
 //parsing.c
 char	***parsing(char *av);

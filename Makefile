@@ -1,12 +1,16 @@
 # Complie
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror # Norm	
-# CFLAGS = -g -fsanitize=address # catch segfault error
-CFLAGS = -g # if with (export MallocStackLogging=1) -> catch memory leaks
+# CFLAGS = -Wall -Wextra -Werror # Norm
+CFLAGS = -g -fsanitize=address # catch segfault error
+# CFLAGS = -g # if with (export MallocStackLogging=1) -> catch memory leaks
 
-# Readline
-COMFILE_FLAGS = -lreadline -L/usr/local/lib
-OBJ_FLAGS = -I/usr/local/include/readline
+# Readline - Cluster ver
+# COMFILE_FLAGS = -lreadline -L/usr/local/lib
+# OBJ_FLAGS = -I/usr/local/include/readline
+
+# Readline - local ver
+COMFILE_FLAGS = -lreadline -L/opt/homebrew/opt/readline/lib
+OBJ_FLAGS = -I/opt/homebrew/opt/readline/include
 
 # Directories
 LIB_DIR = libft/
@@ -34,12 +38,10 @@ SRCS_E = \
 	srcs/builtin/ft_pwd.c       \
 	srcs/builtin/ft_unset.c     \
 	\
-	srcs/env/env_node.c         \
-	srcs/env/get_env.c          \
+	srcs/env/env_init.c			\
 	\
 	srcs/exec/builtin.c         \
 	srcs/exec/exec.c            \
-	srcs/exec/here_doc.c        \
 	srcs/exec/process.c         \
 	srcs/exec/redirection.c     \
 	\

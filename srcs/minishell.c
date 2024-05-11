@@ -12,6 +12,21 @@
 
 #include "minishell.h"
 
+int		count_node(t_node *node)
+{
+	int		cnt;
+	t_node	*cur;
+
+	cnt = 0;
+	cur = node;
+	while (cur != NULL)
+	{
+		cnt++;
+		cur = cur->next;
+	}
+	return (cnt);
+}
+
 void	sig_handler(int signal)
 {
 	if (signal == SIGINT)
@@ -43,6 +58,9 @@ void	minishell(char *av, char **envp)
 				node = make_node(head);
 			parsing_in_pipe(str[u.i][u.j], node);
 		}
+		u.cnt = count_node(head);
+		printf("cnt : %d\n", u.cnt);
+		fork_process(&env, node, u.cnt);
 		//execve("/usr/bin/sed", head->cmd, NULL);
 	 	//실행부
 		// int q;
@@ -97,7 +115,7 @@ int	main(int argc, char **argv, char **envp)
 		else
 		{
 			add_history(av);
-			minishell(av);
+			minishell(av, envp);
 			free(av);
 		}
 	}

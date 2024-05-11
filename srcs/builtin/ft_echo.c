@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:37 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/10 18:01:00 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/11 12:34:01 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void echo_with_option(t_node *node)
 	while (node->cmd[i] && is_option(node->cmd[i])) // 옵션 넘기기
 	{
 		i++;
-	}	
+	}
 	while (node->cmd[i]) // 옵션 이후 출력
 	{
 		printf("%s", node->cmd[i]);
