@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../includes/minishell.h"
 
 void	sig_handler(int signal)
 {
@@ -77,12 +77,13 @@ void	sig_handler(int signal)
 
 void minishell(char *av, char **envp)
 {
-	t_node *head = NULL;
+	t_node *head;
 	t_node *node;
 	char ***str;
 	t_env env;
 	t_util u;
 
+	head = NULL;
 	util_init(&u);
 	env_init(&env, envp);
 	str = parsing(av);
@@ -105,9 +106,26 @@ void minishell(char *av, char **envp)
 		}
 		u.cnt = count_node(head); // 노드 수 세기
 
+		// int q;
+		// int k = 0;
+		// t_node *abc;
+		// abc = head;
+		// while (abc)
+		// {
+		//  	q = -1;
+		// 	printf("pipe line %d :--------\n", k++);
+		// 	if (!abc->cmd)
+		// 		printf("error\n");
+		// 	else{
+		// 		while (abc->cmd[++q])
+		// 			printf("%s ", abc->cmd[q]);
+		// 		printf("\n");
+		// 	}
+		// 	abc = abc->next;
+		// }
 		// 실행하는 부분
 		fork_process(&env, head, u.cnt); // 프로세스 실행
-
+		//print_linked_list(head);
 		unlink(".heredoc_tmp");
 		free_node(head); // 노드 메모리 해제
 		head = NULL; // 헤드 초기화
