@@ -62,6 +62,9 @@ static void	child_solo(t_env *env, t_node *node, int *cnt)
 	}
 	else
 		(*cnt)++;
+	while (waitpid(-1, NULL, WNOHANG) != -1)
+	{	
+	}
 }
 
 static void	child_normal(t_env *env, t_node *node, int *cnt)
