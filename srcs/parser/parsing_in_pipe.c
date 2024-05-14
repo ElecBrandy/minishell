@@ -39,7 +39,6 @@ void	is_outfd(char **str, int *i, t_node *node)
 void	is_infd(char **str, int *i, t_node *node)
 {
 	int		idx;
-	//char	*file;
 
 	idx = 0;
 	if (!str[(*i) + 1])
@@ -122,12 +121,14 @@ char *add_space(char *av)
 	u.idx = 0;
 	while (av[++u.i])
 	{
+		if ((u.i > 1) &&
+			(av[u.i] == '<' || av[u.i] == '>') &&
+			(av[u.i - 1] != '<' && av[u.i - 1] != '>' && av[u.i - 1] != ' '))
+			str[u.idx++] = ' ';
 		str[u.idx++] = av[u.i];
 		if ((av[u.i] == '<' || av[u.i] == '>') &&
 			(av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
-		{
 			str[u.idx++] = ' ';
-		}
 	}
 	str[u.idx] = '\0';  // 널 종료 문자 추가
 	// printf("변환 후str : $%s$\n", str);
@@ -194,6 +195,7 @@ void	parsing_in_pipe(char *av, t_node *node)
 	char	**cmd;
 
 	tmp = add_space(av);
+	printf("%s\n", tmp);
 	len = find_flag(tmp, ' ');
 	if (ft_find_quotes(tmp, 34) + ft_find_quotes(tmp, 39) == 0)
 		str = ft_split(tmp, ' ');
