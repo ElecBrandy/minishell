@@ -82,13 +82,14 @@ void append_node(t_node **head, t_node *new_node)
 {
 	t_node	*cur;
 
-	if (!*head)
-		*head = new_node;
+	cur = *head;
+	if (!cur)
+		(*head) = new_node;
 	else
 	{
-		cur = *head;
 		while (cur->next)
 			cur = cur->next;
+		new_node->in_fd = cur->out_fd;
 		cur->next = new_node;
 	}
 }
