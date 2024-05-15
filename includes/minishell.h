@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/15 18:02:12 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/16 02:48:08 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,4 +132,5 @@ void	ft_free(void **target);
 void	ft_free_2d(char **str);
 void	print_node_details(t_node *node);
 void	print_linked_list(t_node *head);
+int		ft_strcmp(const char *s1, const char *s2);
 #endif

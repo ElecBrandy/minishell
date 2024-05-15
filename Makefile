@@ -46,7 +46,8 @@ SRCS_E = \
 	srcs/exec/process_utils.c   \
 	\
 	srcs/utils/ft_free.c		\
-	srcs/utils/tmp.c
+	srcs/utils/tmp.c			\
+	srcs/utils/ft_strcmp.c		\
 
 SRCS_M = \
 	srcs/minishell.c

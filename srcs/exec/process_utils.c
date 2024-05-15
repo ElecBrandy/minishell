@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 00:58:04 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/15 20:28:06 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/16 02:21:46 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,8 @@ void redirect_io(int in_fd, int out_fd)
 		{
 			exit(1); // Error
 		}
-		else
-			printf("dup2 in_fd : %d\n", in_fd);
-		// close(in_fd);
+		fprintf(stderr, "in_fd : %d\n", in_fd);
+		close(in_fd);
 	}
 	if (out_fd != STDOUT)
 	{
@@ -45,9 +44,8 @@ void redirect_io(int in_fd, int out_fd)
 		{
 			exit(1); // Error
 		}
-		else
-			printf("dup2 in_fd : %d\n", in_fd);
-		// close(out_fd);
+		fprintf(stderr, "out_fd : %d\n", out_fd);
+		close(out_fd);
 	}
 }
 

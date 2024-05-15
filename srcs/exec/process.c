@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/15 21:02:45 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/16 02:51:52 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static void	child_solo(t_env *env, t_node *node, int *cnt)
 	if (pid == 0)
 	{
 		// fprintf(stderr, "child_solo\n");
-		redirect_io(node->in_fd, node->out_fd);
+		// redirect_io(node->in_fd, node->out_fd);
 		system("lsof -p $$ >> log");
 		// system("lsof -p $$ >> solo_log");
 		run_cmd(env, node);
@@ -86,18 +86,13 @@ static void	child_normal(t_env *env, t_node *node, int *cnt)
 		/*
 			만약 node->in_fd가 STDIN이 아니라면, in_fd를 STDIN으로 복사하고 in_fd는 닫는다.
 			만약 node->out_fd가 STDOUT이 아니라면, out_fd를 STDOUT으로 복사하고 out_fd는 닫는다.
-
 		*/
+
 		// fprintf(stderr, "child_normal\n");
-		// printf("node->in_fd : %d\n", node->in_fd);
-		// printf("node->out_fd : %d\n", node->out_fd);
-
-
 		dup2(fd[1], STDOUT); // 일단 출력을 fd[1]로 보내고
-		system("lsof -p $$ >> 1_log");
-		redirect_io(node->in_fd, node->out_fd); // 입출력을 설정한다.
+		// redirect_io(node->in_fd, node->out_fd); // 입출력을 설정한다.
 		close_pipe(fd);
-		system("lsof -p $$ >> 2_log");
+		system("lsof -p $$ >> log");
 		run_cmd(env, node);
 	}
 	else
@@ -118,8 +113,8 @@ static void	child_end(t_env *env, t_node *node, int *cnt)
 	if (pid == 0)
 	{
 		// fprintf(stderr, "child_end\n");
-		// redirect_io(node->in_fd, node->out_fd); <- 여기서부터 다시
-		system("lsof -p $$ >> 3_log");
+		// redirect_io(node->in_fd, node->out_fd); // <- 여기서부터 다시
+		system("lsof -p $$ >> log");
 		run_cmd(env, node);
 	}
 	else

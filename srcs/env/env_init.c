@@ -6,13 +6,14 @@
 /*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:19:07 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/12 03:31:49 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/16 02:48:19 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 static int count_str(char **str);
+static int	sort_arr_2d(char **arr);
 static int	copy_array(char **src, char **dst);
 static void	print_arry_2d(char **arr); // Error (나중에 지우기)
 
@@ -25,7 +26,6 @@ int	env_init(t_env *env, char **envp)
 		fprintf(stderr, "envp is NULL\n"); // Error
 		return (FALSE);
 	}
-
 	len = count_str(envp);
 	// fprintf(stderr, "len : %d\n", len);
 	env->arr = (char **)malloc(sizeof(char *) * (len + 1));
@@ -41,11 +41,9 @@ int	env_init(t_env *env, char **envp)
 		// 여기 free 하고 나가게 해야하나?
 		fprintf(stderr, "malloc error2\n"); // Error
 		return (FALSE);
-
 	}
 	if (!envp)
 		return (FALSE);
-
 	if (!copy_array(envp, env->arr))
 	{
 		fprintf(stderr, "copy_array error\n"); // Error
@@ -54,6 +52,11 @@ int	env_init(t_env *env, char **envp)
 	if (!copy_array(envp, env->arr_export))
 	{
 		fprintf(stderr, "copy_array error\n"); // Error
+		return (FALSE);
+	}
+	if (!sort_arr_2d(env->arr_export))
+	{
+		fprintf(stderr, "sort_arr_2d error\n"); // Error
 		return (FALSE);
 	}
 	return (TRUE);
@@ -71,6 +74,31 @@ int	env_init(t_env *env, char **envp)
 // 		i++;
 // 	}
 // }
+
+static int	sort_arr_2d(char **arr)
+{
+	int		i;
+	int		j;
+	char	*temp;
+
+	i = 0;
+	while (arr[i])
+	{
+		j = i + 1;
+		while (arr[j])
+		{
+			if (ft_strcmp(arr[i], arr[j]) > 0)
+			{
+				temp = arr[i];
+				arr[i] = arr[j];
+				arr[j] = temp;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (TRUE);
+}
 
 static int	copy_array(char **src, char **dst)
 {
