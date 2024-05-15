@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/12 03:56:57 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/15 18:02:12 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 
 # define TRUE 1
 # define FALSE 0
+
+# define STDIN 0
+# define STDOUT 1
 
 # include <unistd.h>
 # include <sys/types.h>

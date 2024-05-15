@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/04 15:14:34 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/12 02:42:05 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/15 19:06:20 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_free(void **target)
 
 void	ft_free_2d(char **str)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (str[i])

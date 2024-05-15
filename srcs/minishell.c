@@ -105,27 +105,8 @@ void minishell(char *av, char **envp)
 			parsing_in_pipe(str[u.i][u.j], node); // 파이프라인 파싱
 		}
 		u.cnt = count_node(head); // 노드 수 세기
-
-		// int q;
-		// int k = 0;
-		// t_node *abc;
-		// abc = head;
-		// while (abc)
-		// {
-		//  	q = -1;
-		// 	printf("pipe line %d :--------\n", k++);
-		// 	if (!abc->cmd)
-		// 		printf("error\n");
-		// 	else{
-		// 		while (abc->cmd[++q])
-		// 			printf("%s ", abc->cmd[q]);
-		// 		printf("\n");
-		// 	}
-		// 	abc = abc->next;
-		// }
-		// 실행하는 부분
 		fork_process(&env, head, u.cnt); // 프로세스 실행
-		//print_linked_list(head);
+		// print_linked_list(head); // 노드 다 출력
 		unlink(".heredoc_tmp");
 		free_node(head); // 노드 메모리 해제
 		head = NULL; // 헤드 초기화
