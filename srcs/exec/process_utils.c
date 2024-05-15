@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 00:58:04 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/15 19:06:44 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/15 20:28:06 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,25 @@ int		count_node(t_node *node)
 
 void redirect_io(int in_fd, int out_fd)
 {
-	if (in_fd != 0)
+	if (in_fd != STDIN)
 	{
-		if (dup2(in_fd, 0) == -1)
+		if (dup2(in_fd, STDIN) == -1)
 		{
 			exit(1); // Error
 		}
-		close(in_fd);
+		else
+			printf("dup2 in_fd : %d\n", in_fd);
+		// close(in_fd);
 	}
-	if (out_fd != 1)
+	if (out_fd != STDOUT)
 	{
-		if (dup2(out_fd, 1) == -1)
+		if (dup2(out_fd, STDOUT) == -1)
 		{
 			exit(1); // Error
 		}
-		close(out_fd);
+		else
+			printf("dup2 in_fd : %d\n", in_fd);
+		// close(out_fd);
 	}
 }
 
