@@ -3,28 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 10:26:19 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/15 14:08:07 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/16 18:23:04 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-void	save_in_node(t_node *node, char **cmd)
-{
-	int	i;
-
-	i = 0;
-	while (cmd[i])
-		i++;
-	node->cmd = malloc(sizeof(char *) * (i + 1));
-	i = -1;
-	while (cmd[++i])
-		node->cmd[i] = ft_strdup(cmd[i]);
-	node->cmd[i] = NULL;
-}
 
 void	util_init(t_util *util)
 {
@@ -34,66 +20,8 @@ void	util_init(t_util *util)
 	util->idx = -1;
 	util->flag = 0;
 	util->j = -1;
+	util->cnt = 0;
 }
-
-// dongwook
-
-// t_node	*make_node(t_node *head)
-// {
-// 	t_node	*str;
-// 	t_node	*node;
-
-// 	str = malloc(sizeof(t_node));
-// 	if (!str)
-// 		return (NULL);
-// 	str->next = NULL;
-// 	str->cmd = NULL;
-// 	str->path = NULL;
-// 	str->in_fd = 0;
-// 	str->out_fd = 1;
-// 	if (head)
-// 	{
-// 		node = head;
-// 		while (node->next)
-// 			node = node->next;
-// 		node->next = str;
-// 	}
-// 	else
-// 		node = str;
-// 	return (str);
-// }
-
-t_node *create_node(void)
-{
-	t_node *node;
-
-	node = malloc(sizeof(t_node));
-	if (!node)
-		return NULL;
-	node->next = NULL;
-	node->cmd = NULL;
-	node->path = NULL;
-	node->in_fd = 0;
-	node->out_fd = 1;
-	return (node);
-}
-
-void append_node(t_node **head, t_node *new_node)
-{
-	t_node	*cur;
-
-	cur = *head;
-	if (!cur)
-		(*head) = new_node;
-	else
-	{
-		while (cur->next)
-			cur = cur->next;
-		new_node->in_fd = cur->out_fd;
-		cur->next = new_node;
-	}
-}
-
 
 int	find_next_quote(char *av, int idx, char flag)
 {
@@ -123,4 +51,13 @@ int	find_flag(char *av, char flag)
 			idx = find_next_quote(av, idx, 39);
 	}
 	return (len);
+}
+
+int	ft_max(int a, int b)
+{
+	if (a > b)
+		return (a);
+	else if (a < b)
+		return (b);
+	return (a);
 }

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_delquote.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/16 18:23:22 by dongeunk          #+#    #+#             */
+/*   Updated: 2024/05/16 18:23:50 by dongeunk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 char	**check_cmd(char **av)
@@ -44,44 +56,66 @@ char	**split_space(char *av, int len)
 	return (str);
 }
 
-char    *del_quote(char *av)
+int	find_cut(char *av)
+{
+	int	cut;
+	int	i;
+
+	i = -1;
+	cut = 0;
+	while (av[++i])
+	{
+		if (av[i] == 34)
+		{
+			i = find_next_quote(av, i, 34);
+			cut += 2;
+		}
+		if (av[i] == 39)
+		{
+			i = find_next_quote(av, i, 39);
+			cut += 2;
+		}
+	}
+	return (cut);
+}
+
+void	del_q(char *av, char *str, t_util *u)
+{
+	if (av[u->i] == 39)
+	{
+		if (u->flag == 0)
+			u->flag = 1;
+		else if (u->flag == 3)
+			str[++(u->idx)] = av[u->i];
+		else
+			u->flag = 0;
+	}
+	else if (av[u->i] == 34)
+	{
+		if (u->flag == 0)
+			u->flag = 3;
+		else if (u->flag == 1)
+			str[++(u->idx)] = av[u->i];
+		else
+			u->flag = 0;
+	}
+	else
+		str[++(u->idx)] = av[u->i];
+}
+
+char	*del_quote(char *av)
 {
 	t_util	u;
 	int		cut;
 	char	*str;
 
-	cut = 0;
+	cut = find_cut(av);
 	util_init(&u);
-	while (av[++u.i])
-	{
-		// if (av[i] == 34) // "" $
-		// {
-		// 	i = find_next_quote(av, i, 34);
-		// 	cut += 2;
-		// }
-		if (av[u.i] == 39)
-		{
-			u.i = find_next_quote(av, u.i, 39);
-			cut += 2;
-		}
-	}
-	str = malloc(sizeof(char) * (u.i - cut + 1));
+	str = malloc(sizeof(char) * (ft_strlen(av) - cut + 1));
 	u.i = -1;
 	while (av[++u.i])
 	{
-		if (av[u.i] == 39)
-		{
-			if (u.flag == 0)
-			{
-				u.flag = 1;
-			}
-			else
-			{
-				u.flag = 0;
-			}
-		}
-		else
-			str[++u.idx] = av[u.i];
+		del_q(av, str, &u);
 	}
 	str[++u.idx] = '\0';
 	return (str);

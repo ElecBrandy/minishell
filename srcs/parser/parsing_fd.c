@@ -63,57 +63,33 @@ void	check_infile(char **str, int *i, t_node *node)
 	}
 }
 
-void	heredoc_process(char **str, int *i, t_node *node)
+void	only_open(char **str, int *i)
 {
-	char	*av;
-	char	*limiter;
-
-	limiter = del_quote(str[(*i)]);
-	while (1)
-	{
-		av = readline("> ");
-		if (!av)
-		{
-			free(av);
-			break ;
-		}
-		else if (*av == '\0')
-			free(av);
-		else
-		{
-			add_history(av);
-			if ((ft_strncmp(limiter, av, ft_strlen(limiter)) == 0)
-				&& (ft_strlen(limiter) == ft_strlen(av)))
-				break ;
-			write(node->in_fd, av, ft_strlen(av));
-			write(node->in_fd, "\n", 1);
-			free(av);
-		}
-		if (!str)
-			break ;
-	}
-	free(limiter);
-	free(av);
+	open(str[(*i) + 1], O_RDWR | O_CREAT | O_APPEND, 0666);
+	close(open(str[(*i) + 1], O_RDWR | O_CREAT | O_APPEND, 0666));
+	*i += 1;
 }
 
-void	heredoc_infile(char **str, int *i, t_node *node)
+void	is_infd(char **str, int *i, t_node *node, t_env e)
 {
-	struct termios	ter;
-
-	tcgetattr(STDIN_FILENO, &ter);
-	ter.c_lflag &= ~(ECHOCTL);
-	tcsetattr(STDIN_FILENO, TCSANOW, &ter);
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, SIG_IGN);
-	unlink(".heredoc_tmp");
-	if (node->in_fd != 0)
-		close(node->in_fd);
-	node->in_fd = open(".heredoc_tmp", O_RDWR | O_CREAT | O_APPEND, 0666);
-	if (node->in_fd == -1)
+	if (!str[(*i) + 1])
+		perror("nnnn");
+	else
 	{
-		perror("minishell");
-		exit (1);
+		if (str[(*i) + 1][0] == '<' || str[(*i) + 1][0] == '>')
+		{
+			perror("not file in");
+			return ;
+		}
+		if (ft_strlen(str[*i]) == 1)
+			check_infile(str, i, node);
+		else if (ft_strncmp(str[*i], "<<", ft_strlen(str[*i])) == 0)
+			heredoc_infile(str, i, node, e);
+		else if (str[*i][1] == '>')
+			only_open(str, i);
+		else
+		{
+			perror("notfile error2");
+		}
 	}
-	*i += 1;
-	heredoc_process(str, i, node);
 }

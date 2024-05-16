@@ -8,10 +8,6 @@ CFLAGS = -g -fsanitize=address # catch segfault error
 COMFILE_FLAGS = -lreadline -L/usr/local/lib
 OBJ_FLAGS = -I/usr/local/include/readline
 
-# Readline - local ver
-# COMFILE_FLAGS = -lreadline -L/opt/homebrew/opt/readline/lib
-# OBJ_FLAGS = -I/opt/homebrew/opt/readline/include
-
 # Directories
 LIB_DIR = libft/
 INC_DIR = includes/
@@ -22,12 +18,16 @@ LIB = -L$(LIB_DIR) -lft
 
 # Sources
 SRCS_P = \
-	srcs/parser/parsing.c           \
-	srcs/parser/parsing_free.c      \
-	srcs/parser/parsing_in_pipe.c   \
-	srcs/parser/parsing_fd.c        \
-	srcs/parser/parsing_utils.c     \
 	srcs/parser/parsing_delquote.c  \
+	srcs/parser/parsing_dollar_util.c	\
+	srcs/parser/parsing_dollar.c	\
+	srcs/parser/parsing_fd.c        \
+	srcs/parser/parsing_free.c      \
+	srcs/parser/parsing_heredoc.c	\
+	srcs/parser/parsing_in_pipe.c   \
+	srcs/parser/parsing_node.c      \
+	srcs/parser/parsing_utils.c     \
+	srcs/parser/parsing.c           \
 
 SRCS_E = \
 	srcs/builtin/ft_cd.c        \
@@ -46,8 +46,7 @@ SRCS_E = \
 	srcs/exec/process_utils.c   \
 	\
 	srcs/utils/ft_free.c		\
-	srcs/utils/tmp.c			\
-	srcs/utils/ft_strcmp.c		\
+	srcs/utils/tmp.c
 
 SRCS_M = \
 	srcs/minishell.c

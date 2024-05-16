@@ -29,6 +29,5 @@ char	*ft_strjoin(char *s1, char *s2)
 	ft_memcpy(word, s1, len1);
 	ft_memcpy(word + len1, s2, len2);
 	word[len1 + len2] = 0;
-	free(s1);
 	return (word);
 }
