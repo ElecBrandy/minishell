@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 20:03:28 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/17 02:13:03 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,22 +55,16 @@ typedef struct s_util
 
 typedef struct s_env
 {
-	char	**arr;
-	char	**arr_export;
-}	t_env;
-
-typedef struct s_data
-{
 	char	*cmd;
 	char	*key;
 	char	*value;
-	struct s_data	*next;
-}	t_data;
+	struct s_env	*next;
+}	t_env;
 
 /* ↓↓↓↓↓ ======== EXEC ======== ↓↓↓↓↓ */
 
 /* minishell.c */
-void	minishell(char *str, char **evnp);
+void	minishell(char *av, t_env *head_env);
 void	sig_handler(int signal);
 
 /* parsing.c */
@@ -91,7 +85,6 @@ void	save_in_node(t_node *node, char **cmd);
 int		find_flag(char *av, char flag);
 int		find_next_quote(char *av, int idx, char flag);
 void	util_init(t_util *util);
-// t_node	*make_node(t_node *node); // dongwook
 t_node	*create_node(void);
 void	append_node(t_node **head, t_node *new_node);
 
@@ -115,28 +108,31 @@ char	**check_cmd(char **av);
 void	ft_cat(t_node *node);
 void	ft_cd(t_node *node);
 void	ft_echo(t_node *node);
-void	ft_env(t_data *data);
+void	ft_env(t_env *head_env);
 void	ft_exit(t_node *node);
 void	ft_export(t_env *env, t_node *node);
 void	ft_pwd(t_node *node);
 void	ft_unset(t_node *node);
 
 /* env */
-t_data	*create_node_env(const char *cmd, const char *key, const char *value);
-void	append_node_env(t_data **head, t_data *new_node);
-t_data	*envp_to_linkedlist(t_data *head, char **envp);
-void	print_env_list(t_data *head);
-char 	**env_to_arr(t_data *head);
+t_env	*create_node_env(const char *cmd, const char *key, const char *value);
+void	append_node_env(t_env **head, t_env *new_node);
+t_env	*env_array_to_list(t_env *head, char **envp);
+char	**env_list_to_array(t_env *head_env);
+int		count_env(t_env *head_env);
+void	free_env_list(t_env *head);
 
 /* exec */
 int		is_builtin(t_node *node);
-int		exec_builtin(t_env *env, t_node *node, t_data *data);
-int		run_cmd(t_env *env, t_node *node, t_data *data);
-void	fork_process(t_env *env, t_node *node, int node_cnt, t_data *data);
+int		exec_builtin(t_env *env, t_node *node);
+int		run_cmd(t_env *env, t_node *node);
+void	fork_process(t_env *env, t_node *node, int node_cnt);
 void	wait_process(int cnt);
 void	close_pipe(int *fd);
 void	redirect_io(int in_fd, int out_fd);
 int		count_node(t_node *node);
+void	head_env_chk(t_env *head_env, int i);
+void	print_env_list(t_env *head_env);
 
 /* utils */
 void	ft_free(void **target);

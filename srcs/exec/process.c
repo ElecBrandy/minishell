@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 18:56:28 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/17 00:33:49 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,9 @@ static void	child_solo(t_env *head_env, t_node *node, int *cnt)
 	{
 		// fprintf(stderr, "child_solo\n");
 		// redirect_io(node->in_fd, node->out_fd);
-		system("lsof -p $$ >> log");
+		// system("lsof -p $$ >> log");
 		// system("lsof -p $$ >> solo_log");
+		head_env_chk(head_env, 100); // chk
 		run_cmd(head_env, node);
 	}
 	else
@@ -91,7 +92,7 @@ static void	child_normal(t_env *head_env, t_node *node, int *cnt)
 		dup2(fd[1], STDOUT); // 일단 출력을 fd[1]로 보내고
 		// redirect_io(node->in_fd, node->out_fd); // 입출력을 설정한다.
 		close_pipe(fd);
-		system("lsof -p $$ >> log");
+		// system("lsof -p $$ >> log");
 		run_cmd(head_env, node);
 	}
 	else
@@ -113,7 +114,7 @@ static void	child_end(t_env *head_env, t_node *node, int *cnt)
 	{
 		// fprintf(stderr, "child_end\n");
 		// redirect_io(node->in_fd, node->out_fd); // <- 여기서부터 다시
-		system("lsof -p $$ >> log");
+		// system("lsof -p $$ >> log");
 		run_cmd(head_env, node);
 	}
 	else

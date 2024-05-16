@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:15 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 18:28:17 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:42:46 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,25 @@ static void print_2d_array(char **str);
 
 void ft_export(t_env *env, t_node *node)
 {
-	int i;
+	// int i;
 
-	i = 0;
-	if (!env->arr_export)
-	{
-		exit(1); // Error
-	}
-	if (ft_strlen(node->cmd[0]) == 6 && ft_strncmp(node->cmd[0], "export", 6) == 0) // 오직 export 만 들어온 경우
-	{
-		while (env->arr_export[i])
-		{
-			printf("declare -x %s\n", env->arr_export[i]);
-			i++;
-		}
-	}
-	else // export 다음에 변수가 들어온 경우
-	{
+	// i = 0;
+	// if (!env->arr_export)
+	// {
+	// 	exit(1); // Error
+	// }
+	// if (ft_strlen(node->cmd[0]) == 6 && ft_strncmp(node->cmd[0], "export", 6) == 0) // 오직 export 만 들어온 경우
+	// {
+	// 	while (env->arr_export[i])
+	// 	{
+	// 		printf("declare -x %s\n", env->arr_export[i]);
+	// 		i++;
+	// 	}
+	// }
+	// else // export 다음에 변수가 들어온 경우
+	// {
 		printf("add ENV\n");	// 여기서 변수를 추가해주는 작업을 해야함
-	}
+	// }
 	exit(1);
 }
 

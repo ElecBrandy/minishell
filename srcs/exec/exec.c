@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 20:01:07 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/17 02:04:08 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@ static char	*make_path(char *cmd, char **path_list);
 
 static void	print_arry_2d(char **arr);
 
+void head_env_chk(t_env *head_env, int i)
+{
+	if (head_env == NULL)
+	{
+		fprintf(stderr, "head_env is NULL\n");
+		fprintf(stderr, "i : %d\n", i);
+		exit(1); // Error
+	}
+}
 
 /*
 	node 하나 잘라와서 (파이프 기준)
@@ -29,10 +38,11 @@ int run_cmd(t_env *head_env, t_node *node)
 {
 	if (is_builtin(node) != 0) // builtin 일 경우
 	{
-		exec_builtin(head_env, node, data);
+		exec_builtin(head_env, node);
 	}
 	else // builtin 아니라 일반 함수인 경우
 	{
+		head_env_chk(head_env, 0); // chk
 		exec_cmd(head_env, node);
 	}
 	return (0);
@@ -43,12 +53,16 @@ static void exec_cmd(t_env *head_env, t_node *node)
 {
 	char	*path;
 	char	**cmd;
-	char 	**tmp
+	char 	**tmp;
 
 	// 환경변수를 이중배열로 변환
-	tmp = env_to_arr(head_env);
-	printf("exec_cmd\n");
-	print_2d_array(tmp);
+	head_env_chk(head_env, 1); //chk
+	// print_env_list(head_env); // 연결리스트 출력
+	head_env_chk(head_env, 2); // chk
+	tmp = env_list_to_array(head_env);
+	head_env_chk(head_env, 3); // chk
+	// printf("exec_cmd\n");
+	// print_2d_array(tmp);
 	if (!head_env)
 	{
 		fprintf(stderr, "env is NULL\n");
@@ -63,6 +77,20 @@ static void exec_cmd(t_env *head_env, t_node *node)
 	if (execve(path, node->cmd, tmp) == -1)
 	{
 		exit(1); // Error
+	}
+}
+
+void print_env_list(t_env *head_env)
+{
+	t_env *cur;
+
+	cur = head_env;
+	while (cur)
+	{
+		fprintf(stderr, "cmd : %s\n", cur->cmd);
+		fprintf(stderr, "key : %s\n", cur->key);
+		fprintf(stderr, "value : %s\n", cur->value);
+		cur = cur->next;
 	}
 }
 
@@ -110,6 +138,12 @@ static char	**split_paths(char **env)
 	i = 0;
 	if (env == NULL)
 		return (NULL);
+	// while (env[i])
+	// {
+	// 	printf("env[%d] : %s\n", i, env[i]);
+	// 	i++;
+	// }
+	i = 0;
 	while (env[i] && ft_strncmp("PATH=", env[i], 5) != 0)
 		i++;
 	path_list = ft_split(env[i] + 5, ':');

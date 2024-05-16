@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:56:28 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 17:05:06 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:44:22 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		is_builtin(t_node *node)
 	return (0);
 }
 
-int		exec_builtin(t_env *env, t_node *node, t_data *data)
+int		exec_builtin(t_env *env, t_node *node)
 {
 	if (is_builtin(node) == 0)
 		return (0);
@@ -67,7 +67,7 @@ int		exec_builtin(t_env *env, t_node *node, t_data *data)
 	if (is_builtin(node) == 3)
 		ft_unset(node);
 	if (is_builtin(node) == 2)
-		ft_env(data);
+		ft_env(env);
 	if (is_builtin(node) == 1)
 		ft_exit(node);
 	return (1);

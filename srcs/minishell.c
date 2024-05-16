@@ -22,25 +22,20 @@ void	sig_handler(int signal)
 	rl_redisplay();
 }
 
-void minishell(char *av, char **envp)
+void minishell(char *av, t_env *head_env)
 {
 	t_node *head;
 	t_node *node;
 	char ***str;
-	t_env env;
 	t_util u;
-	t_data *head_env;
 	
 	head = NULL;
-	head_env = NULL;
+
 	util_init(&u);
 	str = parsing(av);
-
-	/* ======= 환경변수 받아서 연결리스트로 변환하기 ====== */
-	head_env = envp_to_linkedlist(head_env, envp);
-	print_env_list(head_env); // 연결리스트 출력
 	while (str[++u.i])
 	{
+		head_env_chk(head_env, 150);
 		node = create_node(); // 새 노드 생성
 		if (!node)
 			exit (1); // Error
@@ -58,7 +53,7 @@ void minishell(char *av, char **envp)
 		}
 		u.cnt = count_node(head); // 노드 수 세기
 		fork_process(head_env, head, u.cnt); // 프로세스 실행
-		// print_linked_list(head); // 노드 다 출력
+		head_env_chk(head_env, 160);
 		unlink(".heredoc_tmp");
 		free_node(head); // 노드 메모리 해제
 		head = NULL; // 헤드 초기화
@@ -71,6 +66,7 @@ int	main(int argc, char **argv, char **envp)
 {
 	char			*av;
 	struct termios	term;
+	t_env			*head_env;
 
 	if (argc != 1 && !argv && !envp)
 		exit (1); // Error
@@ -79,6 +75,12 @@ int	main(int argc, char **argv, char **envp)
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	signal(SIGINT, sig_handler);				// CTRL + c
 	signal(SIGQUIT, SIG_IGN);					// CTRL + /
+	
+	/* ====== 환경변수 받아서 연결리스트로 변환하기 ====== */
+	head_env = NULL;
+	head_env = env_array_to_list(head_env, envp);
+	// print_env_list(head_env); // 연결리스트 출력
+
 	while (1)
 	{
 		av = readline("nimishell$ ");
@@ -94,10 +96,9 @@ int	main(int argc, char **argv, char **envp)
 		else
 		{
 			add_history(av);
-			minishell(av, envp);
+			minishell(av, head_env);
 			free(av);
 		}
 	}
 	exit (0);
 }
-
