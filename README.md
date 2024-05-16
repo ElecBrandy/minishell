@@ -1,6 +1,6 @@
 # minishell
 
-## 05.15
+## 05.16
 ### ~~1. 의문의 엔터 (완)~~
 - 미니쉘 진입 후 예를 들어 `cat a.txt`시 결과가 나온 히후 다시 nimishell$ 문구와 함께 명령어를 입력하려면 엔터를 한번 더 쳐야 진입이 가능했던 것
 - 파이프가 없을 경우 자식 프로세서를 기다리지않고 부모프로세서가 먼저 시작해서 그런 경우 -> **`wait_process`를 통해서 자식 프로세서가 끝나는 것을 기다리고 실행되게 끔 수정**
@@ -16,61 +16,12 @@
 - 그래서 자식 프로세스에서 노드 입출력을 적용할 경우 통신이 끊겨 무한 로딩 나는 경우 발생
 - 해당 함수 주석 처리하고, 리다이렉션 없는 경우 정상 동작
 
-#### 예시
-``` C
-cat a.txt | cat a.txt | cat a.txt | cat a.txt | grep a
-cat a.txt
-cat a.txt
-cat a.txt
-cat a.txt
-grep a
-fork_cnt : 5
-saf
-asdf
-asdf
-safdsa
+### 4. libft 수정
+- strjoin free(s1)제거
 
---- Node 0 ---
-Node details:
-Path: None
-in_fd: 0, out_fd: 1
-Commands:
-  cmd[0]: cat
-  cmd[1]: a.txt
+### Makefile 수정
+- c파일 추가
 
-
---- Node 1 ---
-Node details:
-Path: None
-in_fd: 1, out_fd: 1
-Commands:
-  cmd[0]: cat
-  cmd[1]: a.txt
-
-
---- Node 2 ---
-Node details:
-Path: None
-in_fd: 1, out_fd: 1
-Commands:
-  cmd[0]: cat
-  cmd[1]: a.txt
-
-
---- Node 3 ---
-Node details:
-Path: None
-in_fd: 1, out_fd: 1
-Commands:
-  cmd[0]: cat
-  cmd[1]: a.txt
-
-
---- Node 4 ---
-Node details:
-Path: None
-in_fd: 1, out_fd: 1
-Commands:
-  cmd[0]: grep
-  cmd[1]: a
-```
+### parsing 수정
+- $표시부분 환경변수로 치환
+- 주석을 제외한 거의 모든 부분 norm검사 통과
