@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 02:48:08 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/16 20:03:28 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,14 @@ typedef struct s_env
 	char	**arr_export;
 }	t_env;
 
+typedef struct s_data
+{
+	char	*cmd;
+	char	*key;
+	char	*value;
+	struct s_data	*next;
+}	t_data;
+
 /* ↓↓↓↓↓ ======== EXEC ======== ↓↓↓↓↓ */
 
 /* minishell.c */
@@ -103,25 +111,28 @@ char	**split_space(char *av, int len);
 char	**check_cmd(char **av);
 
 /* ↓↓↓↓↓ ======== EXEC ======== ↓↓↓↓↓ */
-
 /* builtin */
 void	ft_cat(t_node *node);
 void	ft_cd(t_node *node);
 void	ft_echo(t_node *node);
-void	ft_env(t_env *env);
+void	ft_env(t_data *data);
 void	ft_exit(t_node *node);
 void	ft_export(t_env *env, t_node *node);
 void	ft_pwd(t_node *node);
 void	ft_unset(t_node *node);
 
 /* env */
-int		env_init(t_env *env, char **envp);
+t_data	*create_node_env(const char *cmd, const char *key, const char *value);
+void	append_node_env(t_data **head, t_data *new_node);
+t_data	*envp_to_linkedlist(t_data *head, char **envp);
+void	print_env_list(t_data *head);
+char 	**env_to_arr(t_data *head);
 
 /* exec */
 int		is_builtin(t_node *node);
-int		exec_builtin(t_env *env, t_node *node);
-int		run_cmd(t_env *env, t_node *node);
-void	fork_process(t_env *env, t_node *node, int node_cnt);
+int		exec_builtin(t_env *env, t_node *node, t_data *data);
+int		run_cmd(t_env *env, t_node *node, t_data *data);
+void	fork_process(t_env *env, t_node *node, int node_cnt, t_data *data);
 void	wait_process(int cnt);
 void	close_pipe(int *fd);
 void	redirect_io(int in_fd, int out_fd);
@@ -133,4 +144,5 @@ void	ft_free_2d(char **str);
 void	print_node_details(t_node *node);
 void	print_linked_list(t_node *head);
 int		ft_strcmp(const char *s1, const char *s2);
+void    *ft_realloc(void *ptr, int original_size, int new_size);
 #endif

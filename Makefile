@@ -39,6 +39,7 @@ SRCS_E = \
 	srcs/builtin/ft_export.c    \
 	\
 	srcs/env/env_init.c			\
+	srcs/env/env_util.c			\
 	\
 	srcs/exec/exec.c            \
 	srcs/exec/builtin.c         \
@@ -48,6 +49,7 @@ SRCS_E = \
 	srcs/utils/ft_free.c		\
 	srcs/utils/tmp.c			\
 	srcs/utils/ft_strcmp.c		\
+	srcs/utils/ft_realloc.c
 
 SRCS_M = \
 	srcs/minishell.c
