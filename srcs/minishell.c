@@ -6,7 +6,7 @@
 /*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:28:09 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/05 17:29:36 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/17 09:37:19 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ void minishell(char *av, char **envp)
 					exit (1); // Error
 				append_node(&head, node); // 추가 노드를 리스트에 추가
 			}
-			parsing_in_pipe(str[u.i][u.j], node); // 파이프라인 파싱
+			parsing_in_pipe(str[u.i][u.j], node, env); // 파이프라인 파싱
 		}
 		u.cnt = count_node(head); // 노드 수 세기
 		fork_process(&env, head, u.cnt); // 프로세스 실행
