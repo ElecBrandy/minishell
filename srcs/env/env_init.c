@@ -6,13 +6,12 @@
 /*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:19:07 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 02:48:19 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/17 09:35:22 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int count_str(char **str);
 static int	sort_arr_2d(char **arr);
 static int	copy_array(char **src, char **dst);
 static void	print_arry_2d(char **arr); // Error (나중에 지우기)
@@ -122,7 +121,7 @@ static int	copy_array(char **src, char **dst)
 	return (TRUE);
 }
 
-static int count_str(char **str)
+int	count_str(char **str)
 {
 	int count;
 
