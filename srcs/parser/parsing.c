@@ -30,7 +30,7 @@ char	*save_in(char *av, t_util *util)
 	str = ft_strldup(av, util->start, util->end);
 	str = ft_strtrim(str, " ");
 	if (!str)
-		exit(1);
+		return (NULL);
 	util->start = util->end + 2;
 	return (str);
 }

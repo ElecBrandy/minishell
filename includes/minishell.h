@@ -58,11 +58,13 @@ typedef struct s_env
 	char	**arr_export;
 }	t_env;
 
-/* ↓↓↓↓↓ ======== EXEC ======== ↓↓↓↓↓ */
-
+int		g_errnum;
+/* ↓↓↓↓↓ ======== PARSER ======== ↓↓↓↓↓ */
 /* minishell.c */
 void	minishell(char *str, char **evnp);
 void	sig_handler(int signal);
+void	readline_minishell(char **envp);
+int		parsing_minishell(t_node **head, char **str, t_env env);
 
 /* parsing_delquote.c */
 char	*del_quote(char *av);
@@ -103,7 +105,7 @@ char	*heredoc_check_dollar(char *av, t_env e);
 int		heredoc_readline(char *av, char *limiter, t_node *node, t_env e);
 
 /* parsing_in_pipe.c */
-void	parsing_in_pipe(char *av, t_node *node, t_env env);
+int		parsing_in_pipe(char *av, t_node *node, t_env env);
 char	*add_space(char *av);
 char	**find_fd(char **str, t_node *node, t_env e);
 int		get_flagcnt(char *av);
@@ -129,7 +131,6 @@ char	*save_in(char *av, t_util *util);
 int		find_other(char *av, int idx);
 
 /* ↓↓↓↓↓ ======== EXEC ======== ↓↓↓↓↓ */
-
 /* builtin */
 void	ft_cat(t_node *node);
 void	ft_cd(t_node *node);

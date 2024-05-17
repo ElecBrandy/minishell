@@ -105,7 +105,7 @@ char	*add_space(char *av)
 	return (str);
 }
 
-void	parsing_in_pipe(char *av, t_node *node, t_env env)
+int	parsing_in_pipe(char *av, t_node *node, t_env env)
 {
 	int		len;
 	char	*tmp;
@@ -113,11 +113,15 @@ void	parsing_in_pipe(char *av, t_node *node, t_env env)
 	char	**cmd;
 
 	tmp = add_space(av);
+	if (!tmp)
+		return (1);
 	len = find_flag(tmp, ' ');
 	if (ft_find_quotes(tmp, 34) + ft_find_quotes(tmp, 39) == 0)
 		str = ft_split(tmp, ' ');
 	else
 		str = split_space(tmp, len);
+	if (!str) //free(tmp);
+		return (1);
 	cmd = check_dollar(str, env);
 	cmd = check_cmd(cmd);
 	cmd = find_fd(cmd, node, env);
@@ -125,4 +129,5 @@ void	parsing_in_pipe(char *av, t_node *node, t_env env)
 	free(tmp);
 	free_str(str);
 	free_str(cmd);
+	return (0);
 }

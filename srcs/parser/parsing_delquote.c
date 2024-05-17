@@ -37,13 +37,13 @@ char	**split_space(char *av, int len)
 	util_init(&util);
 	str = (char **)malloc(sizeof(char *) * (len + 2));
 	if (!str)
-		exit(1);
+		return (NULL);
 	while (av[++util.idx])
 	{
 		if (av[util.idx] == ' ')
 		{
 			if (av[util.idx + 1] != ' ')
-				str[++util.i] = save_in(av, &util);
+				str[++util.i] = save_in(av, &util); //malloc error 처리
 		}
 		else
 			util.idx = find_other(av, util.idx);

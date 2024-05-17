@@ -62,7 +62,7 @@ static void	child_solo(t_env *env, t_node *node, int *cnt)
 	if (pid == 0)
 	{
 		// fprintf(stderr, "child_solo\n");
-		// redirect_io(node->in_fd, node->out_fd);
+		redirect_io(node->in_fd, node->out_fd);
 		system("lsof -p $$ >> log");
 		// system("lsof -p $$ >> solo_log");
 		run_cmd(env, node);
@@ -90,7 +90,7 @@ static void	child_normal(t_env *env, t_node *node, int *cnt)
 
 		// fprintf(stderr, "child_normal\n");
 		dup2(fd[1], STDOUT); // 일단 출력을 fd[1]로 보내고
-		// redirect_io(node->in_fd, node->out_fd); // 입출력을 설정한다.
+		redirect_io(node->in_fd, node->out_fd); // 입출력을 설정한다.
 		close_pipe(fd);
 		system("lsof -p $$ >> log");
 		run_cmd(env, node);
@@ -113,7 +113,7 @@ static void	child_end(t_env *env, t_node *node, int *cnt)
 	if (pid == 0)
 	{
 		// fprintf(stderr, "child_end\n");
-		// redirect_io(node->in_fd, node->out_fd); // <- 여기서부터 다시
+		redirect_io(node->in_fd, node->out_fd); // <- 여기서부터 다시
 		system("lsof -p $$ >> log");
 		run_cmd(env, node);
 	}

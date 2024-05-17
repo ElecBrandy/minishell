@@ -22,117 +22,67 @@ void	sig_handler(int signal)
 	rl_redisplay();
 }
 
-// dongwook
-// 밑밑에 수정된코드있고 아래 주석처리된 코드는 원래 코드
-// void	minishell(char *av, char **envp)
-// {
-// 	t_node	*head;
-// 	t_node	*node;
-// 	char	***str;
-// 	t_env	env;
-// 	t_util	u;
-
-// 	util_init(&u);
-// 	env_init(&env, envp);
-// 	str = parsing(av);
-// 	while (str[++u.i])
-// 	{
-// 		head = make_node(head); //dongwook
-// 		node = head;
-// 		while (str[u.i][++u.j])
-// 		{
-// 			if (u.j > 0)
-// 				node = make_node(head);
-// 			parsing_in_pipe(str[u.i][u.j], node);
-// 		}
-// 		u.cnt = count_node(head);
-// 		fprintf(stderr,"cnt : %d\n", u.cnt);
-// 		fork_process(&env, node, u.cnt);
-// 		//execve("/usr/bin/sed", head->cmd, NULL);
-// 	 	//실행부
-// 		// int q;
-// 		// int k = 0;
-// 		// t_node *abc;
-// 		// abc = head;
-// 		// while (abc)
-// 		// {
-// 		//  	q = -1;
-// 		// 	printf("pipe line %d :--------\n", k++);
-// 		// 	if (!abc->cmd)
-// 		// 		printf("error\n");
-// 		// 	else{
-// 		// 		while (abc->cmd[++q])
-// 		// 			printf("%s  ", abc->cmd[q]);
-// 		// 		printf("\n");
-// 		// 	}
-// 		// 	abc = abc->next;
-// 		// }
-// 		unlink(".heredoc_tmp");
-// 		free_node(head);
-// 		head = NULL;
-// 	}
-// 	free_str_three(str);
-// 	str = NULL;
-// }
-
-void minishell(char *av, char **envp)
+int	parsing_minishell(t_node **head, char **str, t_env env)
 {
-	t_node *head;
-	t_node *node;
-	char ***str;
-	t_env env;
-	t_util u;
+	t_node	*node;
+	t_util	u;
+
+	util_init(&u);
+	node = create_node(); // 새 노드 생성
+	if (!node)
+		return (1);
+	append_node(head, node); // 새 노드를 리스트에 추가
+	u.j = -1;
+	while (str[++u.j])
+	{
+		if (u.j > 0)
+		{
+			node = create_node(); // 추가 노드 생성
+			if (!node)
+				return (1); // Error
+			append_node(head, node); // 추가 노드를 리스트에 추가
+		}
+		parsing_in_pipe(str[u.j], node, env); // 파이프라인 파싱
+	}
+	return (0);
+}
+
+void	minishell(char *av, char **envp)
+{
+	t_node	*head;
+	char	***str;
+	t_env	env;
+	t_util	u;
 
 	head = NULL;
 	util_init(&u);
 	env_init(&env, envp);
-	str = parsing(av);
+	str = parsing(av); // str[세미콜론][파이프][파이프 내부]로 파싱
 	while (str[++u.i])
-	{
-		node = create_node(); // 새 노드 생성
-		if (!node)
-			exit (1); // Error
-		append_node(&head, node); // 새 노드를 리스트에 추가
-		u.j = -1;
-		while (str[u.i][++u.j])
+	{	
+		g_errnum = parsing_minishell(&head, str[u.i], env); // 파싱부분
+		if (g_errnum != 0) //파싱부분에서 에러나오면 다시 readline으로
 		{
-			if (u.j > 0) {
-				node = create_node(); // 추가 노드 생성
-				if (!node)
-					exit (1); // Error
-				append_node(&head, node); // 추가 노드를 리스트에 추가
-			}
-			parsing_in_pipe(str[u.i][u.j], node, env); // 파이프라인 파싱
+			free_node(head);
+			break ;
 		}
 		u.cnt = count_node(head); // 노드 수 세기
 		fork_process(&env, head, u.cnt); // 프로세스 실행
-		// print_linked_list(head); // 노드 다 출력
-		unlink(".heredoc_tmp");
+		print_linked_list(head); // 노드 다 출력
 		free_node(head); // 노드 메모리 해제
-		head = NULL; // 헤드 초기화
 	}
+	free_str(env.arr);
+	free_str(env.arr_export); // 환경변수 free
 	free_str_three(str); // 파싱된 문자열 해제
-	str = NULL;
 }
 
-
-int	main(int argc, char **argv, char **envp)
+void	readline_minishell(char **envp)
 {
-	char			*av;
-	struct termios	term;
+	char	*av;
 
-	// dongwook
-	if (argc != 1 && !argv && !envp)
-		exit (1); // Error
-	// if (argc == 0 && argv && envp)
-	// 	exit (0);
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~(ECHOCTL);
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	signal(SIGINT, sig_handler);// CTRL + c
-	signal(SIGQUIT, SIG_IGN);// CTRL + /
 	while (1)
 	{
+		g_errnum = 0;
 		av = readline("nimishell$ ");
 		if (!av)
 		{
@@ -150,6 +100,23 @@ int	main(int argc, char **argv, char **envp)
 			free(av);
 		}
 	}
-	exit (0);
 }
 
+int	main(int argc, char **argv, char **envp)
+{
+	struct termios	term;
+
+	if (argc != 1 || !argv || !envp)
+	{
+		g_errnum = 3;
+		printf("%s\n", strerror(g_errnum));
+		exit (g_errnum);
+	}
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+	signal(SIGINT, sig_handler);// CTRL + c
+	signal(SIGQUIT, SIG_IGN);// CTRL + /
+	readline_minishell(envp);
+	exit (g_errnum);
+}

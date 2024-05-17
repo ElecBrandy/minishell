@@ -16,9 +16,7 @@ void	save_in_node(t_node *node, char **cmd, t_env e)
 {
 	int	i;
 
-	i = 0;
-	while (cmd[i])
-		i++;
+	i = count_str(cmd);
 	node->cmd = malloc(sizeof(char *) * (i + 1));
 	i = -1;
 	while (cmd[++i])
@@ -48,6 +46,7 @@ void	find_path(char *cmd, char **env, t_node *node)
 		return ;
 	}
 	get_path(path, node, cmd);
+	free_str(path);
 }
 
 void	get_path(char **path, t_node *node, char *cmd)
@@ -58,7 +57,7 @@ void	get_path(char **path, t_node *node, char *cmd)
 	while (path[++i])
 	{
 		node->path = ft_strjoin(path[i], "/");
-		node->path = ft_strjoin(node->path, cmd);
+		node->path = ft_strjoin_free(node->path, cmd);
 		if (access(node->path, X_OK) == 0)
 			return ;
 		else
