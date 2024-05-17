@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/17 09:24:12 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/17 09:32:13 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ void	ft_unset(t_node *node);
 
 /* env */
 int		env_init(t_env *env, char **envp);
+int		count_str(char **str);
 
 /* exec */
 int		is_builtin(t_node *node);
