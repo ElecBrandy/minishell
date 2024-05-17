@@ -75,12 +75,14 @@ void	del_q(char *av, char *str, t_util *u);
 int		find_env(char *av, int *idx, char ***env);
 char	*get_word(char *av, int *idx);
 int		find_dollar(char *av, char ***env);
+void	put_str(char *str, char *av, int *a_idx, int *s_idx);
 
 /* parsing_dollar.c */
 char	**check_dollar(char **av, t_env e);
 char	*change_dollar(char *av, char ***env, int env_len);
 char	***make_env(t_env e);
 void	put_word(char *av, char *word, int *idx);
+void	put_env(char *str, char *av, char ***env, t_util *u);
 
 /* paring_fd.c */
 void	new_file(char **str, int *i, t_node *node);

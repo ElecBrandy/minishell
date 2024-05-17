@@ -45,6 +45,7 @@ char	*get_word(char *av, int *idx)
 	word = malloc(sizeof(char) * (u.cnt + 1));
 	if (!word)
 		exit (1); // error
+	put_word(av, word, idx);
 	(*idx)--;
 	return (word);
 }
@@ -58,29 +59,21 @@ char	*change_dollar(char *av, char ***env, int env_len)
 	char	*word;
 
 	util_init(&u);
-	idx = -1;
 	len = ft_strlen(av);
 	str = malloc(sizeof(char) * (len + env_len + 1));
 	while (av[++u.i])
 	{
-		if (av[u.i] == '$' && av[u.i + 1] != ' '
+		if (av[u.i] == 39)
+			put_str(str, av, &u.i, &u.idx);
+		else if (av[u.i] == '$' && av[u.i + 1] != ' '
 			&& av[u.i + 1] != '\0' && av[u.i + 1] != 34 && av[u.i + 1] != 39)
 		{
-			word = get_word(av, &u.i);
-			while (env[++u.j])
-			{
-				if (ft_strncmp(env[u.j][0], word, env_len) == 0)
-				{
-					while (env[u.j][1][++idx])
-						str[++u.idx] = env[u.j][1][idx];
-				}
-			}
+			put_env(str, av, env, &u);
 		}
 		else
 			str[++u.idx] = av[u.i];
 	}
 	str[++u.idx] = '\0';
-	free(word);
 	return (str);
 }
 

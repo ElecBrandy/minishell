@@ -67,3 +67,32 @@ int	find_env(char *av, int *idx, char ***env)
 	free(word);
 	return (len);
 }
+
+void	put_str(char *str, char *av, int *a_idx, int *s_idx)
+{
+	str[++(*s_idx)] = av[*a_idx];
+	while (av[(++*a_idx)] != 39)
+		str[++(*s_idx)] = av[*a_idx];
+	str[++(*s_idx)] = av[*a_idx];
+}
+
+void	put_env(char *str, char *av, char ***env, t_util *u)
+{
+	char	*word;
+	int		env_len;
+	int		idx;
+
+	env_len = find_dollar(av, env);
+	word = get_word(av, &u->i);
+	u->j = -1;
+	while (env[++(u->j)])
+	{
+		if (ft_strncmp(env[u->j][0], word, env_len) == 0)
+		{
+			idx = -1;
+			while (env[u->j][1][++idx])
+				str[++(u->idx)] = env[u->j][1][idx];
+		}
+	}
+	free(word);
+}
