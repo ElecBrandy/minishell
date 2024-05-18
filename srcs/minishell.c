@@ -68,7 +68,7 @@ void	minishell(char *av, t_env *env)
 			break ;
 		}
 		u.cnt = count_node(head); // 노드 수 세기
-		//fork_process(env, head, u.cnt); // 프로세스 실행
+		fork_process(env, head, u.cnt); // 프로세스 실행
 		print_linked_list(head); // 노드 다 출력
 		free_node(head); // 노드 메모리 해제
 	}

@@ -74,7 +74,7 @@ int	find_env(char *av, int *idx, t_env *env)
 void	put_str(char *str, char *av, int *a_idx, int *s_idx)
 {
 	str[++(*s_idx)] = av[*a_idx];
-	while (av[(++*a_idx)] != 39)
+	while (av[++(*a_idx)] != 39)
 		str[++(*s_idx)] = av[*a_idx];
 	str[++(*s_idx)] = av[*a_idx];
 }

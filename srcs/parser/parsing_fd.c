@@ -65,8 +65,12 @@ void	check_infile(char **str, int *i, t_node *node)
 
 void	only_open(char **str, int *i)
 {
-	open(str[(*i) + 1], O_RDWR | O_CREAT | O_APPEND, 0666);
-	close(open(str[(*i) + 1], O_RDWR | O_CREAT | O_APPEND, 0666));
+	char	*file;
+	int		fd;
+	file = del_quote(str[(*i) + 1]);
+	fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
+	close(fd);
+	free(file);
 	*i += 1;
 }
 

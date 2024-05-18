@@ -69,13 +69,27 @@ int	get_flagcnt(char *av)
 	util_init(&u);
 	while (av[++u.i])
 	{
+		if (av[u.i] == 34)
+			u.i = find_next_quote(av, u.i, 34);
+		else if (av[u.i] == 39)
+			u.i = find_next_quote(av, u.i, 39);
 		if ((av[u.i] == '<' || av[u.i] == '>')
 			&& (av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
-		{
 			u.flag++;
-		}
 	}
 	return (u.flag);
+}
+
+static void	write_other(char *str, char *av, int *a_idx, int *s_idx)
+{
+	str[++(*s_idx)] = av[*a_idx];
+	while (av[++(*a_idx)])
+	{
+		if (av[*a_idx] == 34 || av[*a_idx] == 39)
+			break ;
+		str[++(*s_idx)] = av[*a_idx];
+	}
+	str[++(*s_idx)] = av[*a_idx];
 }
 
 char	*add_space(char *av)
@@ -92,14 +106,21 @@ char	*add_space(char *av)
 		return (NULL);// 메모리 할당 실패 시 NULL 반환
 	while (av[++u.i])
 	{
-		if ((u.i > 1)
-			&& (av[u.i] == '<' || av[u.i] == '>')
-			&& (av[u.i - 1] != '<' && av[u.i - 1] != '>' && av[u.i - 1] != ' '))
-			str[++u.idx] = ' ';
-		str[++u.idx] = av[u.i];
-		if ((av[u.i] == '<' || av[u.i] == '>')
-			&& (av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
-			str[++u.idx] = ' ';
+		if (av[u.i] == 34 || av[u.i] == 39)
+			write_other(str, av, &u.i, &u.idx);
+		else
+		{
+			if ((u.i > 1)
+				&& (av[u.i] == '<' || av[u.i] == '>')
+				&& (av[u.i - 1] != '<' && av[u.i - 1] != '>' && av[u.i - 1] != ' '))
+				str[++u.idx] = ' ';
+			str[++u.idx] = av[u.i];
+			if ((av[u.i] == '<' || av[u.i] == '>')
+				&& (av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
+				str[++u.idx] = ' ';
+		}
+		if (av[u.i] == '\0')
+			break ;
 	}
 	str[++u.idx] = '\0';
 	return (str);
@@ -123,8 +144,8 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 	if (!str) //free(tmp);
 		return (1);
 	cmd = check_dollar(str, env, p_e);
-	cmd = check_cmd(cmd);
 	cmd = find_fd(cmd, node, env);
+	cmd = check_cmd(cmd);
 	save_in_node(node, cmd, env);
 	free(tmp);
 	free_str(str);
