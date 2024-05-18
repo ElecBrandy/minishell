@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 03:55:02 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 17:13:33 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 17:34:28 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,44 @@ void print_linked_list(t_node *head)
 		print_node_details(current);
 		printf("\n");
 		current = current->next;
+	}
+}
+
+
+
+void print_env_list(t_env *head_env)
+{
+	t_env *cur;
+
+	cur = head_env;
+	while (cur)
+	{
+		fprintf(stderr, "cmd : %s\n", cur->cmd);
+		fprintf(stderr, "key : %s\n", cur->key);
+		fprintf(stderr, "value : %s\n", cur->value);
+		cur = cur->next;
+	}
+}
+
+void	print_arry_2d(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i])
+	{
+		fprintf(stderr, "%s\n", arr[i]);
+		i++;
+	}
+}
+
+
+void head_env_chk(t_env *head_env, int i)
+{
+	if (head_env == NULL)
+	{
+		fprintf(stderr, "head_env is NULL\n");
+		fprintf(stderr, "i : %d\n", i);
+		exit(1); // Error
 	}
 }

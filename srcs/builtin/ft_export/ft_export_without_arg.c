@@ -6,11 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:20:54 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 16:48:59 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 18:22:00 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
+#include "minishell.h"
 
 static int	sort_arr_2d(char **arr);
 
@@ -44,7 +44,7 @@ void export_withoutarg(t_env *env)
 			{
 				util.key = ft_substr(str[i], 0, sep_pos - str[i]); // Error
 				util.value = ft_strdup(sep_pos + 1); // Error
-				if (!util.key || !util.value == NULL)
+				if (!util.key || !util.value)
 					exit(1); // Error
 				printf("%s=\"%s\"\n", util.key, util.value);
 				ft_free((void **)&util.key);

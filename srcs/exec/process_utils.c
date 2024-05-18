@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 00:58:04 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 20:37:05 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 17:29:09 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void redirect_io(int in_fd, int out_fd)
 		{
 			exit(1); // Error
 		}
-		fprintf(stderr, "in_fd : %d\n", in_fd);
+		// fprintf(stderr, "in_fd : %d\n", in_fd);
 		close(in_fd);
 	}
 	if (out_fd != STDOUT)
@@ -44,7 +44,7 @@ void redirect_io(int in_fd, int out_fd)
 		{
 			exit(1); // Error
 		}
-		fprintf(stderr, "out_fd : %d\n", out_fd);
+		// fprintf(stderr, "out_fd : %d\n", out_fd);
 		close(out_fd);
 	}
 }

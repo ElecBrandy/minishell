@@ -6,11 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:27:16 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 16:51:47 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 17:18:53 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
+#include "minishell.h"
 
 // \ -> 처리를 잊지말자. 일단 나중에
 
@@ -62,13 +62,4 @@ int is_inenv(t_env *env, char *key)
 		cur = cur->next;
 	}
 	return (FALSE);
-}
-
-int	check_env(char *key, char *value)
-{
-	if (is_valid_key(key) == FALSE)
-		return (FALSE);
-	if (is_valid_value(value) == FALSE)
-		return (FALSE);
-	return (TRUE);
 }

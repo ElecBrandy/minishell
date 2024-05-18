@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 15:03:18 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 18:34:40 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
 	- If there is no argument, print all the environment variables.
 */
 
-void ft_env(t_node *node, t_env *head_env)
+void	ft_env(t_env *head_env, t_node *node)
 {
 	int		i;
 	t_env	*cur;
 	char	**env;
 
-	if (node->cmd[1] != NULL) // 옵션 || 인자 이 있는 경우
+	if (node->cmd[1] != NULL) // 옵션 또는 인자가 있는 경우
 	{
 		exit(0); // Error
 	}

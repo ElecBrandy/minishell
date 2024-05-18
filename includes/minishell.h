@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 16:28:39 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 17:32:50 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,47 +141,78 @@ char	**split_flag(char *av, int len, char flag);
 char	*save_in(char *av, t_util *util);
 int		find_other(char *av, int idx);
 
-/* ↓↓↓↓↓ ======== EXEC ======== ↓↓↓↓↓ */
-/* builtin */
+/* >>>>> ======== EXEC ======== <<<<< */
+
+/* Builtn */
 void	ft_cat(t_node *node);
 void	ft_cd(t_node *node);
 void	ft_echo(t_node *node);
-void	ft_env(t_env *head_env);
+void	ft_env(t_env *head_env, t_node *node);
 void	ft_exit(t_node *node);
-void	ft_export(t_env *env, t_node *node);
 void	ft_pwd(t_node *node);
 void	ft_unset(t_node *node);
 
-/* env */
-t_env	*create_node_env(const char *cmd, const char *key, const char *value);
-void	append_node_env(t_env **head, t_env *new_node);
+
+/* ===== FT_EXPROT ===== */
+/* ft_export.c */
+void	ft_export(t_env *head_env, t_node *node);
+
+/* ft_export_witharg.c */
+void	export_witharg(t_env *env, t_node *node);
+void    renew_env(t_env *env, char *key, char *value);
+void    add_env(t_env *env, char *cmd, char *key, char *value);
+
+/* ft_export_outarg.c */
+void	export_withoutarg(t_env *env);
+
+/* ft_export_util.c */
+int		is_valid_key(char *key);
+int		is_valid_value(char *value);
+int		is_inenv(t_env *env, char *key);
+
+/* ===== ENV ===== */
+/* env_init.c */
 t_env	*env_array_to_list(t_env *head, char **envp);
 char	**env_list_to_array(t_env *head_env);
-int		count_env(t_env *head_env);
+
+/* env_util.c */
+t_env	*create_node_env(const char *cmd, const char *key, const char *value);
+void	append_node_env(t_env **head, t_env *new_node);
+void	add_env_to_list(t_env **head, char *original_str, char *key, char *value);
+void	parse_env_str(char *env_str, char **key, char **value);
 void	free_env_list(t_env *head);
 
-/* exec */
+/* ===== EXEC ===== */
+/* builtin.c */
 int		is_builtin(t_node *node);
-int		exec_builtin(t_env *env, t_node *node);
-int		run_cmd(t_env *env, t_node *node);
-void	fork_process(t_env *env, t_node *node, int node_cnt);
-void	wait_process(int cnt);
-void	close_pipe(int *fd);
-void	redirect_io(int in_fd, int out_fd);
-int		count_node(t_node *node);
-void	head_env_chk(t_env *head_env, int i);
-void	print_env_list(t_env *head_env);
+int		exec_builtin(t_env *head_env, t_node *node);
 
-/* utils */
+/* exe.c */
+int		run_cmd(t_env *head_env, t_node *node);
+
+/* process.c */
+void	fork_process(t_env *head_env, t_node *node, int node_cnt);
+
+/* process_util.c */
+int		count_node(t_node *node);
+void	redirect_io(int in_fd, int out_fd);
+void	wait_process(int cnt);
+void close_pipe(int *fd);
+
+/* ===== UTILS ===== */
+
+/* ft_free.c */
 void	ft_free(void **target);
 void	ft_free_2d(char **str);
-void	print_node_details(t_node *node);
-void	print_linked_list(t_node *head);
+
+/* ft_strcmp.c */
 int		ft_strcmp(const char *s1, const char *s2);
 
-
-/* new */
-void	parse_append_env(t_env **head, char *env_str);
-void	parse_env_str(char *env_str, char **key, char **value);
+/* tmp.c */
+void	print_node_details(t_node *node);
+void	print_linked_list(t_node *head);
+void	print_env_list(t_env *head_env);
+void	print_arry_2d(char **arr);
+void	head_env_chk(t_env *head_env, int i);
 
 #endif

@@ -36,7 +36,10 @@ SRCS_E = \
 	srcs/builtin/ft_exit.c      \
 	srcs/builtin/ft_echo.c      \
 	srcs/builtin/ft_unset.c     \
-	srcs/builtin/ft_export.c    \
+	srcs/builtin/ft_export/ft_export.c    \
+	srcs/builtin/ft_export/ft_export_with_arg.c    \
+	srcs/builtin/ft_export/ft_export_without_arg.c    \
+	srcs/builtin/ft_export/ft_export_util.c    \
 	\
 	srcs/env/env_init.c			\
 	srcs/env/env_util.c			\

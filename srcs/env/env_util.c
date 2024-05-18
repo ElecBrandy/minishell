@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:31:14 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 16:54:41 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 18:14:27 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_env	*create_node_env(const char *cmd, const char *key, const char *value)
 		return (NULL);
 	new_node->cmd = ft_strdup(cmd);
 	new_node->key = ft_strdup(key);
-	if (value == '\0')
+	if (value[0] == '\0')
 		new_node->value = NULL;
 	else
 		new_node->value = ft_strdup(value);
@@ -65,6 +65,24 @@ void	add_env_to_list(t_env **head, char *original_str, char *key, char *value)
     append_node_env(head, new_node); // 성공 시 리스트에 노드 추가
 }
 
+void	parse_env_str(char *env_str, char **key, char **value)
+{
+    char *sep_pos;
+
+	sep_pos = ft_strchr(env_str, '=');
+	if (!sep_pos) // '=' 이 없을 경우
+	{
+		*key = env_str;
+		*value = NULL;
+	}
+	else // '=' 이 있을 경우
+	{
+		*sep_pos = '\0'; // '='를 NULL 문자로 변경하여 문자열 분리
+		*key = env_str; // 키는 '=' 이전 부분
+		*value = sep_pos + 1; // 값은 '=' 다음 부분
+	}
+}
+
 void	free_env_list(t_env *head)
 {
 	t_env *cur;
@@ -80,21 +98,6 @@ void	free_env_list(t_env *head)
 		ft_free((void **)&cur);
 		cur = next;
 	}
-}
-
-int	count_env(t_env *head_env)
-{
-	int		cnt;
-	t_env	*cur;
-
-	cnt = 0;
-	cur = head_env;
-	while (cur != NULL)
-	{
-		cnt++;
-		cur = cur->next;
-	}
-	return (cnt);
 }
 
 // void print_env_list(t_env *head)
