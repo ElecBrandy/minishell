@@ -69,7 +69,7 @@ void	get_path(char **path, t_node *node, char *cmd)
 		exit (2);//빌트인함수 따로 처리
 }
 
-t_node	*create_node(void)
+t_node	*create_node(int p_e)
 {
 	t_node	*node;
 
@@ -81,6 +81,7 @@ t_node	*create_node(void)
 	node->path = NULL;
 	node->in_fd = 0;
 	node->out_fd = 1;
+	node->prev_errnum = p_e;
 	return (node);
 }
 

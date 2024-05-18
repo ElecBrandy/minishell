@@ -19,8 +19,7 @@ void	put_word(char *av, char *word, int *idx)
 	i = -1;
 	while (av[++(*idx)])
 	{
-		if (av[*idx] != ' ' && av[*idx] != 34
-			&& av[*idx] != 39 && av[*idx] != '$')
+		if (is_print(av[*idx]))
 			word[++i] = av[*idx];
 		else
 			break ;
@@ -37,7 +36,7 @@ char	*get_word(char *av, int *idx)
 	u.i = (*idx);
 	while (av[++u.i])
 	{
-		if (av[u.i] != ' ' && av[u.i] != 34 && av[u.i] != 39 && av[u.i] != '$')
+		if (is_print(av[u.i]))
 			u.cnt++;
 		else
 			break ;
@@ -50,7 +49,7 @@ char	*get_word(char *av, int *idx)
 	return (word);
 }
 
-char	*change_dollar(char *av, t_env *env, int env_len)
+char	*change_dollar(char *av, t_env *env, int env_len, int p_e)
 {
 	int		len;
 	int		idx;
@@ -65,11 +64,10 @@ char	*change_dollar(char *av, t_env *env, int env_len)
 	{
 		if (av[u.i] == 39)
 			put_str(str, av, &u.i, &u.idx);
-		else if (av[u.i] == '$' && av[u.i + 1] != ' '
-			&& av[u.i + 1] != '\0' && av[u.i + 1] != 34 && av[u.i + 1] != 39)
-		{
+		else if (av[u.i] == '$' && av[u.i + 1] == '?')
+			put_errno(str, av, p_e, &u);
+		else if (av[u.i] == '$' && is_print(av[u.i + 1]))
 			put_env(str, av, env, &u);
-		}
 		else
 			str[++u.idx] = av[u.i];
 	}
@@ -77,7 +75,7 @@ char	*change_dollar(char *av, t_env *env, int env_len)
 	return (str);
 }
 
-char	**check_dollar(char **av, t_env *env)
+char	**check_dollar(char **av, t_env *env, int p_e)
 {
 	char	**str;
 	int		env_len;
@@ -93,8 +91,8 @@ char	**check_dollar(char **av, t_env *env)
 			str[u.i] = ft_strdup(av[u.i]);
 		else
 		{
-			env_len = find_dollar(av[u.i], env);
-			str[u.i] = change_dollar(av[u.i], env, env_len);
+			env_len = find_dollar(av[u.i], env, p_e);
+			str[u.i] = change_dollar(av[u.i], env, env_len, p_e);
 		}
 	}
 	str[u.i] = NULL;

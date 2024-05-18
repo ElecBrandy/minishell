@@ -12,7 +12,18 @@
 
 #include "../../includes/minishell.h"
 
-int	find_dollar(char *av, t_env *env)
+int	is_print(char s)
+{
+	int	flag;
+
+	flag = 0;
+	if ((s >= '0' && s <= '9') || (s >= 'A' && s <= 'Z')
+		|| (s >= 'a' && s <= 'z') || s == '_')
+		flag = 1;
+	return (flag);
+}
+
+int	find_dollar(char *av, t_env *env, int p_e)
 {
 	t_util	u;
 	int		env_len;
@@ -21,9 +32,9 @@ int	find_dollar(char *av, t_env *env)
 	util_init(&u);
 	while (av[++u.i])
 	{
-		if (av[u.i] == '$' && av[u.i + 1] != ' '
-			&& av[u.i + 1] != '\0' && av[u.i + 1] != 34
-			&& av[u.i + 1] != 39)
+		if (av[u.i] == '$' && av[u.i + 1] == '?')
+			env_len = (get_numlen(p_e) - 2);
+		else if (av[u.i] == '$' && is_print(av[u.i + 1]))
 			env_len += find_env(av, &u.i, env);
 		else if (av[u.i] == 39)
 			u.i = find_next_quote(av, u.i, 39);

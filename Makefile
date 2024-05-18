@@ -1,7 +1,7 @@
 # Complie
 CC = cc
 # CFLAGS = -Wall -Wextra -Werror # Norm
-CFLAGS = -g -fsanitize=address # catch segfault error
+#CFLAGS = -g -fsanitize=address # catch segfault error
 # CFLAGS = -g # if with (export MallocStackLogging=1) -> catch memory leaks
 
 # Readline - Cluster ver
@@ -21,6 +21,7 @@ SRCS_P = \
 	srcs/parser/parsing_delquote.c  \
 	srcs/parser/parsing_dollar_util.c	\
 	srcs/parser/parsing_dollar.c	\
+	srcs/parser/parsing_error.c		\
 	srcs/parser/parsing_fd.c        \
 	srcs/parser/parsing_free.c      \
 	srcs/parser/parsing_heredoc.c	\

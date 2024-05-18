@@ -105,7 +105,7 @@ char	*add_space(char *av)
 	return (str);
 }
 
-int	parsing_in_pipe(char *av, t_node *node, t_env *env)
+int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 {
 	int		len;
 	char	*tmp;
@@ -122,7 +122,7 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env)
 		str = split_space(tmp, len);
 	if (!str) //free(tmp);
 		return (1);
-	cmd = check_dollar(str, env);
+	cmd = check_dollar(str, env, p_e);
 	cmd = check_cmd(cmd);
 	cmd = find_fd(cmd, node, env);
 	save_in_node(node, cmd, env);

@@ -12,13 +12,13 @@
 
 #include "../../includes/minishell.h"
 
-char	*heredoc_check_dollar(char *av, t_env *env)
+char	*heredoc_check_dollar(char *av, t_env *env, t_node *node)
 {
 	char	*str;
 	int		env_len;
 
-	env_len = find_dollar(av, env);
-	str = change_dollar(av, env, env_len);
+	env_len = find_dollar(av, env, node->prev_errnum);
+	str = change_dollar(av, env, env_len, node->prev_errnum);
 	free(av);
 	return (str);
 }
@@ -29,7 +29,7 @@ int	heredoc_readline(char *av, char *limiter, t_node *node, t_env *env)
 	if ((ft_strncmp(limiter, av, ft_strlen(limiter)) == 0)
 		&& (ft_strlen(limiter) == ft_strlen(av)))
 		return (1);
-	av = heredoc_check_dollar(av, env);
+	av = heredoc_check_dollar(av, env, node);
 	write(node->in_fd, av, ft_strlen(av));
 	write(node->in_fd, "\n", 1);
 	free(av);

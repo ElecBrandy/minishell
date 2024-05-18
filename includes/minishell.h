@@ -38,6 +38,7 @@ typedef struct s_node
 	char			*path;
 	int				in_fd;
 	int				out_fd;
+	int				prev_errnum;
 	struct s_node	*next;
 }t_node;
 
@@ -66,7 +67,7 @@ int		g_errnum;
 void	minishell(char *av, t_env *head_env);
 void	sig_handler(int signal);
 void	readline_minishell(t_env *env);
-int		parsing_minishell(t_node **head, char **str, t_env *env);
+int		parsing_minishell(t_node **head, char **str, t_env *env, int p_e);
 
 /* parsing_delquote.c */
 char	*del_quote(char *av);
@@ -78,15 +79,19 @@ void	del_q(char *av, char *str, t_util *u);
 /* parsing_dollar_util.c */
 int		find_env(char *av, int *idx, t_env *env);
 char	*get_word(char *av, int *idx);
-int		find_dollar(char *av, t_env *env);
+int		find_dollar(char *av, t_env *env, int p_e);
 void	put_str(char *str, char *av, int *a_idx, int *s_idx);
+int		is_print(char s);
 
 /* parsing_dollar.c */
-char	**check_dollar(char **av, t_env *env);
-char	*change_dollar(char *av, t_env *env, int env_len);
-char	***make_env(t_env e);
+char	**check_dollar(char **av, t_env *env, int p_e);
+char	*change_dollar(char *av, t_env *env, int env_len, int p_e);
 void	put_word(char *av, char *word, int *idx);
 void	put_env(char *str, char *av, t_env *env, t_util *u);
+
+/* parsing_error.c*/
+int		get_numlen(int num);
+void	put_errno(char *str, char *av, int p_e, t_util *u);
 
 /* paring_fd.c */
 void	new_file(char **str, int *i, t_node *node);
@@ -104,11 +109,11 @@ int		count_str(char **str);
 /* parsing_heredoc.c */
 void	heredoc_infile(char **str, int *i, t_node *node, t_env *env);
 void	heredoc_process(char **str, int *i, t_node *node, t_env *env);
-char	*heredoc_check_dollar(char *av, t_env *env);
+char	*heredoc_check_dollar(char *av, t_env *env, t_node *node);
 int		heredoc_readline(char *av, char *limiter, t_node *node, t_env *env);
 
 /* parsing_in_pipe.c */
-int		parsing_in_pipe(char *av, t_node *node, t_env *env);
+int		parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e);
 char	*add_space(char *av);
 char	**find_fd(char **str, t_node *node, t_env *e);
 int		get_flagcnt(char *av);
@@ -116,7 +121,7 @@ void	is_outfd(char **str, int *i, t_node *node);
 
 /* parsing_node.c */
 void	save_in_node(t_node *node, char **cmd, t_env *env);
-t_node	*create_node(void);
+t_node	*create_node(int p_e);
 void	append_node(t_node **head, t_node *new_node);
 void	find_path(char *cmd, t_env *env, t_node *node);
 void	get_path(char **path, t_node *node, char *cmd);
@@ -126,7 +131,6 @@ int		find_flag(char *av, char flag);
 int		find_next_quote(char *av, int idx, char flag);
 void	util_init(t_util *util);
 int		ft_max(int a, int b);
-t_node	*create_node(void);
 void	append_node(t_node **head, t_node *new_node);
 
 /* parsing.c */
