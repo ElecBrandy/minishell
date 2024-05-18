@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_in_pipe.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 10:26:26 by dongeunk          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/05/16 19:13:07 by dongeunk         ###   ########.fr       */
+=======
+/*   Updated: 2024/05/16 22:43:17 by dongwook         ###   ########.fr       */
+>>>>>>> origin/dongwook
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +117,12 @@ int	parsing_in_pipe(char *av, t_node *node, t_env env)
 	char	**cmd;
 
 	tmp = add_space(av);
+<<<<<<< HEAD
 	if (!tmp)
 		return (1);
+=======
+	// printf("%s\n", tmp);
+>>>>>>> origin/dongwook
 	len = find_flag(tmp, ' ');
 	if (ft_find_quotes(tmp, 34) + ft_find_quotes(tmp, 39) == 0)
 		str = ft_split(tmp, ' ');

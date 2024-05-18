@@ -55,6 +55,7 @@ void	minishell(char *av, char **envp)
 	t_util	u;
 
 	head = NULL;
+
 	util_init(&u);
 	env_init(&env, envp);
 	str = parsing(av); // str[세미콜론][파이프][파이프 내부]로 파싱
@@ -88,7 +89,7 @@ void	readline_minishell(char **envp)
 		{
 			printf("\033[1A");
 			printf("\033[10C");
-			printf(" exit\n"); // 의문의 종료
+			printf(" exit\n");
 			exit (0);
 		}
 		else if (*av == '\0')
@@ -96,7 +97,7 @@ void	readline_minishell(char **envp)
 		else
 		{
 			add_history(av);
-			minishell(av, envp);
+			minishell(av, head_env);
 			free(av);
 		}
 	}

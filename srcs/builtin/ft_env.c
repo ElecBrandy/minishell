@@ -3,29 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 02:35:49 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/16 22:01:24 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void ft_env(t_env *env)
+void ft_env(t_env *head_env)
 {
-	int i;
+	int		i;
+	char	**env;
 
+	env = env_list_to_array(head_env);
 	i = 0;
-	if (!env->arr)
+	while (env[i])
 	{
-		exit(1); // Error
-	}
-	while (env->arr[i])
-	{
-		printf("%s\n", env->arr[i]);
+		printf("%s\n", env[i]);
 		i++;
 	}
 	exit(0); // Error?
 }
-

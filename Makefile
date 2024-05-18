@@ -39,6 +39,7 @@ SRCS_E = \
 	srcs/builtin/ft_export.c    \
 	\
 	srcs/env/env_init.c			\
+	srcs/env/env_util.c			\
 	\
 	srcs/exec/exec.c            \
 	srcs/exec/builtin.c         \

@@ -3,63 +3,94 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/12 03:35:52 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/17 02:04:08 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void exec_cmd(t_env *env, t_node *node);
-static char	*check_path(t_env *env, char *cmd);
-static char	**split_paths(t_env *env);
+static void exec_cmd(t_env *head_env, t_node *node);
+static char	*check_path(char **env, char *cmd);
+static char	**split_paths(char **env);
 static char	*make_path(char *cmd, char **path_list);
-static void	print_arry_2d(char **arr); // Error (나중에 지우기)
+
+static void	print_arry_2d(char **arr);
+
+void head_env_chk(t_env *head_env, int i)
+{
+	if (head_env == NULL)
+	{
+		fprintf(stderr, "head_env is NULL\n");
+		fprintf(stderr, "i : %d\n", i);
+		exit(1); // Error
+	}
+}
 
 /*
 	node 하나 잘라와서 (파이프 기준)
 	명령어 실행
 	run_cmd(env_head, node);
 */
-
-int run_cmd(t_env *env, t_node *node)
+int run_cmd(t_env *head_env, t_node *node)
 {
 	if (is_builtin(node) != 0) // builtin 일 경우
 	{
-		exec_builtin(env, node);
+		exec_builtin(head_env, node);
 	}
 	else // builtin 아니라 일반 함수인 경우
 	{
-		exec_cmd(env, node);
+		head_env_chk(head_env, 0); // chk
+		exec_cmd(head_env, node);
 	}
 	return (0);
 }
 
 // cmd 실행
-static void exec_cmd(t_env *env, t_node *node)
+static void exec_cmd(t_env *head_env, t_node *node)
 {
 	char	*path;
 	char	**cmd;
+	char 	**tmp;
 
-
-	if (!env->arr)
+	// 환경변수를 이중배열로 변환
+	head_env_chk(head_env, 1); //chk
+	// print_env_list(head_env); // 연결리스트 출력
+	head_env_chk(head_env, 2); // chk
+	tmp = env_list_to_array(head_env);
+	head_env_chk(head_env, 3); // chk
+	// printf("exec_cmd\n");
+	// print_2d_array(tmp);
+	if (!head_env)
 	{
-		fprintf(stderr, "env->arr is NULL\n");
+		fprintf(stderr, "env is NULL\n");
 		exit(1); // Error
 	}
-	path = check_path(env, node->cmd[0]);
+	path = check_path(tmp, node->cmd[0]);
 	if (!path)
 	{
 		fprintf(stderr, "path is NULL\n");
 		exit(1); // Error
 	}
-	// fprintf(stderr, "path : %s\n", path);
-	// print_arry_2d(node->cmd);
-	if (execve(path, node->cmd, env->arr) == -1)
+	if (execve(path, node->cmd, tmp) == -1)
 	{
 		exit(1); // Error
+	}
+}
+
+void print_env_list(t_env *head_env)
+{
+	t_env *cur;
+
+	cur = head_env;
+	while (cur)
+	{
+		fprintf(stderr, "cmd : %s\n", cur->cmd);
+		fprintf(stderr, "key : %s\n", cur->key);
+		fprintf(stderr, "value : %s\n", cur->value);
+		cur = cur->next;
 	}
 }
 
@@ -80,7 +111,7 @@ static void	print_arry_2d(char **arr)
 	환경변수 PATH에 있는 경로를 찾아서 해당 명령어가 있는지 확인한다.
 	만약 없다면 NULL을 반환한다.
 */
-static char	*check_path(t_env *env, char *cmd)
+static char	*check_path(char **env, char *cmd)
 {
 	char *path;
 	char **path_list;
@@ -99,29 +130,33 @@ static char	*check_path(t_env *env, char *cmd)
 	main에서 envp로 받아온 문자열 중 "PATH="로 시작하는 줄(문자열)을 찾는다.
 	해당 문자열을 찾은 후, 해당 문자열을 ':'으로 분리해 반환한다.
 */
-static char	**split_paths(t_env *env)
+static char	**split_paths(char **env)
 {
 	int		i;
 	char	**path_list;
 
 	i = 0;
-	if (env->arr[i] == NULL)
+	if (env == NULL)
 		return (NULL);
-	while (env->arr[i] && ft_strncmp("PATH=", env->arr[i], 5) != 0)
+	// while (env[i])
+	// {
+	// 	printf("env[%d] : %s\n", i, env[i]);
+	// 	i++;
+	// }
+	i = 0;
+	while (env[i] && ft_strncmp("PATH=", env[i], 5) != 0)
 		i++;
-	path_list = ft_split(env->arr[i] + 5, ':');
+	path_list = ft_split(env[i] + 5, ':');
 	if (!path_list)
 		return (NULL);
 	return (path_list);  // 분리된 경로 목록 반환
 }
-
 
 /*
 	make_path
 	':'로 분리되어 이중배열에 담긴 path_list / 명령어 cmd를 인자로 받는다.
 	각각의 path_list와 cmd를 합쳐보면서 해당 명령어 주소가 유효한지 검사하다.
 */
-
 static char	*make_path(char *cmd, char **path_list)
 {
 	size_t	i;
