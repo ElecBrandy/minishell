@@ -55,7 +55,6 @@ void	minishell(char *av, char **envp)
 	t_util	u;
 
 	head = NULL;
-
 	util_init(&u);
 	env_init(&env, envp);
 	str = parsing(av); // str[세미콜론][파이프][파이프 내부]로 파싱
@@ -89,7 +88,7 @@ void	readline_minishell(char **envp)
 		{
 			printf("\033[1A");
 			printf("\033[10C");
-			printf(" exit\n");
+			printf(" exit\n"); // 의문의 종료
 			exit (0);
 		}
 		else if (*av == '\0')
@@ -97,7 +96,7 @@ void	readline_minishell(char **envp)
 		else
 		{
 			add_history(av);
-			minishell(av, head_env);
+			minishell(av, envp);
 			free(av);
 		}
 	}
@@ -106,6 +105,7 @@ void	readline_minishell(char **envp)
 int	main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
+	t_env			*env; // 환경변수 구조체
 
 	if (argc != 1 || !argv || !envp)
 	{
@@ -113,6 +113,7 @@ int	main(int argc, char **argv, char **envp)
 		printf("%s\n", strerror(g_errnum));
 		exit (g_errnum);
 	}
+	env = env_array_to_list(env, envp); // 연결리스트로 만들기
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
