@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 12:50:31 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 13:04:18 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,15 +113,9 @@ static void	child_end(t_env *head_env, t_node *node, int *cnt)
 	if (pid == 0)
 	{
 		// fprintf(stderr, "child_end\n");
-<<<<<<< HEAD
-		redirect_io(node->in_fd, node->out_fd); // <- 여기서부터 다시
-		system("lsof -p $$ >> log");
-		run_cmd(env, node);
-=======
 		// redirect_io(node->in_fd, node->out_fd); // <- 여기서부터 다시
 		// system("lsof -p $$ >> log");
 		run_cmd(head_env, node);
->>>>>>> origin/dongwook
 	}
 	else
 	{

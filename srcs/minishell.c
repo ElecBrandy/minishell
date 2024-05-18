@@ -47,16 +47,14 @@ int	parsing_minishell(t_node **head, char **str, t_env env)
 	return (0);
 }
 
-void	minishell(char *av, char **envp)
+void	minishell(char *av, t_env *env)
 {
 	t_node	*head;
 	char	***str;
-	t_env	env;
 	t_util	u;
 
 	head = NULL;
 	util_init(&u);
-	env_init(&env, envp);
 	str = parsing(av); // str[세미콜론][파이프][파이프 내부]로 파싱
 	while (str[++u.i])
 	{	
@@ -68,7 +66,7 @@ void	minishell(char *av, char **envp)
 		}
 		u.cnt = count_node(head); // 노드 수 세기
 		fork_process(&env, head, u.cnt); // 프로세스 실행
-		print_linked_list(head); // 노드 다 출력
+		// print_linked_list(head); // 노드 다 출력
 		free_node(head); // 노드 메모리 해제
 	}
 	free_str(env.arr);
@@ -76,7 +74,7 @@ void	minishell(char *av, char **envp)
 	free_str_three(str); // 파싱된 문자열 해제
 }
 
-void	readline_minishell(char **envp)
+void	readline_minishell(t_env *env)
 {
 	char	*av;
 
@@ -88,7 +86,7 @@ void	readline_minishell(char **envp)
 		{
 			printf("\033[1A");
 			printf("\033[10C");
-			printf(" exit\n"); // 의문의 종료
+			printf(" exit\n");
 			exit (0);
 		}
 		else if (*av == '\0')
@@ -96,7 +94,7 @@ void	readline_minishell(char **envp)
 		else
 		{
 			add_history(av);
-			minishell(av, envp);
+			minishell(av, env);
 			free(av);
 		}
 	}
@@ -119,6 +117,6 @@ int	main(int argc, char **argv, char **envp)
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	signal(SIGINT, sig_handler);// CTRL + c
 	signal(SIGQUIT, SIG_IGN);// CTRL + /
-	readline_minishell(envp);
+	readline_minishell(env);
 	exit (g_errnum);
 }
