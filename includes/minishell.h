@@ -65,8 +65,8 @@ int		g_errnum;
 /* minishell.c */
 void	minishell(char *av, t_env *head_env);
 void	sig_handler(int signal);
-void	readline_minishell(char **envp);
-int		parsing_minishell(t_node **head, char **str, t_env env);
+void	readline_minishell(t_env *env);
+int		parsing_minishell(t_node **head, char **str, t_env *env);
 
 /* parsing_delquote.c */
 char	*del_quote(char *av);
@@ -76,48 +76,49 @@ int		find_cut(char *av);
 void	del_q(char *av, char *str, t_util *u);
 
 /* parsing_dollar_util.c */
-int		find_env(char *av, int *idx, char ***env);
+int		find_env(char *av, int *idx, t_env *env);
 char	*get_word(char *av, int *idx);
-int		find_dollar(char *av, char ***env);
+int		find_dollar(char *av, t_env *env);
 void	put_str(char *str, char *av, int *a_idx, int *s_idx);
 
 /* parsing_dollar.c */
-char	**check_dollar(char **av, t_env e);
-char	*change_dollar(char *av, char ***env, int env_len);
+char	**check_dollar(char **av, t_env *env);
+char	*change_dollar(char *av, t_env *env, int env_len);
 char	***make_env(t_env e);
 void	put_word(char *av, char *word, int *idx);
-void	put_env(char *str, char *av, char ***env, t_util *u);
+void	put_env(char *str, char *av, t_env *env, t_util *u);
 
 /* paring_fd.c */
 void	new_file(char **str, int *i, t_node *node);
 void	append_file(char **str, int *i, t_node *node);
 void	check_infile(char **str, int *i, t_node *node);
 void	only_open(char **str, int *i);
-void	is_infd(char **str, int *i, t_node *node, t_env e);
+void	is_infd(char **str, int *i, t_node *node, t_env *env);
 
 /* parsing_free.c */
 void	free_str(char **str);
 void	free_str_three(char ***str);
 void	free_node(t_node *head);
+int		count_str(char **str);
 
 /* parsing_heredoc.c */
-void	heredoc_infile(char **str, int *i, t_node *node, t_env e);
-void	heredoc_process(char **str, int *i, t_node *node, t_env e);
-char	*heredoc_check_dollar(char *av, t_env e);
-int		heredoc_readline(char *av, char *limiter, t_node *node, t_env e);
+void	heredoc_infile(char **str, int *i, t_node *node, t_env *env);
+void	heredoc_process(char **str, int *i, t_node *node, t_env *env);
+char	*heredoc_check_dollar(char *av, t_env *env);
+int		heredoc_readline(char *av, char *limiter, t_node *node, t_env *env);
 
 /* parsing_in_pipe.c */
-int		parsing_in_pipe(char *av, t_node *node, t_env env);
+int		parsing_in_pipe(char *av, t_node *node, t_env *env);
 char	*add_space(char *av);
-char	**find_fd(char **str, t_node *node, t_env e);
+char	**find_fd(char **str, t_node *node, t_env *e);
 int		get_flagcnt(char *av);
 void	is_outfd(char **str, int *i, t_node *node);
 
 /* parsing_node.c */
-void	save_in_node(t_node *node, char **cmd, t_env env);
+void	save_in_node(t_node *node, char **cmd, t_env *env);
 t_node	*create_node(void);
 void	append_node(t_node **head, t_node *new_node);
-void	find_path(char *cmd, char **env, t_node *node);
+void	find_path(char *cmd, t_env *env, t_node *node);
 void	get_path(char **path, t_node *node, char *cmd);
 
 /* parsing_util.c */

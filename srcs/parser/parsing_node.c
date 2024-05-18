@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-void	save_in_node(t_node *node, char **cmd, t_env e)
+void	save_in_node(t_node *node, char **cmd, t_env *env)
 {
 	int	i;
 
@@ -22,22 +22,24 @@ void	save_in_node(t_node *node, char **cmd, t_env e)
 	while (cmd[++i])
 		node->cmd[i] = ft_strdup(cmd[i]);
 	node->cmd[i] = NULL;
-	find_path(cmd[0], e.arr, node);
+	find_path(cmd[0], env, node);
 }
 
-void	find_path(char *cmd, char **env, t_node *node)
+void	find_path(char *cmd, t_env *env, t_node *node)
 {
 	char	*env_path;
 	char	**path;
 	int		i;
+	t_env	*e;
 
-	i = -1;
-	while (env[++i])
+	e = env;
+	while (e->cmd)
 	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
+		if (ft_strncmp(e->key, "PATH", 4) == 0)
 			break ;
+		e = e->next;
 	}
-	env_path = ft_strdup(env[i] + 5);
+	env_path = ft_strdup(e->value);
 	path = ft_split(env_path, ':');
 	free(env_path);
 	if (access(cmd, X_OK) == 0)

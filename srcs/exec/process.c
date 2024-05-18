@@ -62,7 +62,7 @@ static void	child_solo(t_env *head_env, t_node *node, int *cnt)
 	if (pid == 0)
 	{
 		// fprintf(stderr, "child_solo\n");
-		// redirect_io(node->in_fd, node->out_fd);
+		redirect_io(node->in_fd, node->out_fd);
 		// system("lsof -p $$ >> log");
 		// system("lsof -p $$ >> solo_log");
 		head_env_chk(head_env, 100); // chk
@@ -113,7 +113,7 @@ static void	child_end(t_env *head_env, t_node *node, int *cnt)
 	if (pid == 0)
 	{
 		// fprintf(stderr, "child_end\n");
-		// redirect_io(node->in_fd, node->out_fd); // <- 여기서부터 다시
+		redirect_io(node->in_fd, node->out_fd); // <- 여기서부터 다시
 		// system("lsof -p $$ >> log");
 		run_cmd(head_env, node);
 	}

@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-int	find_dollar(char *av, char ***env)
+int	find_dollar(char *av, t_env *env)
 {
 	t_util	u;
 	int		env_len;
@@ -31,39 +31,31 @@ int	find_dollar(char *av, char ***env)
 	return (env_len);
 }
 
-char	***make_env(t_env e)
-{
-	t_util	u;
-	char	***env;
-
-	util_init(&u);
-	u.idx = count_str(e.arr);
-	env = malloc(sizeof(char **) * (u.idx + 1));
-	while (e.arr[++u.i])
-		env[u.i] = ft_split(e.arr[u.i], '=');
-	env[u.i] = NULL;
-	return (env);
-}
-
-int	find_env(char *av, int *idx, char ***env)
+int	find_env(char *av, int *idx, t_env *env)
 {
 	int		word_len;
 	int		env_len;
 	int		len;
 	int		i;
 	char	*word;
+	t_env	*e;
 
+	e = env;
 	i = -1;
 	len = 0;
 	word = get_word(av, idx);
 	word_len = ft_strlen(word);
-	while (env[++i])
+	while (e)
 	{
-		env_len = ft_max(word_len, ft_strlen(env[i][0]));
-		if (ft_strncmp(env[i][0], word, env_len) == 0)
-			len = ft_strlen(env[i][1]) - word_len;
+		env_len = ft_max(word_len, ft_strlen(e->key));
+		if (ft_strncmp(e->key, word, env_len) == 0)
+		{	
+			len = ft_strlen(e->value) - word_len;
+			len--;
+			break ;
+		}
+		e = e->next;
 	}
-	len--;
 	free(word);
 	return (len);
 }
@@ -76,23 +68,27 @@ void	put_str(char *str, char *av, int *a_idx, int *s_idx)
 	str[++(*s_idx)] = av[*a_idx];
 }
 
-void	put_env(char *str, char *av, char ***env, t_util *u)
+void	put_env(char *str, char *av, t_env *env, t_util *u)
 {
 	char	*word;
 	int		env_len;
 	int		idx;
+	t_env	*e;
 
-	env_len = find_dollar(av, env);
+	e = env;
 	word = get_word(av, &u->i);
 	u->j = -1;
-	while (env[++(u->j)])
+	while (e)
 	{
-		if (ft_strncmp(env[u->j][0], word, env_len) == 0)
+		env_len = ft_max(ft_strlen(word), ft_strlen(e->key));
+		if (ft_strncmp(e->key, word, env_len) == 0)
 		{
 			idx = -1;
-			while (env[u->j][1][++idx])
-				str[++(u->idx)] = env[u->j][1][idx];
+			while (e->value[++idx])
+				str[++(u->idx)] = e->value[idx];
+			break ;
 		}
+		e = e->next;
 	}
 	free(word);
 }

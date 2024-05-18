@@ -70,7 +70,7 @@ void	only_open(char **str, int *i)
 	*i += 1;
 }
 
-void	is_infd(char **str, int *i, t_node *node, t_env e)
+void	is_infd(char **str, int *i, t_node *node, t_env *env)
 {
 	if (!str[(*i) + 1])
 		perror("nnnn");
@@ -84,7 +84,7 @@ void	is_infd(char **str, int *i, t_node *node, t_env e)
 		if (ft_strlen(str[*i]) == 1)
 			check_infile(str, i, node);
 		else if (ft_strncmp(str[*i], "<<", ft_strlen(str[*i])) == 0)
-			heredoc_infile(str, i, node, e);
+			heredoc_infile(str, i, node, env);
 		else if (str[*i][1] == '>')
 			only_open(str, i);
 		else

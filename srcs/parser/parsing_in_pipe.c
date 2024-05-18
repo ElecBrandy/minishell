@@ -6,11 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 10:26:26 by dongeunk          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2024/05/16 19:13:07 by dongeunk         ###   ########.fr       */
-=======
-/*   Updated: 2024/05/16 22:43:17 by dongwook         ###   ########.fr       */
->>>>>>> origin/dongwook
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +36,7 @@ void	is_outfd(char **str, int *i, t_node *node)
 	}
 }
 
-char	**find_fd(char **str, t_node *node, t_env e)
+char	**find_fd(char **str, t_node *node, t_env *env)
 {
 	char	**cmd;
 	int		i;
@@ -55,7 +51,7 @@ char	**find_fd(char **str, t_node *node, t_env e)
 	while (str[++i])
 	{
 		if (ft_strncmp(str[i], "<", 1) == 0)
-			is_infd(str, &i, node, e);
+			is_infd(str, &i, node, env);
 		else if (ft_strncmp(str[i], ">", 1) == 0)
 			is_outfd(str, &i, node);
 		else
@@ -109,7 +105,7 @@ char	*add_space(char *av)
 	return (str);
 }
 
-int	parsing_in_pipe(char *av, t_node *node, t_env env)
+int	parsing_in_pipe(char *av, t_node *node, t_env *env)
 {
 	int		len;
 	char	*tmp;
@@ -117,12 +113,8 @@ int	parsing_in_pipe(char *av, t_node *node, t_env env)
 	char	**cmd;
 
 	tmp = add_space(av);
-<<<<<<< HEAD
 	if (!tmp)
 		return (1);
-=======
-	// printf("%s\n", tmp);
->>>>>>> origin/dongwook
 	len = find_flag(tmp, ' ');
 	if (ft_find_quotes(tmp, 34) + ft_find_quotes(tmp, 39) == 0)
 		str = ft_split(tmp, ' ');

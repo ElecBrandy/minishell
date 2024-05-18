@@ -22,7 +22,7 @@ void	sig_handler(int signal)
 	rl_redisplay();
 }
 
-int	parsing_minishell(t_node **head, char **str, t_env env)
+int	parsing_minishell(t_node **head, char **str, t_env *env)
 {
 	t_node	*node;
 	t_util	u;
@@ -65,12 +65,10 @@ void	minishell(char *av, t_env *env)
 			break ;
 		}
 		u.cnt = count_node(head); // 노드 수 세기
-		fork_process(&env, head, u.cnt); // 프로세스 실행
+		fork_process(env, head, u.cnt); // 프로세스 실행
 		// print_linked_list(head); // 노드 다 출력
 		free_node(head); // 노드 메모리 해제
 	}
-	free_str(env.arr);
-	free_str(env.arr_export); // 환경변수 free
 	free_str_three(str); // 파싱된 문자열 해제
 }
 

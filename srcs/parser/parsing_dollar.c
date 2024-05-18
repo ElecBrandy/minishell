@@ -50,7 +50,7 @@ char	*get_word(char *av, int *idx)
 	return (word);
 }
 
-char	*change_dollar(char *av, char ***env, int env_len)
+char	*change_dollar(char *av, t_env *env, int env_len)
 {
 	int		len;
 	int		idx;
@@ -77,14 +77,12 @@ char	*change_dollar(char *av, char ***env, int env_len)
 	return (str);
 }
 
-char	**check_dollar(char **av, t_env e)
+char	**check_dollar(char **av, t_env *env)
 {
 	char	**str;
-	char	***env;
 	int		env_len;
 	t_util	u;
 
-	env = make_env(e);
 	util_init(&u);
 	u.cnt = count_str(av);
 	str = malloc(sizeof(char *) * (u.cnt + 1));
@@ -100,6 +98,5 @@ char	**check_dollar(char **av, t_env e)
 		}
 	}
 	str[u.i] = NULL;
-	free_str_three(env);
 	return (str);
 }

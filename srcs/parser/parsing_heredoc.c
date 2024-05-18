@@ -12,34 +12,31 @@
 
 #include "../../includes/minishell.h"
 
-char	*heredoc_check_dollar(char *av, t_env e)
+char	*heredoc_check_dollar(char *av, t_env *env)
 {
 	char	*str;
-	char	***env;
 	int		env_len;
 
-	env = make_env(e);
 	env_len = find_dollar(av, env);
 	str = change_dollar(av, env, env_len);
-	free_str_three(env);
 	free(av);
 	return (str);
 }
 
-int	heredoc_readline(char *av, char *limiter, t_node *node, t_env e)
+int	heredoc_readline(char *av, char *limiter, t_node *node, t_env *env)
 {
 	add_history(av);
 	if ((ft_strncmp(limiter, av, ft_strlen(limiter)) == 0)
 		&& (ft_strlen(limiter) == ft_strlen(av)))
 		return (1);
-	av = heredoc_check_dollar(av, e);
+	av = heredoc_check_dollar(av, env);
 	write(node->in_fd, av, ft_strlen(av));
 	write(node->in_fd, "\n", 1);
 	free(av);
 	return (0);
 }
 
-void	heredoc_process(char **str, int *i, t_node *node, t_env e)
+void	heredoc_process(char **str, int *i, t_node *node, t_env *env)
 {
 	char	*av;
 	char	*limiter;
@@ -57,7 +54,7 @@ void	heredoc_process(char **str, int *i, t_node *node, t_env e)
 			free(av);
 		else
 		{
-			if (heredoc_readline(av, limiter, node, e) == 1)
+			if (heredoc_readline(av, limiter, node, env) == 1)
 				break ;
 		}
 		if (!str)
@@ -67,7 +64,7 @@ void	heredoc_process(char **str, int *i, t_node *node, t_env e)
 	free(av);
 }
 
-void	heredoc_infile(char **str, int *i, t_node *node, t_env e)
+void	heredoc_infile(char **str, int *i, t_node *node, t_env *env)
 {
 	struct termios	ter;
 
@@ -86,5 +83,5 @@ void	heredoc_infile(char **str, int *i, t_node *node, t_env e)
 		exit (1);
 	}
 	*i += 1;
-	heredoc_process(str, i, node, e);
+	heredoc_process(str, i, node, env);
 }

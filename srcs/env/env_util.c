@@ -62,7 +62,7 @@ t_env	*env_array_to_list(t_env *head, char **envp)
 	head = NULL;
 	while (envp[i])
 	{
-		sep_pos = strchr(envp[i], '=');  // '=' 위치 찾기
+		sep_pos = ft_strchr(envp[i], '=');  // '=' 위치 찾기
 		if (sep_pos)
 		{
 			tmp = ft_strdup(envp[i]);
