@@ -6,59 +6,68 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:19:07 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 12:50:03 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 16:14:42 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	sort_arr_2d(char **arr);
-static int	copy_array(char **src, char **dst);
-static void	print_arry_2d(char **arr); // Error (나중에 지우기)
-
-static int	sort_arr_2d(char **arr)
+t_env *env_array_to_list(t_env *head, char **envp)
 {
-	int		i;
-	int		j;
+    int		i;
+    char	*key;
+	char	*value;
 	char	*temp;
 
 	i = 0;
-	while (arr[i])
+    head = NULL;
+    while (envp[i])
 	{
-		j = i + 1;
-		while (arr[j])
-		{
-			if (ft_strcmp(arr[i], arr[j]) > 0)
-			{
-				temp = arr[i];
-				arr[i] = arr[j];
-				arr[j] = temp;
-			}
-			j++;
-		}
-		i++;
-	}
-	return (TRUE);
+        temp = ft_strdup(envp[i]); // 원본 문자열 복사 // 나중에 제대로 작동한다면, 이 복사본 temp가 과연 필요한지 확인해보기
+        parse_env_str(temp, &key, &value); //key와 value 추출
+        add_env_to_list(&head, temp, key, value); // 파싱 성공 시 노드 추가
+        ft_free((void **)&temp); // 사용한 임시 문자열 메모리 해제
+        i++;
+    }
+    return head;
 }
 
-static int	copy_array(char **src, char **dst)
+char	**env_list_to_array(t_env *head_env)
 {
-	int i;
+	int		i;
+	t_env	*cur;
+	char	**arr;
 
 	i = 0;
-	// if (!src || !dst)
-	// 	return (FALSE);
-	while (src[i])
+	cur = head_env;
+	arr = (char **)malloc(sizeof(char *) * (count_env(head_env) + 1));
+	if (!arr)
+		return (NULL);
+	while (cur)
 	{
-		dst[i] = ft_strdup(src[i]);
-		if (!dst[i])
-		{
-			while (--i >= 0)
-				ft_free((void **)&dst[i]);
-			return (FALSE);
-		}
+		arr[i] = ft_strdup(cur->cmd); // Error?
+		// printf("arr[%d]: %s\n", i, arr[i]);
 		i++;
+		cur = cur->next;
 	}
-	dst[i] = NULL;
-	return (TRUE);
+	arr[i] = NULL;
+	return (arr);
+}
+
+void	parse_env_str(char *env_str, char **key, char **value)
+{
+    char *sep_pos;
+
+	sep_pos = ft_strchr(env_str, '=');
+	if (!sep_pos) // '=' 이 없을 경우
+	{
+		*key = env_str;
+		*value = NULL;
+	}
+	else // '=' 이 있을 경우
+	{
+		*sep_pos = '\0'; // '='를 NULL 문자로 변경하여 문자열 분리
+		*key = env_str; // 키는 '=' 이전 부분
+		*value = sep_pos + 1; // 값은 '=' 다음 부분
+	}
 }

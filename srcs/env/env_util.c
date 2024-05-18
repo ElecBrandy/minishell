@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:31:14 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/17 00:30:20 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 16:54:41 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ t_env	*create_node_env(const char *cmd, const char *key, const char *value)
 		return (NULL);
 	new_node->cmd = ft_strdup(cmd);
 	new_node->key = ft_strdup(key);
-	new_node->value = ft_strdup(value);
+	if (value == '\0')
+		new_node->value = NULL;
+	else
+		new_node->value = ft_strdup(value);
 	new_node->next = NULL;
 	if (!new_node->cmd || !new_node->key|| !new_node->value)
 	{
@@ -49,56 +52,34 @@ void	append_node_env(t_env **head, t_env *new_node)
 	}
 }
 
-t_env	*env_array_to_list(t_env *head, char **envp)
+void	add_env_to_list(t_env **head, char *original_str, char *key, char *value)
 {
-	int		i;
-	char	*key;
-	char	*value;
-	char	*sep_pos;
-	char	*tmp;
-	t_env	*new_node;
-
-	i = 0;
-	head = NULL;
-	while (envp[i])
+    t_env *new_node;
+	
+	new_node = create_node_env(original_str, key, value);
+    if (!new_node)
 	{
-		sep_pos = strchr(envp[i], '=');  // '=' 위치 찾기
-		if (sep_pos)
-		{
-			tmp = ft_strdup(envp[i]);
-			*sep_pos = '\0';								// '=' 기호를 NULL로 바꿔 key와 value를 분리
-			key = envp[i];									// 키는 '=' 이전 부분
-			value = sep_pos + 1;							// 값은 '=' 다음 부분
-			new_node = create_node_env(tmp, key, value);	// 새로운 노드 생성 및 연결 리스트에 추가
-			if (new_node)									// 노드 생성에 성공한 경우만 추가
-				append_node_env(&head, new_node);
-			ft_free((void **)&tmp);
-		}
-		i++;
-	}
-	return (head);
+        // free_env_list(*head); // 메모리 해제
+        exit(1); // 실패 시 종료
+    }
+    append_node_env(head, new_node); // 성공 시 리스트에 노드 추가
 }
 
-char **env_list_to_array(t_env *head_env)
+void	free_env_list(t_env *head)
 {
-	int		i;
-	t_env	*cur;
-	char	**arr;
+	t_env *cur;
+	t_env *next;
 
-	i = 0;
-	cur = head_env;
-	arr = (char **)malloc(sizeof(char *) * (count_env(head_env) + 1));
-	if (!arr)
-		return (NULL);
-	while (cur)
+	cur = head;
+	while (cur != NULL)
 	{
-		arr[i] = ft_strdup(cur->cmd);
-		// printf("arr[%d]: %s\n", i, arr[i]);
-		i++;
-		cur = cur->next;
+		next = cur->next;
+		ft_free((void **)&cur->cmd);
+		ft_free((void **)&cur->key);
+		ft_free((void **)&cur->value);
+		ft_free((void **)&cur);
+		cur = next;
 	}
-	arr[i] = NULL;
-	return (arr);
 }
 
 int	count_env(t_env *head_env)
@@ -114,23 +95,6 @@ int	count_env(t_env *head_env)
 		cur = cur->next;
 	}
 	return (cnt);
-}
-
-void	free_env_list(t_env *head)
-{
-    t_env *cur;
-    t_env *next;
-
-    cur = head;
-    while (cur != NULL)
-	{
-        next = cur->next;
-        ft_free((void **)&cur->cmd);
-        ft_free((void **)&cur->key);
-        ft_free((void **)&cur->value);
-        ft_free((void **)&cur);
-        cur = next;
-    }
 }
 
 // void print_env_list(t_env *head)
@@ -149,4 +113,32 @@ void	free_env_list(t_env *head)
 // 		printf("\n");
 // 		cur = cur->next;
 // 	}
+// }
+
+// t_env	*env_array_to_list(t_env *head, char **envp)
+// {
+// 	int			i;
+// 	t_envutil	util;
+// 	char	*sep_pos;
+// 	t_env	*new_node;
+
+// 	i = 0;
+// 	head = NULL;
+// 	while (envp[i])
+// 	{
+// 		sep_pos = strchr(envp[i], '=');  // '=' 위치 찾기
+// 		if (sep_pos)
+// 		{
+// 			util.tmp = ft_strdup(envp[i]);
+// 			*sep_pos = '\0';								// '=' 기호를 NULL로 바꿔 key와 value를 분리
+// 			util.key = envp[i];									// 키는 '=' 이전 부분
+// 			util.value = sep_pos + 1;							// 값은 '=' 다음 부분
+// 			new_node = create_node_env(util.tmp, util.key, util.value);	// 새로운 노드 생성 및 연결 리스트에 추가
+// 			if (new_node)									// 노드 생성에 성공한 경우만 추가
+// 				append_node_env(&head, new_node);
+// 			ft_free((void **)&util.tmp);
+// 		}
+// 		i++;
+// 	}
+// 	return (head);
 // }

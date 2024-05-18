@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 12:49:09 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 16:28:39 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@ typedef struct s_env
 	char	*value;
 	struct s_env	*next;
 }	t_env;
+
+typedef struct s_envutil
+{
+	char	*key;
+	char	*value;
+	char	*tmp;
+}	t_envutil;
 
 int		g_errnum;
 /* ↓↓↓↓↓ ======== PARSER ======== ↓↓↓↓↓ */
@@ -171,5 +178,10 @@ void	ft_free_2d(char **str);
 void	print_node_details(t_node *node);
 void	print_linked_list(t_node *head);
 int		ft_strcmp(const char *s1, const char *s2);
-void    *ft_realloc(void *ptr, int original_size, int new_size);
+
+
+/* new */
+void	parse_append_env(t_env **head, char *env_str);
+void	parse_env_str(char *env_str, char **key, char **value);
+
 #endif

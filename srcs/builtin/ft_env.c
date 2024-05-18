@@ -6,23 +6,40 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 22:01:24 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/18 15:03:18 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void ft_env(t_env *head_env)
+/*
+	ft_env
+	- Print the environment variables.
+	- If there is no argument, print all the environment variables.
+*/
+
+void ft_env(t_node *node, t_env *head_env)
 {
 	int		i;
+	t_env	*cur;
 	char	**env;
 
-	env = env_list_to_array(head_env);
-	i = 0;
-	while (env[i])
+	if (node->cmd[1] != NULL) // 옵션 || 인자 이 있는 경우
 	{
-		printf("%s\n", env[i]);
-		i++;
+		exit(0); // Error
 	}
-	exit(0); // Error?
+	else // 옵션 || 인자가 없는 경우 (정상 : 환경변수 출력)
+	{
+		cur = head_env;
+		i = 0;
+		while (cur != NULL)
+		{
+			if (ft_strchr(cur->cmd, '=') != NULL) // '='가 존재하는 경우만 (출력 O)
+			{
+				printf("%s=%s\n", cur->key, cur->value);
+			}
+			cur = cur->next;
+		}
+		exit(1);
+	}
 }
