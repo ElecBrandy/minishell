@@ -6,80 +6,46 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 10:26:26 by dongeunk          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2024/05/16 19:13:07 by dongeunk         ###   ########.fr       */
-=======
-/*   Updated: 2024/05/16 22:43:17 by dongwook         ###   ########.fr       */
->>>>>>> origin/dongwook
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	is_outfd(char **str, int *i, t_node *node)
+static void	write_other(char *str, char *av, int *a_idx, int *s_idx)
 {
-	if (!str[(*i) + 1])
-		perror("no");
-	else
+	str[++(*s_idx)] = av[*a_idx];
+	while (av[++(*a_idx)])
 	{
-		if (str[(*i) + 1][0] == '<' || str[(*i) + 1][0] == '>')
-		{
-			perror("not file out");
-			return ;
-		}
-		if (ft_strlen(str[*i]) == 1)
-			new_file(str, i, node);
-		else if (str[*i][1] == '>')
-			append_file(str, i, node);
-		else
-		{
-			if (node->out_fd != 1)
-				close(node->out_fd);
-			perror("notfile error");
-		}
+		if (av[*a_idx] == 34)
+			break ;
+		str[++(*s_idx)] = av[*a_idx];
 	}
+	str[++(*s_idx)] = av[*a_idx];
 }
 
-char	**find_fd(char **str, t_node *node, t_env e)
+static void	write_other_two(char *str, char *av, int *a_idx, int *s_idx)
 {
-	char	**cmd;
-	int		i;
-	int		idx;
-
-	idx = 0;
-	i = -1;
-	while (str[idx])
-		idx++;
-	cmd = malloc(sizeof(char *) * (idx + 1));
-	idx = 0;
-	while (str[++i])
+	str[++(*s_idx)] = av[*a_idx];
+	while (av[++(*a_idx)])
 	{
-		if (ft_strncmp(str[i], "<", 1) == 0)
-			is_infd(str, &i, node, e);
-		else if (ft_strncmp(str[i], ">", 1) == 0)
-			is_outfd(str, &i, node);
-		else
-			cmd[idx++] = ft_strdup(str[i]);
+		if (av[*a_idx] == 39)
+			break ;
+		str[++(*s_idx)] = av[*a_idx];
 	}
-	cmd[idx] = NULL;
-	free_str(str);
-	return (cmd);
+	str[++(*s_idx)] = av[*a_idx];
 }
 
-int	get_flagcnt(char *av)
+static void	write_space(char *str, char *av, t_util *u)
 {
-	t_util	u;
-
-	util_init(&u);
-	while (av[++u.i])
-	{
-		if ((av[u.i] == '<' || av[u.i] == '>')
-			&& (av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
-		{
-			u.flag++;
-		}
-	}
-	return (u.flag);
+	if ((u->i > 1)
+		&& (av[u->i] == '<' || av[u->i] == '>')
+		&& (av[u->i - 1] != '<' && av[u->i - 1] != '>' && av[u->i - 1] != ' '))
+		str[++(u->idx)] = ' ';
+	str[++(u->idx)] = av[u->i];
+	if ((av[u->i] == '<' || av[u->i] == '>')
+		&& (av[u->i + 1] != '<' && av[u->i + 1] != '>' && av[u->i + 1] != ' '))
+		str[++(u->idx)] = ' ';
 }
 
 char	*add_space(char *av)
@@ -96,20 +62,20 @@ char	*add_space(char *av)
 		return (NULL);// 메모리 할당 실패 시 NULL 반환
 	while (av[++u.i])
 	{
-		if ((u.i > 1)
-			&& (av[u.i] == '<' || av[u.i] == '>')
-			&& (av[u.i - 1] != '<' && av[u.i - 1] != '>' && av[u.i - 1] != ' '))
-			str[++u.idx] = ' ';
-		str[++u.idx] = av[u.i];
-		if ((av[u.i] == '<' || av[u.i] == '>')
-			&& (av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
-			str[++u.idx] = ' ';
+		if (av[u.i] == 34)
+			write_other(str, av, &u.i, &u.idx);
+		else if (av[u.i] == 39)
+			write_other_two(str, av, &u.i, &u.idx);
+		else
+			write_space(str, av, &u);
+		if (av[u.i] == '\0')
+			break ;
 	}
 	str[++u.idx] = '\0';
 	return (str);
 }
 
-int	parsing_in_pipe(char *av, t_node *node, t_env env)
+int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 {
 	int		len;
 	char	*tmp;
@@ -117,12 +83,9 @@ int	parsing_in_pipe(char *av, t_node *node, t_env env)
 	char	**cmd;
 
 	tmp = add_space(av);
-<<<<<<< HEAD
 	if (!tmp)
 		return (1);
-=======
-	// printf("%s\n", tmp);
->>>>>>> origin/dongwook
+	tmp = check_dollar(tmp, env, p_e);
 	len = find_flag(tmp, ' ');
 	if (ft_find_quotes(tmp, 34) + ft_find_quotes(tmp, 39) == 0)
 		str = ft_split(tmp, ' ');
@@ -130,12 +93,10 @@ int	parsing_in_pipe(char *av, t_node *node, t_env env)
 		str = split_space(tmp, len);
 	if (!str) //free(tmp);
 		return (1);
-	cmd = check_dollar(str, env);
+	cmd = find_fd(str, node, env);
 	cmd = check_cmd(cmd);
-	cmd = find_fd(cmd, node, env);
 	save_in_node(node, cmd, env);
 	free(tmp);
-	free_str(str);
 	free_str(cmd);
 	return (0);
 }

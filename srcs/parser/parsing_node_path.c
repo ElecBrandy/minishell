@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_node.c                                     :+:      :+:    :+:   */
+/*   parsing_node_path.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 19:12:40 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/16 19:12:53 by dongeunk         ###   ########.fr       */
+/*   Created: 2024/05/19 17:48:56 by dongeunk          #+#    #+#             */
+/*   Updated: 2024/05/19 17:48:58 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	save_in_node(t_node *node, char **cmd, t_env e)
+void	save_in_node(t_node *node, char **cmd, t_env *env)
 {
 	int	i;
 
@@ -22,22 +22,24 @@ void	save_in_node(t_node *node, char **cmd, t_env e)
 	while (cmd[++i])
 		node->cmd[i] = ft_strdup(cmd[i]);
 	node->cmd[i] = NULL;
-	find_path(cmd[0], e.arr, node);
+	find_path(cmd[0], env, node);
 }
 
-void	find_path(char *cmd, char **env, t_node *node)
+void	find_path(char *cmd, t_env *env, t_node *node)
 {
 	char	*env_path;
 	char	**path;
 	int		i;
+	t_env	*e;
 
-	i = -1;
-	while (env[++i])
+	e = env;
+	while (e->cmd)
 	{
-		if (ft_strncmp(env[i], "PATH=", 5) == 0)
+		if (ft_strncmp(e->key, "PATH", 4) == 0)
 			break ;
+		e = e->next;
 	}
-	env_path = ft_strdup(env[i] + 5);
+	env_path = ft_strdup(e->value);
 	path = ft_split(env_path, ':');
 	free(env_path);
 	if (access(cmd, X_OK) == 0)
@@ -67,7 +69,7 @@ void	get_path(char **path, t_node *node, char *cmd)
 		exit (2);//빌트인함수 따로 처리
 }
 
-t_node	*create_node(void)
+t_node	*create_node(int p_e)
 {
 	t_node	*node;
 
@@ -79,6 +81,7 @@ t_node	*create_node(void)
 	node->path = NULL;
 	node->in_fd = 0;
 	node->out_fd = 1;
+	node->prev_errnum = p_e;
 	return (node);
 }
 

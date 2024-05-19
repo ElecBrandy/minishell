@@ -57,3 +57,13 @@ void	free_str(char **str)
 	}
 	ft_free((void **)&str);
 }
+
+int	count_str(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}

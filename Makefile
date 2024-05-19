@@ -18,16 +18,20 @@ LIB = -L$(LIB_DIR) -lft
 
 # Sources
 SRCS_P = \
-	srcs/parser/parsing_delquote.c  \
-	srcs/parser/parsing_dollar_util.c	\
-	srcs/parser/parsing_dollar.c	\
-	srcs/parser/parsing_fd.c        \
-	srcs/parser/parsing_free.c      \
-	srcs/parser/parsing_heredoc.c	\
-	srcs/parser/parsing_in_pipe.c   \
-	srcs/parser/parsing_node.c      \
-	srcs/parser/parsing_utils.c     \
-	srcs/parser/parsing.c           \
+	srcs/parser/parsing_delquote.c 			\
+	srcs/parser/parsing_dollar_put.c		\
+	srcs/parser/parsing_dollar_find.c		\
+	srcs/parser/parsing_dollar.c			\
+	srcs/parser/parsing_error.c				\
+	srcs/parser/parsing_free.c     			\
+	srcs/parser/parsing_heredoc_dollar.c	\
+	srcs/parser/parsing_heredoc.c			\
+	srcs/parser/parsing_in_pipe.c 		 	\
+	srcs/parser/parsing_infd.c       		\
+	srcs/parser/parsing_node_path.c   		\
+	srcs/parser/parsing_outfd.c				\
+	srcs/parser/parsing_utils.c  		  	\
+	srcs/parser/parsing.c         		 	\
 
 SRCS_E = \
 	srcs/builtin/ft_cd.c        \

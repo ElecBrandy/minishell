@@ -1,16 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_fd.c                                       :+:      :+:    :+:   */
+/*   parsing_outfd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/10 09:10:14 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/10 09:10:15 by dongeunk         ###   ########.fr       */
+/*   Created: 2024/05/19 17:45:07 by dongeunk          #+#    #+#             */
+/*   Updated: 2024/05/19 17:45:09 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	is_outfd(char **str, int *i, t_node *node)
+{
+	if (!str[(*i) + 1])
+		perror("no");
+	else
+	{
+		if (str[(*i) + 1][0] == '<' || str[(*i) + 1][0] == '>')
+		{
+			perror("not file out");
+			return ;
+		}
+		if (ft_strlen(str[*i]) == 1)
+			new_file(str, i, node);
+		else if (str[*i][1] == '>')
+			append_file(str, i, node);
+		else
+		{
+			if (node->out_fd != 1)
+				close(node->out_fd);
+			perror("notfile error");
+		}
+	}
+}
 
 void	new_file(char **str, int *i, t_node *node)
 {
@@ -46,50 +70,28 @@ void	append_file(char **str, int *i, t_node *node)
 	}
 }
 
-void	check_infile(char **str, int *i, t_node *node)
+char	**find_fd(char **str, t_node *node, t_env *env)
 {
-	char	*file;
+	char	**cmd;
+	int		i;
+	int		idx;
 
-	if (node->in_fd != 0)
-		close(node->in_fd);
-	file = del_quote(str[(*i) + 1]);
-	node->in_fd = open(file, O_RDONLY);
-	*i += 1;
-	free(file);
-	if (node->in_fd == -1)
+	idx = 0;
+	i = -1;
+	while (str[idx])
+		idx++;
+	cmd = malloc(sizeof(char *) * (idx + 1));
+	idx = 0;
+	while (str[++i])
 	{
-		perror("infile error");
-		exit (1);
-	}
-}
-
-void	only_open(char **str, int *i)
-{
-	open(str[(*i) + 1], O_RDWR | O_CREAT | O_APPEND, 0666);
-	close(open(str[(*i) + 1], O_RDWR | O_CREAT | O_APPEND, 0666));
-	*i += 1;
-}
-
-void	is_infd(char **str, int *i, t_node *node, t_env e)
-{
-	if (!str[(*i) + 1])
-		perror("nnnn");
-	else
-	{
-		if (str[(*i) + 1][0] == '<' || str[(*i) + 1][0] == '>')
-		{
-			perror("not file in");
-			return ;
-		}
-		if (ft_strlen(str[*i]) == 1)
-			check_infile(str, i, node);
-		else if (ft_strncmp(str[*i], "<<", ft_strlen(str[*i])) == 0)
-			heredoc_infile(str, i, node, e);
-		else if (str[*i][1] == '>')
-			only_open(str, i);
+		if (ft_strncmp(str[i], "<", 1) == 0)
+			is_infd(str, &i, node, env);
+		else if (ft_strncmp(str[i], ">", 1) == 0)
+			is_outfd(str, &i, node);
 		else
-		{
-			perror("notfile error2");
-		}
+			cmd[idx++] = ft_strdup(str[i]);
 	}
+	cmd[idx] = NULL;
+	free_str(str);
+	return (cmd);
 }
