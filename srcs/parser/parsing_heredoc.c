@@ -84,4 +84,6 @@ void	heredoc_infile(char **str, int *i, t_node *node, t_env *env)
 	}
 	*i += 1;
 	heredoc_process(str, i, node, env);
+	close(node->in_fd);
+	node->in_fd = open(".heredoc_tmp", O_RDONLY);
 }
