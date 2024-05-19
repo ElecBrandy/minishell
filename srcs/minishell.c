@@ -6,7 +6,7 @@
 /*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 17:28:09 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/17 09:37:19 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:53:31 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ void	minishell(char *av, t_env *env)
 	t_util	u;
 	int		prev_errnum;
 
-	head = NULL;
 	util_init(&u);
 	prev_errnum = g_errnum;
 	g_errnum = 0;
 	str = parsing(av); // str[세미콜론][파이프][파이프 내부]로 파싱
 	while (str[++u.i])
-	{	
+	{
+		head = NULL;
 		g_errnum = parsing_minishell(&head, str[u.i], env, prev_errnum); // 파싱부분
 		if (g_errnum != 0) //파싱부분에서 에러나오면 다시 readline으로
 		{
@@ -69,7 +69,7 @@ void	minishell(char *av, t_env *env)
 		}
 		u.cnt = count_node(head); // 노드 수 세기
 		fork_process(env, head, u.cnt); // 프로세스 실행
-		print_linked_list(head); // 노드 다 출력
+	//	print_linked_list(head); // 노드 다 출력
 		free_node(head); // 노드 메모리 해제
 	}
 	free_str_three(str); // 파싱된 문자열 해제
@@ -103,7 +103,7 @@ void	readline_minishell(t_env *env)
 int	main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
-	t_env			*env; // 환경변수 구조체
+	t_env			*env;
 
 	if (argc != 1 || !argv || !envp)
 	{

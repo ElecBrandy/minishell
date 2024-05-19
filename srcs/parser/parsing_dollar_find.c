@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing_dollar_util.c                              :+:      :+:    :+:   */
+/*   parsing_dollar_find.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/16 19:14:10 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/16 19:14:11 by dongeunk         ###   ########.fr       */
+/*   Created: 2024/05/19 17:40:51 by dongeunk          #+#    #+#             */
+/*   Updated: 2024/05/19 17:47:34 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,37 +23,59 @@ int	is_print(char s)
 	return (flag);
 }
 
+void	jump_next_word(char *av, t_util *u)
+{
+	while (av[++u->i])
+	{
+		if (av[u->i] != ' ')
+			break ;
+	}
+	while (av[++u->i])
+	{
+		if (av[u->i] == ' ')
+			break ;
+	}
+	u->flag = 0;
+}
+
 int	find_dollar(char *av, t_env *env, int p_e)
 {
 	t_util	u;
-	int		env_len;
 
-	env_len = 0;
 	util_init(&u);
 	while (av[++u.i])
 	{
-		if (av[u.i] == '$' && av[u.i + 1] == '?')
-			env_len = (get_numlen(p_e) - 2);
-		else if (av[u.i] == '$' && is_print(av[u.i + 1]))
-			env_len += find_env(av, &u.i, env);
-		else if (av[u.i] == 39)
-			u.i = find_next_quote(av, u.i, 39);
+		if (u.i > 0 && (av[u.i] == '<' && av[u.i - 1] == '<'))
+			u.flag = 1;
+		if (u.flag == 1)
+			jump_next_word(av, &u);
+		else
+		{
+			if (av[u.i] == '$' && av[u.i + 1] == '?')
+				u.cnt += (get_numlen(p_e) - 2);
+			else if (av[u.i] == '$' && is_print(av[u.i + 1]))
+				u.cnt += find_env(av, &u.i, env);
+			else if (av[u.i] == 34)
+				in_doublequote(av, p_e, env, &u);
+			else if (av[u.i] == 39)
+				u.i = find_next_quote(av, u.i, 39);
+		}
+		if (av[u.i] == '\0')
+			break ;
 	}
-	return (env_len);
+	return (u.cnt);
 }
 
 int	find_env(char *av, int *idx, t_env *env)
 {
 	int		word_len;
 	int		env_len;
-	int		len;
-	int		i;
+	t_util	u;
 	char	*word;
 	t_env	*e;
 
+	util_init(&u);
 	e = env;
-	i = -1;
-	len = 0;
 	word = get_word(av, idx);
 	word_len = ft_strlen(word);
 	while (e)
@@ -61,45 +83,34 @@ int	find_env(char *av, int *idx, t_env *env)
 		env_len = ft_max(word_len, ft_strlen(e->key));
 		if (ft_strncmp(e->key, word, env_len) == 0)
 		{	
-			len = ft_strlen(e->value) - word_len;
-			len--;
+			u.cnt = ft_strlen(e->value) - word_len;
+			u.cnt--;
 			break ;
 		}
 		e = e->next;
 	}
 	free(word);
-	return (len);
+	return (u.cnt);
 }
 
-void	put_str(char *str, char *av, int *a_idx, int *s_idx)
+char	*get_word(char *av, int *idx)
 {
-	str[++(*s_idx)] = av[*a_idx];
-	while (av[++(*a_idx)] != 39)
-		str[++(*s_idx)] = av[*a_idx];
-	str[++(*s_idx)] = av[*a_idx];
-}
-
-void	put_env(char *str, char *av, t_env *env, t_util *u)
-{
+	t_util	u;
 	char	*word;
-	int		env_len;
-	int		idx;
-	t_env	*e;
 
-	e = env;
-	word = get_word(av, &u->i);
-	u->j = -1;
-	while (e)
+	util_init(&u);
+	u.i = (*idx);
+	while (av[++u.i])
 	{
-		env_len = ft_max(ft_strlen(word), ft_strlen(e->key));
-		if (ft_strncmp(e->key, word, env_len) == 0)
-		{
-			idx = -1;
-			while (e->value[++idx])
-				str[++(u->idx)] = e->value[idx];
+		if (is_print(av[u.i]))
+			u.cnt++;
+		else
 			break ;
-		}
-		e = e->next;
 	}
-	free(word);
+	word = malloc(sizeof(char) * (u.cnt + 1));
+	if (!word)
+		exit (1); // error
+	put_word(av, word, idx);
+	(*idx)--;
+	return (word);
 }

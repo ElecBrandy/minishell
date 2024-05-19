@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 10:26:19 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/16 18:23:04 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:45:15 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	find_next_quote(char *av, int idx, char flag)
 			return (idx);
 	}
 	// 따옴표가 안닫혀있으면 에러처리
+	printf("error\n");
 	exit (1);
 }
 
@@ -60,4 +61,22 @@ int	ft_max(int a, int b)
 	else if (a < b)
 		return (b);
 	return (a);
+}
+
+int	get_flagcnt(char *av)
+{
+	t_util	u;
+
+	util_init(&u);
+	while (av[++u.i])
+	{
+		if (av[u.i] == 34)
+			u.i = find_next_quote(av, u.i, 34);
+		else if (av[u.i] == 39)
+			u.i = find_next_quote(av, u.i, 39);
+		if ((av[u.i] == '<' || av[u.i] == '>')
+			&& (av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
+			u.flag++;
+	}
+	return (u.flag);
 }

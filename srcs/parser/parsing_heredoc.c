@@ -6,7 +6,7 @@
 /*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 18:27:33 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/16 18:29:06 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:43:40 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ char	*heredoc_check_dollar(char *av, t_env *env, t_node *node)
 	char	*str;
 	int		env_len;
 
-	env_len = find_dollar(av, env, node->prev_errnum);
-	str = change_dollar(av, env, env_len, node->prev_errnum);
+	env_len = heredoc_find_dollar(av, env, node->prev_errnum);
+	str = heredoc_change_dollar(av, env, env_len, node->prev_errnum);
 	free(av);
 	return (str);
 }

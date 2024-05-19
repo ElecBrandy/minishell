@@ -12,84 +12,40 @@
 
 #include "../../includes/minishell.h"
 
-void	is_outfd(char **str, int *i, t_node *node)
-{
-	if (!str[(*i) + 1])
-		perror("no");
-	else
-	{
-		if (str[(*i) + 1][0] == '<' || str[(*i) + 1][0] == '>')
-		{
-			perror("not file out");
-			return ;
-		}
-		if (ft_strlen(str[*i]) == 1)
-			new_file(str, i, node);
-		else if (str[*i][1] == '>')
-			append_file(str, i, node);
-		else
-		{
-			if (node->out_fd != 1)
-				close(node->out_fd);
-			perror("notfile error");
-		}
-	}
-}
-
-char	**find_fd(char **str, t_node *node, t_env *env)
-{
-	char	**cmd;
-	int		i;
-	int		idx;
-
-	idx = 0;
-	i = -1;
-	while (str[idx])
-		idx++;
-	cmd = malloc(sizeof(char *) * (idx + 1));
-	idx = 0;
-	while (str[++i])
-	{
-		if (ft_strncmp(str[i], "<", 1) == 0)
-			is_infd(str, &i, node, env);
-		else if (ft_strncmp(str[i], ">", 1) == 0)
-			is_outfd(str, &i, node);
-		else
-			cmd[idx++] = ft_strdup(str[i]);
-	}
-	cmd[idx] = NULL;
-	free_str(str);
-	return (cmd);
-}
-
-int	get_flagcnt(char *av)
-{
-	t_util	u;
-
-	util_init(&u);
-	while (av[++u.i])
-	{
-		if (av[u.i] == 34)
-			u.i = find_next_quote(av, u.i, 34);
-		else if (av[u.i] == 39)
-			u.i = find_next_quote(av, u.i, 39);
-		if ((av[u.i] == '<' || av[u.i] == '>')
-			&& (av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
-			u.flag++;
-	}
-	return (u.flag);
-}
-
 static void	write_other(char *str, char *av, int *a_idx, int *s_idx)
 {
 	str[++(*s_idx)] = av[*a_idx];
 	while (av[++(*a_idx)])
 	{
-		if (av[*a_idx] == 34 || av[*a_idx] == 39)
+		if (av[*a_idx] == 34)
 			break ;
 		str[++(*s_idx)] = av[*a_idx];
 	}
 	str[++(*s_idx)] = av[*a_idx];
+}
+
+static void	write_other_two(char *str, char *av, int *a_idx, int *s_idx)
+{
+	str[++(*s_idx)] = av[*a_idx];
+	while (av[++(*a_idx)])
+	{
+		if (av[*a_idx] == 39)
+			break ;
+		str[++(*s_idx)] = av[*a_idx];
+	}
+	str[++(*s_idx)] = av[*a_idx];
+}
+
+static void	write_space(char *str, char *av, t_util *u)
+{
+	if ((u->i > 1)
+		&& (av[u->i] == '<' || av[u->i] == '>')
+		&& (av[u->i - 1] != '<' && av[u->i - 1] != '>' && av[u->i - 1] != ' '))
+		str[++(u->idx)] = ' ';
+	str[++(u->idx)] = av[u->i];
+	if ((av[u->i] == '<' || av[u->i] == '>')
+		&& (av[u->i + 1] != '<' && av[u->i + 1] != '>' && av[u->i + 1] != ' '))
+		str[++(u->idx)] = ' ';
 }
 
 char	*add_space(char *av)
@@ -106,19 +62,12 @@ char	*add_space(char *av)
 		return (NULL);// 메모리 할당 실패 시 NULL 반환
 	while (av[++u.i])
 	{
-		if (av[u.i] == 34 || av[u.i] == 39)
+		if (av[u.i] == 34)
 			write_other(str, av, &u.i, &u.idx);
+		else if (av[u.i] == 39)
+			write_other_two(str, av, &u.i, &u.idx);
 		else
-		{
-			if ((u.i > 1)
-				&& (av[u.i] == '<' || av[u.i] == '>')
-				&& (av[u.i - 1] != '<' && av[u.i - 1] != '>' && av[u.i - 1] != ' '))
-				str[++u.idx] = ' ';
-			str[++u.idx] = av[u.i];
-			if ((av[u.i] == '<' || av[u.i] == '>')
-				&& (av[u.i + 1] != '<' && av[u.i + 1] != '>' && av[u.i + 1] != ' '))
-				str[++u.idx] = ' ';
-		}
+			write_space(str, av, &u);
 		if (av[u.i] == '\0')
 			break ;
 	}
@@ -136,6 +85,7 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 	tmp = add_space(av);
 	if (!tmp)
 		return (1);
+	tmp = check_dollar(tmp, env, p_e);
 	len = find_flag(tmp, ' ');
 	if (ft_find_quotes(tmp, 34) + ft_find_quotes(tmp, 39) == 0)
 		str = ft_split(tmp, ' ');
@@ -143,12 +93,10 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 		str = split_space(tmp, len);
 	if (!str) //free(tmp);
 		return (1);
-	cmd = check_dollar(str, env, p_e);
-	cmd = find_fd(cmd, node, env);
+	cmd = find_fd(str, node, env);
 	cmd = check_cmd(cmd);
 	save_in_node(node, cmd, env);
 	free(tmp);
-	free_str(str);
 	free_str(cmd);
 	return (0);
 }
