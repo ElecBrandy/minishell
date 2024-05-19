@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 17:32:50 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:57:31 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void	ft_echo(t_node *node);
 void	ft_env(t_env *head_env, t_node *node);
 void	ft_exit(t_node *node);
 void	ft_pwd(t_node *node);
-void	ft_unset(t_node *node);
+void	ft_unset(t_env *head_env, t_node *node);
 
 
 /* ===== FT_EXPROT ===== */
@@ -214,5 +214,8 @@ void	print_linked_list(t_node *head);
 void	print_env_list(t_env *head_env);
 void	print_arry_2d(char **arr);
 void	head_env_chk(t_env *head_env, int i);
+
+/* ft_count_2d_array */
+int		count_2d_array(char **array);
 
 #endif

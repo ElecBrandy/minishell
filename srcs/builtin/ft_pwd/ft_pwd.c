@@ -5,15 +5,27 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/05 15:22:30 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/07 17:29:53 by dongwook         ###   ########.fr       */
+/*   Created: 2024/05/19 17:48:20 by dongwook          #+#    #+#             */
+/*   Updated: 2024/05/19 17:50:41 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 void ft_pwd(t_node *node)
 {
-    printf("builtin pwd\n");
-    exit(0);
+	char	*str;
+
+	g_errnum = 0; // 이거 어떻게 하지?
+	// Error? 전역변수
+	str = getcwd(NULL, 0);
+	if (!str)
+	{
+		ft_putstr_fd("error?\n", 2); // Error?
+		exit(1); // Error?
+	}
+	ft_putstr_fd(str, node->out_fd);
+	write(node->out_fd, "\n", 1);
+	ft_free((void **)&str);
+	exit(0);
 }

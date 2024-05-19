@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:37 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 15:58:24 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:54:13 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ static int is_option(char *str);
 static void echo_without_option(t_node *node);
 static void echo_with_option(t_node *node);
 
-void ft_echo(t_node *node)
+void	ft_echo(t_node *node)
 {
-    size_t	i;
+    int		i;
     int		n_flag;
 
 	n_flag = FALSE;
 	i = 1;
 
-	if (node->cmd[1] == NULL) // "echo" 만 존재하는 경우
+	if (count_2d_array(node->cmd) != 1) // "echo" 만 존재하는 경우
 		printf("\n");
 	else // 인자가 존재하는 경우
 	{
@@ -43,7 +43,7 @@ void ft_echo(t_node *node)
 
 static void echo_without_option(t_node *node)
 {
-	size_t i;
+	int i;
 
 	i = 1;
 	while (node->cmd[i])
@@ -57,7 +57,7 @@ static void echo_without_option(t_node *node)
 
 static void echo_with_option(t_node *node)
 {
-	size_t i;
+	int i;
 
 	i = 2;
 	while (node->cmd[i] && is_option(node->cmd[i])) // 옵션 넘기기
@@ -75,7 +75,7 @@ static void echo_with_option(t_node *node)
 
 static int is_option(char *cmd)
 {
-	size_t i;
+	int i;
 
     if (cmd[0] != '-' || cmd[1] != 'n') // '-'로 시작하지 않거나 두 번째 문자가 'n'이 아닌 경우
         return (FALSE);
@@ -83,9 +83,9 @@ static int is_option(char *cmd)
     while (cmd[i])
 	{
         if (cmd[i] != 'n') // 'n' 이외의 다른 문자가 있다면
-            return FALSE;
+            return (FALSE);
         i++;
     }
-    return TRUE;
+    return (TRUE);
 }
 

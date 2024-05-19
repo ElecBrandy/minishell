@@ -6,11 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 18:34:40 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/19 17:55:25 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 /*
 	ft_env

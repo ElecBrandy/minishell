@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:21:36 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 17:20:13 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/19 16:45:52 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	export_witharg(t_env *env, t_node *node)
 			else
 				add_env(env, node->cmd[i], key, value); // 존재하지 않는 경우 추가
 		}
+		i++;
 	}
 }
 

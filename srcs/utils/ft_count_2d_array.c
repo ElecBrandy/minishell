@@ -1,19 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_unset.c                                         :+:      :+:    :+:   */
+/*   ft_count_2d_array.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/05 15:22:38 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/07 17:29:53 by dongwook         ###   ########.fr       */
+/*   Created: 2024/05/19 16:19:31 by dongwook          #+#    #+#             */
+/*   Updated: 2024/05/19 16:22:08 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
-void ft_unset(t_node *node)
+int count_2d_array(char **array)
 {
-    printf("builtin unset\n");
-    exit(0);
+    int cnt = 0;
+
+    while (array[cnt] != NULL)
+    {
+        cnt++;
+    }
+    return (cnt);
 }
