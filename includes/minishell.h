@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/19 16:57:31 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:09:12 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ int		find_other(char *av, int idx);
 
 /* Builtn */
 void	ft_cat(t_node *node);
-void	ft_cd(t_node *node);
+void	ft_cd(t_env *hea_env, t_node *node);
 void	ft_echo(t_node *node);
 void	ft_env(t_env *head_env, t_node *node);
 void	ft_exit(t_node *node);
@@ -214,7 +214,7 @@ void	fork_process(t_env *head_env, t_node *node, int node_cnt);
 int		count_node(t_node *node);
 void	redirect_io(int in_fd, int out_fd);
 void	wait_process(int cnt);
-void close_pipe(int *fd);
+void	close_pipe(int *fd);
 
 /* ===== UTILS ===== */
 
@@ -232,7 +232,7 @@ void	print_env_list(t_env *head_env);
 void	print_arry_2d(char **arr);
 void	head_env_chk(t_env *head_env, int i);
 
-/* ft_count_2d_array */
-int		count_2d_array(char **array);
+/* _ft_arrlen_2d */
+int		ft_arrlen_2d(char **array);
 
 #endif

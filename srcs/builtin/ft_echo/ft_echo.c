@@ -6,11 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:37 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/19 17:54:13 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:51:36 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 static int is_option(char *str);
 static void echo_without_option(t_node *node);
@@ -24,7 +24,7 @@ void	ft_echo(t_node *node)
 	n_flag = FALSE;
 	i = 1;
 
-	if (count_2d_array(node->cmd) != 1) // "echo" 만 존재하는 경우
+	if (ft_arrlen_2d(node->cmd) == 1) // "echo" 만 존재하는 경우
 		printf("\n");
 	else // 인자가 존재하는 경우
 	{

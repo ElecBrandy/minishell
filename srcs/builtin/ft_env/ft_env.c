@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/19 17:55:25 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:52:19 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_env(t_env *head_env, t_node *node)
 	t_env	*cur;
 	char	**env;
 
-	if (node->cmd[1] != NULL) // 옵션 또는 인자가 있는 경우
+	if (ft_arrlen_2d(node->cmd) != 1) // 옵션 또는 인자가 있는 경우
 	{
 		exit(0); // Error
 	}

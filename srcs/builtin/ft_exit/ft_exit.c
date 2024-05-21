@@ -1,24 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_count_2d_array.c                                :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/19 16:19:31 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/19 16:22:08 by dongwook         ###   ########.fr       */
+/*   Created: 2024/05/05 15:22:03 by dongwook          #+#    #+#             */
+/*   Updated: 2024/05/21 13:57:00 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int count_2d_array(char **array)
+void ft_exit(t_node *node)
 {
-    int cnt = 0;
-
-    while (array[cnt] != NULL)
-    {
-        cnt++;
-    }
-    return (cnt);
+    printf("builtin exit\n");
+    exit(0);
 }

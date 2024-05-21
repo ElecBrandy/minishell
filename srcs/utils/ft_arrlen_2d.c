@@ -1,19 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_exit.c                                          :+:      :+:    :+:   */
+/*   ft_arrlen_2d.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/05 15:22:03 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/07 17:29:53 by dongwook         ###   ########.fr       */
+/*   Created: 2024/05/21 13:55:41 by dongwook          #+#    #+#             */
+/*   Updated: 2024/05/21 14:09:59 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void ft_exit(t_node *node)
+int ft_arrlen_2d(char **array)
 {
-    printf("builtin exit\n");
-    exit(0);
+    int cnt = 0;
+
+    while (array[cnt] != NULL)
+    {
+        cnt++;
+    }
+    return (cnt);
 }

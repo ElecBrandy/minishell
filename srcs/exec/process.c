@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 17:31:14 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:43:03 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	fork_process(t_env *head_env, t_node *node, int node_cnt)
 	int		fork_cnt;
 	t_node	*cur;
 
+	
 	fork_cnt = 0;
 	cur = node;
 	stdin_origin = dup(STDIN);
@@ -31,7 +32,7 @@ void	fork_process(t_env *head_env, t_node *node, int node_cnt)
 	if (node_cnt == 0)		// 노드가 없는 경우
 		return ;
 	if (node_cnt == 1)		// pipe가 없는 경우
-		child_solo(head_env, cur, &fork_cnt);
+		child_solo(head_env, cur, &fork_cnt); 
 	else 					// pipe가 있는 경우
 	{
 		i = 0;
@@ -61,11 +62,9 @@ static void	child_solo(t_env *head_env, t_node *node, int *cnt)
 		exit(1); // Error
 	if (pid == 0)
 	{
-		// fprintf(stderr, "child_solo\n");
+		// printf("child_solo\n");
 		redirect_io(node->in_fd, node->out_fd);
-		// system("lsof -p $$ >> log");
 		// system("lsof -p $$ >> solo_log");
-		head_env_chk(head_env, 100); // chk
 		run_cmd(head_env, node);
 	}
 	else

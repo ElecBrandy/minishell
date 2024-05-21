@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:38 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/19 16:58:45 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 14:51:08 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	delete_env(t_env *env, char *key);
 
 void	ft_unset(t_env *head_env, t_node *node)
 {
-	if (count_2d_array(node->cmd) == 1) // 인자가 없는 경우
+	if (ft_arrlen_2d(node->cmd) == 1) // 인자가 없는 경우
 	{
 		exit(1); // Error: unset: not enough arguments
 	}
