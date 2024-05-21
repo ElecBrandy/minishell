@@ -18,8 +18,15 @@ char	*heredoc_check_dollar(char *av, t_env *env, t_node *node)
 	int		env_len;
 
 	env_len = heredoc_find_dollar(av, env, node->prev_errnum);
+	if (env_len == -1)
+	{
+		free(av);
+		return (NULL);
+	}
 	str = heredoc_change_dollar(av, env, env_len, node->prev_errnum);
 	free(av);
+	if (!str)
+		return (NULL);
 	return (str);
 }
 
@@ -30,6 +37,11 @@ int	heredoc_readline(char *av, char *limiter, t_node *node, t_env *env)
 		&& (ft_strlen(limiter) == ft_strlen(av)))
 		return (1);
 	av = heredoc_check_dollar(av, env, node);
+	if (!av)
+	{
+		g_errnum = 12;
+		return (-1);
+	}
 	write(node->in_fd, av, ft_strlen(av));
 	write(node->in_fd, "\n", 1);
 	free(av);
@@ -54,7 +66,7 @@ void	heredoc_process(char **str, int *i, t_node *node, t_env *env)
 			free(av);
 		else
 		{
-			if (heredoc_readline(av, limiter, node, env) == 1)
+			if (heredoc_readline(av, limiter, node, env))
 				break ;
 		}
 		if (!str)
@@ -79,8 +91,9 @@ void	heredoc_infile(char **str, int *i, t_node *node, t_env *env)
 	node->in_fd = open(".heredoc_tmp", O_RDWR | O_CREAT | O_APPEND, 0666);
 	if (node->in_fd == -1)
 	{
-		perror("minishell");
-		exit (1);
+		printf("minishell: %s: %s\n", ".heredoc_tmp", strerror(2));
+		g_errnum = 1;
+		return ;
 	}
 	*i += 1;
 	heredoc_process(str, i, node, env);

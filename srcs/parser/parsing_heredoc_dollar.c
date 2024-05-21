@@ -36,6 +36,8 @@ char	*heredoc_change_dollar(char *av, t_env *env, int env_len, int p_e)
 	u.cnt = ft_strlen(av);
 	u.flag = p_e;
 	str = malloc(sizeof(char) * (u.cnt + env_len + 1));
+	if (!str)
+		return (NULL);
 	while (av[++u.i])
 	{
 		if (av[u.i] == 34)
@@ -55,8 +57,10 @@ char	*heredoc_change_dollar(char *av, t_env *env, int env_len, int p_e)
 	return (str);
 }
 
-void	in_doublequote(char *av, int p_e, t_env *env, t_util *u)
+int	in_doublequote(char *av, int p_e, t_env *env, t_util *u)
 {
+	int	len;
+
 	while (av[++u->i])
 	{
 		if (av[u->i] == 34)
@@ -64,8 +68,14 @@ void	in_doublequote(char *av, int p_e, t_env *env, t_util *u)
 		if (av[u->i] == '$' && av[u->i + 1] == '?')
 			u->cnt += (get_numlen(p_e) - 2);
 		else if (av[u->i] == '$' && is_print(av[u->i + 1]))
-			u->cnt += find_env(av, &u->i, env);
+		{	
+			len = find_env(av, &u->i, env);
+			if (len == -1)
+				return (-1);
+			u->cnt += len;
+		}
 	}
+	return (0);
 }
 
 int	heredoc_find_dollar(char *av, t_env *env, int p_e)
@@ -78,9 +88,17 @@ int	heredoc_find_dollar(char *av, t_env *env, int p_e)
 		if (av[u.i] == '$' && av[u.i + 1] == '?')
 			u.cnt += (get_numlen(p_e) - 2);
 		else if (av[u.i] == '$' && is_print(av[u.i + 1]))
-			u.cnt += find_env(av, &u.i, env);
+		{
+			u.flag = find_env(av, &u.i, env);
+			if (u.flag == -1)
+				return (-1);
+			u.cnt += u.flag;
+		}
 		else if (av[u.i] == 34)
-			in_doublequote(av, p_e, env, &u);
+		{
+			if (in_doublequote(av, p_e, env, &u))
+				return (-1);
+		}
 		else if (av[u.i] == 39)
 			u.i = find_next_quote(av, u.i, 39);
 	}

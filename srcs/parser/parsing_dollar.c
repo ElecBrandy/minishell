@@ -68,12 +68,14 @@ char	*check_dollar(char *av, t_env *env, int p_e)
 	int		env_len;
 
 	env_len = find_dollar(av, env, p_e);
-	str = change_dollar(av, env, env_len, p_e);
-	if (!str)
+	if (env_len == -1)
 	{
 		free(av);
 		return (NULL);
 	}
+	str = change_dollar(av, env, env_len, p_e);
 	free(av);
+	if (!str)
+		return (NULL);
 	return (str);
 }

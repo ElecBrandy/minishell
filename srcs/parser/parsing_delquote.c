@@ -21,10 +21,23 @@ char	**check_cmd(char **av)
 	while (av[i])
 		i++;
 	str = malloc(sizeof(char *) * (i + 1));
+	if (!str)
+	{
+		free_str(av);
+		return (NULL);
+	}
 	str[i] = NULL;
 	i = -1;
 	while (av[++i])
+	{
 		str[i] = del_quote(av[i]);
+		if (!str[i])
+		{
+			free_str(av);
+			free_str(str);
+			return (NULL);
+		}
+	}
 	free_str(av);
 	return (str);
 }
@@ -122,6 +135,8 @@ char	*del_quote(char *av)
 	cut = find_cut(av);
 	util_init(&u);
 	str = malloc(sizeof(char) * (ft_strlen(av) - cut + 1));
+	if (!str)
+		return (NULL);
 	u.i = -1;
 	while (av[++u.i])
 	{

@@ -43,11 +43,18 @@ char	**split_flag(char *av, int len, char flag)
 	util_init(&util);
 	str = (char **)malloc(sizeof(char *) * (len + 2));
 	if (!str)
-		exit(1);
+		return (NULL);
 	while (av[++util.idx])
 	{
 		if (av[util.idx] == flag)
+		{
 			str[++util.i] = save_in(av, &util);
+			if (!str[util.i])
+			{
+				free_str(str);
+				return (NULL);
+			}
+		}
 		else
 			util.idx = find_other(av, util.idx);
 	}
@@ -55,6 +62,11 @@ char	**split_flag(char *av, int len, char flag)
 		str[++util.i] = save_in(av, &util);
 	else
 		str[++util.i] = save_in(av, &util);
+	if (!str[util.i])
+	{
+		free_str(str);
+		return (NULL);
+	}
 	str[++util.i] = NULL;
 	return (str);
 }
@@ -67,10 +79,17 @@ char	***parsing(char *av)
 	char	***str_pipe;
 
 	len = find_flag(av, ';');
+	if (len == -1)
+		return (NULL);
 	str_smc = split_flag(av, len, ';');
+	if (!str_smc)
+		return (NULL);
 	str_pipe = malloc(sizeof(char **) * (len + 2));
 	if (!str_pipe)
+	{
+		free_str(str_smc);
 		return (NULL);
+	}
 	i = -1;
 	while (str_smc[++i])
 	{
@@ -78,6 +97,7 @@ char	***parsing(char *av)
 		str_pipe[i] = split_flag(str_smc[i], len, '|');
 		if (!str_pipe[i])
 		{
+			free_str(str_smc);
 			free_str_three(str_pipe);
 			return (NULL);
 		}

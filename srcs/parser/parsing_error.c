@@ -37,3 +37,10 @@ void	put_errno(char *str, char *av, int p_e, t_util *u)
 	(u->i)++;
 	free(word);
 }
+
+int	file_error(void)
+{
+	if (!g_errnum)
+		return (12);
+	return (g_errnum);
+}

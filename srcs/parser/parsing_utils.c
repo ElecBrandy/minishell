@@ -30,9 +30,7 @@ int	find_next_quote(char *av, int idx, char flag)
 		if (av[idx] == flag)
 			return (idx);
 	}
-	// 따옴표가 안닫혀있으면 에러처리
-	printf("error\n");
-	exit (1);
+	return (-1);
 }
 
 int	find_flag(char *av, char flag)
@@ -50,6 +48,11 @@ int	find_flag(char *av, char flag)
 			idx = find_next_quote(av, idx, 34);
 		else if (av[idx] == 39)
 			idx = find_next_quote(av, idx, 39);
+		if (idx == -1)
+		{
+			g_errnum = -1;
+			return (-1);
+		}
 	}
 	return (len);
 }

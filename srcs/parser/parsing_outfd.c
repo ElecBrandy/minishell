@@ -15,23 +15,23 @@
 void	is_outfd(char **str, int *i, t_node *node)
 {
 	if (!str[(*i) + 1])
-		perror("no");
+		g_errnum = 258; //newline
 	else
 	{
 		if (str[(*i) + 1][0] == '<' || str[(*i) + 1][0] == '>')
 		{
-			perror("not file out");
+			g_errnum = 258; // token < << > >>
 			return ;
 		}
 		if (ft_strlen(str[*i]) == 1)
 			new_file(str, i, node);
-		else if (str[*i][1] == '>')
+		else if (str[*i][1] == '>' && ft_strlen(str[*i]) == 2)
 			append_file(str, i, node);
 		else
 		{
 			if (node->out_fd != 1)
 				close(node->out_fd);
-			perror("notfile error");
+			g_errnum = 258; // token < << > >>
 		}
 	}
 }
@@ -43,13 +43,15 @@ void	new_file(char **str, int *i, t_node *node)
 	if (node->out_fd != 1)
 		close(node->out_fd);
 	file = del_quote(str[(*i) + 1]);
+	if (!file)
+		return ;
 	node->out_fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
 	free(file);
 	*i += 1;
 	if (node->out_fd == -1)
 	{
-		perror("makefile error");
-		exit (1);
+		printf("minishell: %s: %s\n", file, strerror(2));
+		g_errnum = 1;
 	}
 }
 
@@ -65,8 +67,8 @@ void	append_file(char **str, int *i, t_node *node)
 	free(file);
 	if (node->out_fd == -1)
 	{
-		perror("append file error");
-		exit (1);
+		printf("minishell: %s: %s\n", file, strerror(2));
+		g_errnum = 1;
 	}
 }
 
@@ -90,12 +92,14 @@ char	**find_fd(char **str, t_node *node, t_env *env)
 		else if (ft_strncmp(str[u.i], ">", 1) == 0)
 			is_outfd(str, &u.i, node);
 		else
-			cmd[u.flag++] = ft_strdup(str[u.i]);
-		if (!cmd[u.flag])
 		{
-			free_str(str);
-			free_str(cmd);
-			return (NULL);
+			cmd[u.flag++] = ft_strdup(str[u.i]);
+			if (!cmd[u.flag])
+			{
+				free_str(str);
+				free_str(cmd);
+				return (NULL);
+			}
 		}
 	}
 	cmd[u.flag] = NULL;

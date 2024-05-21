@@ -24,9 +24,11 @@ void	free_node(t_node *head)
 			close(head->in_fd);
 		if (head->out_fd != 1)
 			close(head->out_fd);
-		free_str(head->cmd);
-		ft_free((void **)&head->path);
-		ft_free((void **)&head);
+		if (head->cmd)
+			free_str(head->cmd);
+		if (head->path != NULL)
+			free(head->path);
+		free(head);
 		head = node;
 	}
 	head = NULL;

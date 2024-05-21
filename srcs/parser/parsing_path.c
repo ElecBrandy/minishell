@@ -5,15 +5,14 @@ int	get_path(char **path, t_node *node, char *cmd)
 	int	i;
 
 	i = -1;
+
     if (is_builtin(node) == 0)
     {
         while (path[++i])
         {
             node->path = ft_strjoin(path[i], "/");
-			if (!node->path)
-				return (12);
             node->path = ft_strjoin_free(node->path, cmd);
-			if (!node->path)
+			if (!(node->path))
 				return (12);
             if (access(node->path, X_OK) == 0)
                 return (0);
@@ -21,11 +20,15 @@ int	get_path(char **path, t_node *node, char *cmd)
                 free(node->path);
         }
         if (!path[i])
-            return (-1);
+		{
+			node->path = NULL;
+			printf("minishell: %s: command not found\n", cmd);
+            return (127);
+		}
     }
     else
         node->path = ft_strdup(cmd);
-	if (!node->path)
+	if (!(node->path))
 		return (12);
 	return (0);
 }
@@ -37,6 +40,8 @@ int	find_path(char *cmd, t_env *env, t_node *node)
 	int		i;
 	t_env	*e;
 
+	if (!cmd)
+		return (1);
 	e = env;
 	while (e->cmd)
 	{
@@ -56,7 +61,9 @@ int	find_path(char *cmd, t_env *env, t_node *node)
 	else
 		g_errnum = get_path(path, node, cmd);
 	free_str(path);
-	if (!node->path)
+	if (g_errnum)
+		return (g_errnum);
+	if (!(node->path))
 		return (12);
 	return (g_errnum);
 }

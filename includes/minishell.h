@@ -97,7 +97,7 @@ char	*change_dollar(char *av, t_env *env, int env_len, int p_e);
 /* parsing_error.c*/
 int		get_numlen(int num);
 void	put_errno(char *str, char *av, int p_e, t_util *u);
-
+int		file_error(void);
 /* parsing_free.c */
 void	free_str(char **str);
 void	free_str_three(char ***str);
@@ -108,7 +108,7 @@ int		count_str(char **str);
 void	putin_doublequote(char *av, char *str, t_env *env, t_util *u);
 char	*heredoc_change_dollar(char *av, t_env *env, int env_len, int p_e);
 int		heredoc_find_dollar(char *av, t_env *env, int p_e);
-void	in_doublequote(char *av, int p_e, t_env *env, t_util *u);
+int		in_doublequote(char *av, int p_e, t_env *env, t_util *u);
 
 /* parsing_heredoc.c */
 void	heredoc_infile(char **str, int *i, t_node *node, t_env *env);

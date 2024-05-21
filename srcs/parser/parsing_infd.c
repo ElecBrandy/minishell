@@ -21,9 +21,12 @@ void	check_infile(char **str, int *i, t_node *node)
 	file = del_quote(str[(*i) + 1]);
 	node->in_fd = open(file, O_RDONLY);
 	*i += 1;
+	if (node->in_fd == -1) // No such file or directory
+	{
+		printf("minishell: %s: %s\n", file, strerror(2));
+		g_errnum = 1;
+	}
 	free(file);
-	if (node->in_fd == -1)
-		perror("infile error");
 }
 
 void	only_open(char **str, int *i)
@@ -33,6 +36,11 @@ void	only_open(char **str, int *i)
 
 	file = del_quote(str[(*i) + 1]);
 	fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
+	if (fd == -1) // No such file or directory
+	{
+		printf("minishell: %s: %s\n", file, strerror(2));
+		g_errnum = 1;
+	}
 	close(fd);
 	free(file);
 	*i += 1;
@@ -41,23 +49,21 @@ void	only_open(char **str, int *i)
 void	is_infd(char **str, int *i, t_node *node, t_env *env)
 {
 	if (!str[(*i) + 1])
-		g_errnum = 258;
+		g_errnum = 258; //newline
 	else
 	{
 		if (str[(*i) + 1][0] == '<' || str[(*i) + 1][0] == '>')
 		{
-			g_errnum = 258;
+			g_errnum = 258; // token < << > >>
 			return ;
 		}
 		if (ft_strlen(str[*i]) == 1)
 			check_infile(str, i, node);
 		else if (ft_strncmp(str[*i], "<<", ft_strlen(str[*i])) == 0)
 			heredoc_infile(str, i, node, env);
-		else if (str[*i][1] == '>')
+		else if (str[*i][1] == '>' && ft_strlen(str[*i]) == 2)
 			only_open(str, i);
 		else
-		{
-			perror("notfile error2");
-		}
+			g_errnum = 258; // token < << > >>
 	}
 }
