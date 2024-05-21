@@ -69,11 +69,18 @@ char	***parsing(char *av)
 	len = find_flag(av, ';');
 	str_smc = split_flag(av, len, ';');
 	str_pipe = malloc(sizeof(char **) * (len + 2));
+	if (!str_pipe)
+		return (NULL);
 	i = -1;
 	while (str_smc[++i])
 	{
 		len = find_flag(str_smc[i], '|');
 		str_pipe[i] = split_flag(str_smc[i], len, '|');
+		if (!str_pipe[i])
+		{
+			free_str_three(str_pipe);
+			return (NULL);
+		}
 	}
 	free_str(str_smc);
 	str_pipe[i] = NULL;

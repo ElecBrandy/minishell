@@ -28,8 +28,9 @@ SRCS_P = \
 	srcs/parser/parsing_heredoc.c			\
 	srcs/parser/parsing_in_pipe.c 		 	\
 	srcs/parser/parsing_infd.c       		\
-	srcs/parser/parsing_node_path.c   		\
+	srcs/parser/parsing_node.c   			\
 	srcs/parser/parsing_outfd.c				\
+	srcs/parser/parsing_path.c				\
 	srcs/parser/parsing_utils.c  		  	\
 	srcs/parser/parsing.c         		 	\
 
@@ -52,7 +53,8 @@ SRCS_E = \
 	\
 	srcs/utils/ft_free.c		\
 	srcs/utils/tmp.c			\
-	srcs/utils/ft_strcmp.c
+	srcs/utils/ft_strcmp.c		\
+	srcs/utils/print_error.c
 
 SRCS_M = \
 	srcs/minishell.c
