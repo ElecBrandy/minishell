@@ -43,7 +43,12 @@ char	**split_space(char *av, int len)
 		if (av[util.idx] == ' ')
 		{
 			if (av[util.idx + 1] != ' ')
-				str[++util.i] = save_in(av, &util); //malloc error 처리
+				str[++util.i] = save_in(av, &util);
+			if (!str[util.i])
+			{
+				free_str(str);
+				return (NULL);
+			}
 		}
 		else
 			util.idx = find_other(av, util.idx);
@@ -52,6 +57,11 @@ char	**split_space(char *av, int len)
 		str[++util.i] = save_in(av, &util);
 	else
 		str[++util.i] = save_in(av, &util);
+	if (!str[util.i])
+	{
+		free_str(str);
+		return (NULL);
+	}
 	str[++util.i] = NULL;
 	return (str);
 }
