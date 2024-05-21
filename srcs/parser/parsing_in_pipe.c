@@ -102,7 +102,7 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 	cmd = check_cmd(cmd);
 	if (!cmd)
 		return (12);
-	save_in_node(node, cmd, env);
+	g_errnum = save_in_node(node, cmd, env);
 	free_str(cmd);
 	return (g_errnum);
 }

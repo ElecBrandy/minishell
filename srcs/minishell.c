@@ -42,10 +42,11 @@ int	parsing_minishell(t_node **head, char **str, t_env *env, int p_e)
 				return (12); // Error
 			append_node(head, node); // 추가 노드를 리스트에 추가
 		}
-		g_errnum = 
-		parsing_in_pipe(str[u.j], node, env, p_e); // 파이프라인 파싱
+		g_errnum = parsing_in_pipe(str[u.j], node, env, p_e); // 파이프라인 파싱
+		if (g_errnum)
+			break ;
 	}
-	return (0);
+	return (g_errnum);
 }
 
 void	minishell(char *av, t_env *env)

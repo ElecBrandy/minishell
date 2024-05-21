@@ -1,19 +1,24 @@
 #include "../../includes/minishell.h"
 
-void	save_in_node(t_node *node, char **cmd, t_env *env)
+int	save_in_node(t_node *node, char **cmd, t_env *env)
 {
 	int	i;
 
 	i = count_str(cmd);
 	node->cmd = malloc(sizeof(char *) * (i + 1));
+	if (!node->cmd)
+		return (12);
 	i = -1;
 	while (cmd[++i])
+	{
 		node->cmd[i] = ft_strdup(cmd[i]);
+		if (!node->cmd[i])
+			return (12);
+	}
 	node->cmd[i] = NULL;
-	find_path(cmd[0], env, node);
+	g_errnum = find_path(cmd[0], env, node);
+	return (g_errnum);
 }
-
-
 
 t_node	*create_node(int p_e)
 {

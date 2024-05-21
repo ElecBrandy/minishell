@@ -126,7 +126,7 @@ void	only_open(char **str, int *i);
 void	is_infd(char **str, int *i, t_node *node, t_env *env);
 
 /* parsing_node.c */
-void	save_in_node(t_node *node, char **cmd, t_env *env);
+int		save_in_node(t_node *node, char **cmd, t_env *env);
 t_node	*create_node(int p_e);
 void	append_node(t_node **head, t_node *new_node);
 
@@ -144,8 +144,8 @@ int		ft_max(int a, int b);
 int		get_flagcnt(char *av);
 
 /* parsing_path.c*/
-void	find_path(char *cmd, t_env *env, t_node *node);
-void	get_path(char **path, t_node *node, char *cmd);
+int		find_path(char *cmd, t_env *env, t_node *node);
+int		get_path(char **path, t_node *node, char *cmd);
 
 /* parsing.c */
 char	***parsing(char *av);
@@ -191,4 +191,7 @@ void	print_node_details(t_node *node);
 void	print_linked_list(t_node *head);
 int		ft_strcmp(const char *s1, const char *s2);
 void    *ft_realloc(void *ptr, int original_size, int new_size);
+
+/* print_error.c*/
+void	print_error(void);
 #endif
