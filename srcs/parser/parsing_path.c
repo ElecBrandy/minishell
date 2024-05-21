@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_path.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/21 19:27:48 by dongeunk          #+#    #+#             */
+/*   Updated: 2024/05/21 19:29:27 by dongeunk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	get_path(char **path, t_node *node, char *cmd)
@@ -5,29 +17,28 @@ int	get_path(char **path, t_node *node, char *cmd)
 	int	i;
 
 	i = -1;
-
-    if (is_builtin(node) == 0)
-    {
-        while (path[++i])
-        {
-            node->path = ft_strjoin(path[i], "/");
-            node->path = ft_strjoin_free(node->path, cmd);
+	if (is_builtin(node) == 0)
+	{
+		while (path[++i])
+		{
+			node->path = ft_strjoin(path[i], "/");
+			node->path = ft_strjoin_free(node->path, cmd);
 			if (!(node->path))
 				return (12);
-            if (access(node->path, X_OK) == 0)
-                return (0);
-            else
-                free(node->path);
-        }
-        if (!path[i])
+			if (access(node->path, X_OK) == 0)
+				return (0);
+			else
+				free(node->path);
+		}
+		if (!path[i])
 		{
 			node->path = NULL;
 			printf("minishell: %s: command not found\n", cmd);
-            return (127);
+			return (127);
 		}
-    }
-    else
-        node->path = ft_strdup(cmd);
+	}
+	else
+		node->path = ft_strdup(cmd);
 	if (!(node->path))
 		return (12);
 	return (0);
