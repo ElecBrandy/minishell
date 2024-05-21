@@ -22,32 +22,6 @@
 - head free 할때 node안에 있는 in,out fd 모두 close
 - cat << a heredoc이 안읽힘 , fd가 3부터 시작을 안하는 경우?????
 
-# minishell
-
-## 05.17
-
-### libft 수정
-- ft_strjoin free(s1)제거
-
-### Makefile 수정
-- c파일 추가
-
-### parsing 수정
-- '$'표시부분 환경변수로 치환완료 ('$'?는 어떤식으로 해야할지 생각, $$도 미정)
-- 주석을 제외한 모든 부분 norm검사 통과
-- node->path 추가(빌트인 함수를 제외하고 path가 없으면 에러처리로 할 예정)
-
-### headerfile
-- 전역변수 int g_errnum 추가
-
-### main file
-- 주석 처리를 제외한 부분 norm 통과를 위해 함수 분할
-- errornum 작업중 / command not found와 몇몇 에러 출력은 stderror, perror로는 안됨(직접 출력해야하는듯함)
-
-### 3. fd 설정
-- head free 할때 node안에 있는 in,out fd 모두 close
-- cat << a heredoc이 안읽힘 , fd가 3부터 시작을 안하는 경우?????
-
 ### 빌트인 함수
 
 #### env (완)
