@@ -84,19 +84,25 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 
 	tmp = add_space(av);
 	if (!tmp)
-		return (1);
+		return (12);
 	tmp = check_dollar(tmp, env, p_e);
+	if (!tmp)
+		return (12);
 	len = find_flag(tmp, ' ');
 	if (ft_find_quotes(tmp, 34) + ft_find_quotes(tmp, 39) == 0)
 		str = ft_split(tmp, ' ');
 	else
 		str = split_space(tmp, len);
-	if (!str) //free(tmp);
-		return (1);
-	cmd = find_fd(str, node, env);
-	cmd = check_cmd(cmd);
-	save_in_node(node, cmd, env);
 	free(tmp);
+	if (!str)
+		return (12);
+	cmd = find_fd(str, node, env);
+	if (!cmd)
+		return (12);
+	cmd = check_cmd(cmd);
+	if (!cmd)
+		return (12);
+	save_in_node(node, cmd, env);
 	free_str(cmd);
-	return (0);
+	return (g_errnum);
 }

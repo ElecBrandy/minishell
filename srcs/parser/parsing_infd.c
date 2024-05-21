@@ -23,10 +23,7 @@ void	check_infile(char **str, int *i, t_node *node)
 	*i += 1;
 	free(file);
 	if (node->in_fd == -1)
-	{
 		perror("infile error");
-		exit (1);
-	}
 }
 
 void	only_open(char **str, int *i)
@@ -44,12 +41,12 @@ void	only_open(char **str, int *i)
 void	is_infd(char **str, int *i, t_node *node, t_env *env)
 {
 	if (!str[(*i) + 1])
-		perror("nnnn");
+		g_errnum = 258;
 	else
 	{
 		if (str[(*i) + 1][0] == '<' || str[(*i) + 1][0] == '>')
 		{
-			perror("not file in");
+			g_errnum = 258;
 			return ;
 		}
 		if (ft_strlen(str[*i]) == 1)

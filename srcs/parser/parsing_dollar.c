@@ -45,6 +45,8 @@ char	*change_dollar(char *av, t_env *env, int env_len, int p_e)
 	u.cnt = ft_strlen(av);
 	u.flag = p_e;
 	str = malloc(sizeof(char) * (u.cnt + env_len + 1));
+	if (!str)
+		return (NULL);
 	while (av[++u.i])
 	{
 		if (u.i > 0 && (av[u.i] == '<' && av[u.i - 1] == '<'))
@@ -67,6 +69,11 @@ char	*check_dollar(char *av, t_env *env, int p_e)
 
 	env_len = find_dollar(av, env, p_e);
 	str = change_dollar(av, env, env_len, p_e);
+	if (!str)
+	{
+		free(av);
+		return (NULL);
+	}
 	free(av);
 	return (str);
 }

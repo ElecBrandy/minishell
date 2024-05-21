@@ -30,7 +30,7 @@ int	parsing_minishell(t_node **head, char **str, t_env *env, int p_e)
 	util_init(&u);
 	node = create_node(p_e); // 새 노드 생성
 	if (!node)
-		return (1);
+		return (12);
 	append_node(head, node); // 새 노드를 리스트에 추가
 	u.j = -1;
 	while (str[++u.j])
@@ -39,9 +39,10 @@ int	parsing_minishell(t_node **head, char **str, t_env *env, int p_e)
 		{
 			node = create_node(p_e); // 추가 노드 생성
 			if (!node)
-				return (1); // Error
+				return (12); // Error
 			append_node(head, node); // 추가 노드를 리스트에 추가
 		}
+		g_errnum = 
 		parsing_in_pipe(str[u.j], node, env, p_e); // 파이프라인 파싱
 	}
 	return (0);
@@ -58,13 +59,19 @@ void	minishell(char *av, t_env *env)
 	prev_errnum = g_errnum;
 	g_errnum = 0;
 	str = parsing(av); // str[세미콜론][파이프][파이프 내부]로 파싱
+	if (!str)
+	{
+		print_error();
+		return ;
+	}
 	while (str[++u.i])
 	{
 		head = NULL;
-		g_errnum = parsing_minishell(&head, str[u.i], env, prev_errnum); // 파싱부분
+		parsing_minishell(&head, str[u.i], env, prev_errnum); // 파싱부분
 		if (g_errnum != 0) //파싱부분에서 에러나오면 다시 readline으로
 		{
 			free_node(head);
+			print_error();
 			break ;
 		}
 		u.cnt = count_node(head); // 노드 수 세기

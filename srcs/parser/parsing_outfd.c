@@ -73,25 +73,32 @@ void	append_file(char **str, int *i, t_node *node)
 char	**find_fd(char **str, t_node *node, t_env *env)
 {
 	char	**cmd;
-	int		i;
-	int		idx;
+	t_util	u;
 
-	idx = 0;
-	i = -1;
-	while (str[idx])
-		idx++;
-	cmd = malloc(sizeof(char *) * (idx + 1));
-	idx = 0;
-	while (str[++i])
+	util_init(&u);
+	u.cnt = count_str(str);
+	cmd = malloc(sizeof(char *) * (u.cnt + 1));
+	if (!cmd)
 	{
-		if (ft_strncmp(str[i], "<", 1) == 0)
-			is_infd(str, &i, node, env);
-		else if (ft_strncmp(str[i], ">", 1) == 0)
-			is_outfd(str, &i, node);
-		else
-			cmd[idx++] = ft_strdup(str[i]);
+		free_str(str);
+		return (NULL);
 	}
-	cmd[idx] = NULL;
+	while (str[++u.i])
+	{
+		if (ft_strncmp(str[u.i], "<", 1) == 0)
+			is_infd(str, &u.i, node, env);
+		else if (ft_strncmp(str[u.i], ">", 1) == 0)
+			is_outfd(str, &u.i, node);
+		else
+			cmd[u.flag++] = ft_strdup(str[u.i]);
+		if (!cmd[u.flag])
+		{
+			free_str(str);
+			free_str(cmd);
+			return (NULL);
+		}
+	}
+	cmd[u.flag] = NULL;
 	free_str(str);
 	return (cmd);
 }
