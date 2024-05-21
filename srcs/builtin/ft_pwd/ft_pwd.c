@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:48:20 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/19 17:50:41 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 17:57:35 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,9 @@ void ft_pwd(t_node *node)
 	if (!str)
 	{
 		ft_putstr_fd("error?\n", 2); // Error?
-		exit(1); // Error?
+		return ; // Error?
 	}
 	ft_putstr_fd(str, node->out_fd);
 	write(node->out_fd, "\n", 1);
 	ft_free((void **)&str);
-	exit(0);
 }

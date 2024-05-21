@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:20:54 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/19 16:55:48 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:41:15 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void export_withoutarg(t_env *env)
 
 	str = env_list_to_array(env);
 	if (str == NULL)
-		exit(1); // Error
+		return ; // Error
 	sort_arr_2d(str);
 	i = 0;
 	while(str[i])
@@ -38,7 +38,7 @@ void export_withoutarg(t_env *env)
 		{
 			if (*sep_pos + 1 == '\0') // value가 존재하지 않는 경우 (= 이 마지막인 경우)
 			{
-				printf("%s""\n", str[i]);
+				printf("%s\"\"\n", str[i]);
 			}
 			else // value가 존재하는 경우 (= 이 마지막이 아닌 경우)
 			{
@@ -53,7 +53,6 @@ void export_withoutarg(t_env *env)
 		}
 		i++;
 	}
-	exit(0);
 }
 
 static int	sort_arr_2d(char **arr)

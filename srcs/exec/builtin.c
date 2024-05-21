@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:56:28 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 13:57:54 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:11:01 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,8 @@
 
 /*
 echo with option -n : 7
--n 옵션을 사용할 수 있는 echo
 
 cd with only a relative or absolute path : 6
-오직 상대 또는 절대경로만 사용하는 cd
 
 pwd with no options : 5
 
@@ -29,25 +27,32 @@ env with no options or arguments : 2
 
 exit with no options : 1
 
-builtin 함수가 아닐 경우 : 0
+no builtin : 0
 */
 
 
 int		is_builtin(t_node *node)
 {
-	if (ft_strncmp(node->cmd[0], "echo", ft_strlen("echo")) == 0) // 내부에서 -n 옵션 체크 하기
+	if (ft_strlen("echo") == ft_strlen(node->cmd[0])  \
+	&& ft_strncmp(node->cmd[0], "echo", ft_strlen("echo")) == 0) // 내부에서 -n 옵션 체크 하기
 		return (7);
-	if (ft_strncmp(node->cmd[0], "cd", ft_strlen("env")) == 0) // 내부에서 경로체크 따로 하기
+	if (ft_strlen("cd") == ft_strlen(node->cmd[0]) \
+	&& ft_strncmp(node->cmd[0], "cd", ft_strlen("env")) == 0) // 내부에서 경로체크 따로 하기
 		return (6);
-	if (ft_strncmp(node->cmd[0], "pwd", ft_strlen("pwd")) == 0)
+	if (ft_strlen("pwd") == ft_strlen(node->cmd[0]) \
+	&& ft_strncmp(node->cmd[0], "pwd", ft_strlen("pwd")) == 0)
 		return (5);
-	if (ft_strncmp(node->cmd[0], "export", ft_strlen("export")) == 0)
+	if (ft_strlen("export") == ft_strlen(node->cmd[0]) \
+	&& ft_strncmp(node->cmd[0], "export", ft_strlen("export")) == 0)
 		return (4);
-	if (ft_strncmp(node->cmd[0], "unset", ft_strlen("export")) == 0)
+	if (ft_strlen("unset") == ft_strlen(node->cmd[0]) \
+	&& ft_strncmp(node->cmd[0], "unset", ft_strlen("unset")) == 0)
 		return (3);
-	if (ft_strncmp(node->cmd[0], "env", ft_strlen("env")) == 0)
+	if (ft_strlen("env") == ft_strlen(node->cmd[0]) \
+	&& ft_strncmp(node->cmd[0], "env", ft_strlen("env")) == 0)
 		return (2);
-	if (ft_strncmp(node->cmd[0], "exit", ft_strlen("exit")) == 0)
+	if (ft_strlen("exit") == ft_strlen(node->cmd[0]) \
+	&& ft_strncmp(node->cmd[0], "exit", ft_strlen("exit")) == 0)
 		return (1);
 	return (0);
 }

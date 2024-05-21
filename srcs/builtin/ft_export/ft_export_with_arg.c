@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:21:36 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/19 16:45:52 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:36:23 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,39 @@ void	export_witharg(t_env *env, t_node *node)
 	int     i;
 	char    *key;
 	char    *value;
+	char	*tmp;
 
+	// printf("in child_solo :: node->cmd[i] : %s\n", node->cmd[1]);
 	i = 1;
 	while (node->cmd[i])
 	{
-		parse_env_str(node->cmd[i], &key, &value);
-		if (!is_valid_key(key) && !is_valid_value(value))
+		tmp = ft_strdup(node->cmd[i]);
+		parse_env_str(tmp, &key, &value);
+		if (!is_valid_key(key) || !is_valid_value(value))
 		{
-			exit(1); // Error, bash: export: `-n': not a valid identifier
+			printf("minishell: export: `%s': not a valid identifier\n", node->cmd[i]);
+			return ; // Error, bash: export: `-n': not a valid identifier
 		}
 		else // 인자가 문제 없는 경우
 		{
+			printf("key : %s\n", key);
 			if (is_inenv(env, key)) // 환경변수 리스트 내 존재?
-				renew_env(env, key, value); // 존재하는 경우 갱신
+			{
+				// printf("환경변수 리스트 내 존재 O : is_inenv: %d\n", is_inenv(env, key));
+				renew_env(env, node->cmd[i], key, value); // 존재하는 경우 갱신
+			}
 			else
+			{
+				// printf("환경변수 리스트 내 존재 X : is_inenv: %d\n", is_inenv(env, key));
 				add_env(env, node->cmd[i], key, value); // 존재하지 않는 경우 추가
+			}
 		}
+		ft_free((void **)&tmp);
 		i++;
 	}
 }
 
-void    renew_env(t_env *env, char *key, char *value)
+void    renew_env(t_env *env, char *cmd, char *key, char *value)
 {
 	t_env *cur;
 
@@ -47,10 +59,13 @@ void    renew_env(t_env *env, char *key, char *value)
 		if (ft_strlen(cur->key) == ft_strlen(key) \
 		 && ft_strncmp(cur->key, key, ft_strlen(key)) == 0) // key가 일치하는 경우 찾고
 		{
+			// ft_free(void **)&cur->cmd); // 기존 cmd 메모리 해제
 			ft_free((void **)&cur->value); // 기존 value 메모리 해제
 			if (value) // 만약 value가 NULL 인경우 ('=' 없이 입력된 경우) -> 무시 / "" or 정상일 경우 renew
 			{   
+				cur->cmd = ft_strdup(cmd);
 				cur->value = ft_strdup(value);
+				// printf("cur->value : $%s$\n", cur->value);
 			}
 			return ;
 		}
@@ -68,7 +83,7 @@ void    add_env(t_env *env, char *cmd, char *key, char *value)
 	if (!new_node)
 	{
 		// free_env_list(env); // 메모리 해제
-		exit(1); // 실패 시 종료
+		return ; // 실패 시 종료
 	}
 	append_node_env(&cur, new_node); // 뒤에 추가
 }

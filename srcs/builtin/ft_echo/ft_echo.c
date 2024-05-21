@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:37 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 14:51:36 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 16:41:15 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	ft_echo(t_node *node)
 			printf("\n");
 		}
 	}
-	exit(0); // Error?
 }
 
 static void echo_without_option(t_node *node)

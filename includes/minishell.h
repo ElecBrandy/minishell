@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 14:55:27 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 17:13:22 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,12 @@ typedef struct s_envutil
 	char	*value;
 	char	*tmp;
 }	t_envutil;
+
+typedef struct s_stdio
+{
+    int stdin_backup;
+    int stdout_backup;
+} t_stdio;
 
 int		g_errnum;
 /* ↓↓↓↓↓ ======== PARSER ======== ↓↓↓↓↓ */
@@ -178,7 +184,7 @@ void	ft_export(t_env *head_env, t_node *node);
 
 /* ft_export_witharg.c */
 void	export_witharg(t_env *env, t_node *node);
-void    renew_env(t_env *env, char *key, char *value);
+void    renew_env(t_env *env, char *cmd, char *key, char *value);
 void    add_env(t_env *env, char *cmd, char *key, char *value);
 
 /* ft_export_outarg.c */
@@ -217,6 +223,8 @@ int		count_node(t_node *node);
 void	redirect_io(int in_fd, int out_fd);
 void	wait_process(int cnt);
 void	close_pipe(int *fd);
+void 	save_stdio(t_stdio *backup);
+void	restore_stdio(t_stdio *backup);
 
 /* ===== UTILS ===== */
 
@@ -232,7 +240,9 @@ void	print_node_details(t_node *node);
 void	print_linked_list(t_node *head);
 void	print_env_list(t_env *head_env);
 void	print_arry_2d(char **arr);
+void	print_error(void);
 void	head_env_chk(t_env *head_env, int i);
+void	print_process_log(void);
 
 /* _ft_arrlen_2d */
 int		ft_arrlen_2d(char **array);

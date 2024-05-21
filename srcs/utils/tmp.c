@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 03:55:02 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/18 17:34:28 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 17:14:48 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void print_env_list(t_env *head_env)
 		fprintf(stderr, "cmd : %s\n", cur->cmd);
 		fprintf(stderr, "key : %s\n", cur->key);
 		fprintf(stderr, "value : %s\n", cur->value);
+		fprintf(stderr, "\n");
 		cur = cur->next;
 	}
 }
@@ -83,4 +84,12 @@ void head_env_chk(t_env *head_env, int i)
 		fprintf(stderr, "i : %d\n", i);
 		exit(1); // Error
 	}
+}
+
+void	print_process_log(void)
+{
+	pid_t pid = getpid();
+	char command[256];
+	snprintf(command, sizeof(command), "lsof -p %d >> log", pid);
+	system(command);
 }

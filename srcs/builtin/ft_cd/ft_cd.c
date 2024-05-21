@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 14:06:38 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 16:04:50 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,5 @@ void ft_cd(t_env *head_env, t_node *node)
 	// {
 	// 	export_witharg(env, node);
 	// }
-	exit(0);
 }
 
