@@ -32,25 +32,32 @@
 
 #### export (완)
 - _export with no options_
+- 인자 없는 경우
+    - `declare -x key=value` 식으로 env 리스트 전부 출력
+    - `declare -x key=""` value가 NULL인 경우
+    - `declare -x key` value가 없는 경우
+- 인자 있는 경우
+    - key, value 각각 유효성검사하고 env 리스트에 추가
 
-#### echo (완)
-- _echo with option -n_
-- `-n -nnnn -nnnnnn` = `-n`
-- `-n -ndf -nnnn` = 출력 `-ndf -nnnn`
+#### unset (완)
+- _unset with no options_
+- 대상을 환경변수에서 삭제 (다중삭제도 가능)
+- 중간에 이상한 인자가 들어와도 끝까지 동작 (경고문자 출력은 함)
 
 #### pwd (완)
 - _pwd with no options_
 - 'print working directory'의 약자로 현재 작업 중인 디렉토리의 절대 경로를 반환
 
+#### echo (진행 중)
+- _echo with option -n_
+- `-n -nnnn -nnnnnn` = `-n`
+- `-n -ndf -nnnn` = 출력 `-ndf -nnnn`
+- 백슬래시 처리 ㅠㅠㅠㅠ
+
 #### cd (진행중)
 - _cd with only a relative or absolute path_
 - 
 
-#### export (완)
-- _export with no options_
-- 인자 없는 경우
-    - `declare -x key=value` 식으로 전부 출력
-    - `declare -x key=""` value가 NULL인 경우
-    - `declare -x key` value가 없는 경우
-- 인자 있는 경우
-    -
+#### exit (진행중)
+- _exit with no options_
+

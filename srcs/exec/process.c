@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 17:37:30 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:58:56 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ void	fork_process(t_env *head_env, t_node *node, int node_cnt)
 	t_node	*cur;
 	t_stdio	stdin_origin;
 
-	
 	fork_cnt = 0;
 	cur = node;
 	save_stdio(&stdin_origin);
@@ -42,11 +41,8 @@ void	fork_process(t_env *head_env, t_node *node, int node_cnt)
 		}
 		child_end(head_env, cur, &fork_cnt);
 	}
-	printf("fork_cnt : %d\n", fork_cnt);
-	restore_stdio(&stdin_origin);
 	wait_process(fork_cnt);
-	// system("lsof -p $$ >> parents_log");
-	// printf("==========fork_process_end==========\n");
+	restore_stdio(&stdin_origin);
 }
 
 static void	child_solo(t_env *head_env, t_node *node, int *cnt)
@@ -88,7 +84,8 @@ static void	child_normal(t_env *head_env, t_node *node, int *cnt)
 	if (pid == 0)
 	{
 		dup2(fd[1], STDOUT); // 일단 출력을 fd[1]로 보내고
-		redirect_io(node->in_fd, node->out_fd); // 입출력을 설정한다.
+		close(fd[1]); // 닫고
+		redirect_io(node->in_fd, node->out_fd); // 입출력을 재설정한다.
 		close_pipe(fd);
 		run_cmd(head_env, node);
 	}
@@ -96,6 +93,7 @@ static void	child_normal(t_env *head_env, t_node *node, int *cnt)
 	{
 		(*cnt)++;
 		dup2(fd[0], STDIN);
+		close(fd[0]);
 		close_pipe(fd);
 	}
 }

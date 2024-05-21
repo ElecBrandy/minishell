@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:15 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 18:38:37 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 19:05:44 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,3 @@ void ft_export(t_env *head_env, t_node *node)
 	}
 	// print_env_list(head_env);
 }
-
-
-
-// cd with only a relative or absolute path
-// 오직 상대 또는 절대경로만 사용하는 cd
-
-// export with no options
-// 옵션이 없는 export
-
-// unset with no options
-// 옵션이 없는 unset
-
-// exit with no options
-// 옵션이 없는 exit

@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:21:36 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 18:36:23 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 19:04:09 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	export_witharg(t_env *env, t_node *node)
 		}
 		else // 인자가 문제 없는 경우
 		{
-			printf("key : %s\n", key);
 			if (is_inenv(env, key)) // 환경변수 리스트 내 존재?
 			{
 				// printf("환경변수 리스트 내 존재 O : is_inenv: %d\n", is_inenv(env, key));

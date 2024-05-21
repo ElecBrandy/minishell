@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:31:14 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 18:36:43 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/21 18:48:43 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ t_env	*create_node_env(const char *cmd, const char *key, const char *value)
 	else
 		new_node->value = ft_strdup(value);
 	new_node->next = NULL;
-	printf("new node!");
 	if (!new_node->cmd || !new_node->key|| !new_node->value)
 	{
 		ft_free((void **)&new_node->cmd);
