@@ -1,26 +1,22 @@
 # minishell
 
-### libft 수정
-- ft_strjoin free(s1)제거
+### errno 처리중
+- g_errnum 0이 아닐때 할당하는 번호
+- -1 -> ‘“ 안닫혀있을때 -> syntax error errno = 258
+- 12 -> 말록 실패(할당안됨)
+- 258~ ->  file syntax error 에러 (newline, token…)
+- 1 ->  not file error
+- 127 -> command not found
 
-### Makefile 수정
-- c파일 추가
-
-### parsing 수정
-- '$'표시부분 환경변수로 치환완료 ('$'?는 어떤식으로 해야할지 생각, $$도 미정)
-- 주석을 제외한 모든 부분 norm검사 통과
-- node->path 추가(빌트인 함수를 제외하고 path가 없으면 에러처리로 할 예정)
+### singal 처리
+- cat과 같은 명령어만 들어오고 단어를 받을때 ctrl + \ 하면 Quit 3이 나오고 끝내야함
+- ctrl + c도 아직 완벽한 동작을 안하는 중
 
 ### headerfile
 - 전역변수 int g_errnum 추가
 
-### main file
-- 주석 처리를 제외한 부분 norm 통과를 위해 함수 분할
-- errornum 작업중 / command not found와 몇몇 에러 출력은 stderror, perror로는 안됨(직접 출력해야하는듯함)
-
-### 3. fd 설정
-- head free 할때 node안에 있는 in,out fd 모두 close
-- cat << a heredoc이 안읽힘 , fd가 3부터 시작을 안하는 경우?????
+### fd
+- fd가 3부터가 아니라 이상하게 열리는 경우가 많음
 
 ### 빌트인 함수
 
@@ -52,8 +48,7 @@
 - 'print working directory'의 약자로 현재 작업 중인 디렉토리의 절대 경로를 반환
 
 #### cd (진행중)
-- _cd with only a relative or absolute path_
-- 
+- _cd with only a relative or absolute path_ 
 
 #### exit (진행중)
 - _exit with no options_
