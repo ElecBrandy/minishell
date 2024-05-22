@@ -56,14 +56,14 @@ int	find_dollar(char *av, t_env *env, int p_e)
 			else if (av[u.i] == '$' && is_print(av[u.i + 1]))
 			{
 				u.idx = find_env(av, &u.i, env);
-				if (u.idx == -1)
-					return (-1);
+				if (u.idx == -100)
+					return (-100);
 				u.cnt += u.idx;
 			}
 			else if (av[u.i] == 34)
 			{
 				if (in_doublequote(av, p_e, env, &u))
-					return (-1);
+					return (-100);
 			}
 			else if (av[u.i] == 39)
 				u.i = find_next_quote(av, u.i, 39);
@@ -86,7 +86,7 @@ int	find_env(char *av, int *idx, t_env *env)
 	e = env;
 	word = get_word(av, idx);
 	if (!word)
-		return (-1);
+		return (-100);
 	word_len = ft_strlen(word);
 	while (e)
 	{

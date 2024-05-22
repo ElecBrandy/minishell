@@ -17,6 +17,8 @@ int	get_numlen(int num)
 	int	i;
 
 	i = 0;
+	if (num == 0)
+		return (1);
 	while (num > 0)
 	{
 		num /= 10;
@@ -34,7 +36,7 @@ void	put_errno(char *str, char *av, int p_e, t_util *u)
 	word = ft_itoa(p_e);
 	while (word[++i])
 		str[++(u->idx)] = word[i];
-	(u->i)++;
+	(u->i) += 1;
 	free(word);
 }
 

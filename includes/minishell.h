@@ -54,6 +54,12 @@ typedef struct s_util
 	int	cnt;
 }t_util;
 
+typedef struct s_errnum
+{
+	int	errnum;
+	int	prev_errnum;
+}t_errnum;
+
 typedef struct s_env
 {
 	char	*cmd;
@@ -62,14 +68,15 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-int		g_errnum;
+int		a;
 int		g_signal;
+int		g_errnum;
 /* ↓↓↓↓↓ ======== PARSER ======== ↓↓↓↓↓ */
 /* minishell.c */
-void	minishell(char *av, t_env *head_env);
+void	minishell(char *av, t_env *head_env, t_errnum *e);
 void	sig_handler(int signal);
-void	readline_minishell(t_env *env);
-int		parsing_minishell(t_node **head, char **str, t_env *env, int p_e);
+void	readline_minishell(t_env *env, t_errnum *e);
+int		parsing_minishell(t_node **head, char **str, t_env *env, t_errnum *e);
 
 /* parsing_dollar_find.c */
 char	*get_word(char *av, int *idx);
@@ -120,7 +127,7 @@ char	*heredoc_check_dollar(char *av, t_env *env, t_node *node);
 int		heredoc_readline(char *av, char *limiter, t_node *node, t_env *env);
 
 /* parsing_in_pipe.c */
-int		parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e);
+int		parsing_in_pipe(char *av, t_node *node, t_env *env, t_errnum *e);
 char	*add_space(char *av);
 
 /* paring_infd.c */

@@ -70,8 +70,8 @@ int	in_doublequote(char *av, int p_e, t_env *env, t_util *u)
 		else if (av[u->i] == '$' && is_print(av[u->i + 1]))
 		{	
 			len = find_env(av, &u->i, env);
-			if (len == -1)
-				return (-1);
+			if (len == -100)
+				return (-100);
 			u->cnt += len;
 		}
 	}
@@ -90,14 +90,14 @@ int	heredoc_find_dollar(char *av, t_env *env, int p_e)
 		else if (av[u.i] == '$' && is_print(av[u.i + 1]))
 		{
 			u.flag = find_env(av, &u.i, env);
-			if (u.flag == -1)
-				return (-1);
+			if (u.flag == -100)
+				return (-100);
 			u.cnt += u.flag;
 		}
 		else if (av[u.i] == 34)
 		{
 			if (in_doublequote(av, p_e, env, &u))
-				return (-1);
+				return (-100);
 		}
 		else if (av[u.i] == 39)
 			u.i = find_next_quote(av, u.i, 39);

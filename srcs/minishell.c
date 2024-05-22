@@ -15,20 +15,21 @@
 void	sig_handler(int signal)
 {
 	if (signal == SIGINT)
+		//printf("sigint\n");
 		printf("\n"); //있던 문자 지움
 	if (rl_on_new_line() == -1)
 		exit(1);
-	rl_replace_line("exit", 1);
+	rl_replace_line("", 1);
 	rl_redisplay();
 }
 
-int	parsing_minishell(t_node **head, char **str, t_env *env, int p_e)
+int	parsing_minishell(t_node **head, char **str, t_env *env, t_errnum *e)
 {
 	t_node	*node;
 	t_util	u;
 
 	util_init(&u);
-	node = create_node(p_e); // 새 노드 생성
+	node = create_node(e->prev_errnum); // 새 노드 생성
 	if (!node)
 		return (12);
 	append_node(head, node); // 새 노드를 리스트에 추가
@@ -37,28 +38,27 @@ int	parsing_minishell(t_node **head, char **str, t_env *env, int p_e)
 	{
 		if (u.j > 0)
 		{
-			node = create_node(p_e); // 추가 노드 생성
+			node = create_node(e->prev_errnum); // 추가 노드 생성
 			if (!node)
 				return (12); // Error
 			append_node(head, node); // 추가 노드를 리스트에 추가
 		}
-		u.cnt = parsing_in_pipe(str[u.j], node, env, p_e);
+		u.cnt = parsing_in_pipe(str[u.j], node, env, e);
 		if (u.cnt)
 			break ;
 	}
 	return (u.cnt);
 }
 
-void	minishell(char *av, t_env *env)
+void	minishell(char *av, t_env *env, t_errnum *e)
 {
 	t_node	*head;
 	char	***str;
 	t_util	u;
-	int		prev_errnum;
 
 	util_init(&u);
-	prev_errnum = g_errnum;
-	g_errnum = 0;
+	e->prev_errnum = e->errnum;
+	e->errnum = 0;
 	str = parsing(av); // str[세미콜론][파이프][파이프 내부]로 파싱
 	if (!str)
 	{
@@ -68,7 +68,7 @@ void	minishell(char *av, t_env *env)
 	while (str[++u.i])
 	{
 		head = NULL;
-		if (parsing_minishell(&head, str[u.i], env, prev_errnum))
+		if (parsing_minishell(&head, str[u.i], env, e))
 		{
 			if (head)
 				free_node(head);
@@ -83,7 +83,7 @@ void	minishell(char *av, t_env *env)
 	free_str_three(str); // 파싱된 문자열 해제
 }
 
-void	readline_minishell(t_env *env)
+void	readline_minishell(t_env *env, t_errnum *e)
 {
 	char	*av;
 
@@ -100,7 +100,7 @@ void	readline_minishell(t_env *env)
 		else
 		{
 			add_history(av);
-			minishell(av, env);
+			minishell(av, env, e);
 			free(av);
 		}
 	}
@@ -110,7 +110,10 @@ int	main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
 	t_env			*env;
+	t_errnum		e;
 
+	e.errnum = 0;
+	e.prev_errnum = 0;
 	if (argc != 1 || !argv || !envp)
 	{
 		g_errnum = 3;
@@ -123,6 +126,6 @@ int	main(int argc, char **argv, char **envp)
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	signal(SIGINT, sig_handler);// CTRL + c
 	signal(SIGQUIT, SIG_IGN);// CTRL + |
-	readline_minishell(env);
+	readline_minishell(env, &e);
 	exit (g_errnum);
 }

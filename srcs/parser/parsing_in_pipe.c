@@ -75,7 +75,7 @@ char	*add_space(char *av)
 	return (str);
 }
 
-int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
+int	parsing_in_pipe(char *av, t_node *node, t_env *env, t_errnum *e)
 {
 	t_util	u;
 	char	*tmp;
@@ -86,7 +86,7 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 	tmp = add_space(av);// error : malloc fail
 	if (!tmp)
 		return (12);
-	tmp = check_dollar(tmp, env, p_e);// error : malloc fail
+	tmp = check_dollar(tmp, env, e->prev_errnum);// error : malloc fail
 	if (!tmp)
 		return (12);
 	u.cnt = find_flag(tmp, ' ') + find_flag(tmp, '\t');

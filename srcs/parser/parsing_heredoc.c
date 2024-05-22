@@ -18,7 +18,7 @@ char	*heredoc_check_dollar(char *av, t_env *env, t_node *node)
 	int		env_len;
 
 	env_len = heredoc_find_dollar(av, env, node->prev_errnum);
-	if (env_len == -1)
+	if (env_len == -100)
 	{
 		free(av);
 		return (NULL);

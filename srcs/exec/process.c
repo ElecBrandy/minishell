@@ -57,11 +57,13 @@ void	child_solo(t_env *head_env, t_node *node, int *cnt)
 {
 	pid_t				pid;
 
+	//signal(SIGINT, SIG_DFL);
 	pid = fork();
 	if (pid == -1)
 		exit(1); // Error
 	if (pid == 0)
 	{
+		a = 1;
 		//fprintf(stderr, "child_solo\n");
 		redirect_io(node->in_fd, node->out_fd);
 		// system("lsof -p $$ >> log");
@@ -70,6 +72,7 @@ void	child_solo(t_env *head_env, t_node *node, int *cnt)
 		run_cmd(head_env, node);
 		// signal(SIGINT, SIG_IGN);
 	}
+	//signal(SIGINT, sig_handler);
 	(*cnt)++;
 }
 

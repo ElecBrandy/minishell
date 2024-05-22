@@ -68,7 +68,7 @@ char	*check_dollar(char *av, t_env *env, int p_e)
 	int		env_len;
 
 	env_len = find_dollar(av, env, p_e);
-	if (env_len == -1)
+	if (env_len == -100)
 	{
 		free(av);
 		return (NULL);
