@@ -18,7 +18,7 @@ void	sig_handler(int signal)
 		printf("\n"); //있던 문자 지움
 	if (rl_on_new_line() == -1)
 		exit(1);
-	rl_replace_line("", 1);
+	rl_replace_line("exit", 1);
 	rl_redisplay();
 }
 
@@ -42,11 +42,11 @@ int	parsing_minishell(t_node **head, char **str, t_env *env, int p_e)
 				return (12); // Error
 			append_node(head, node); // 추가 노드를 리스트에 추가
 		}
-		g_errnum = parsing_in_pipe(str[u.j], node, env, p_e);
-		if (g_errnum)
+		u.cnt = parsing_in_pipe(str[u.j], node, env, p_e);
+		if (u.cnt)
 			break ;
 	}
-	return (g_errnum);
+	return (u.cnt);
 }
 
 void	minishell(char *av, t_env *env)
@@ -122,7 +122,7 @@ int	main(int argc, char **argv, char **envp)
 	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	signal(SIGINT, sig_handler);// CTRL + c
-	signal(SIGQUIT, SIG_IGN);// CTRL + /
+	signal(SIGQUIT, SIG_IGN);// CTRL + |
 	readline_minishell(env);
 	exit (g_errnum);
 }

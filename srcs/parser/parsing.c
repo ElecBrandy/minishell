@@ -12,15 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-int	find_other(char *av, int idx)
-{
-	if (av[idx] == 34)
-		idx = find_next_quote(av, idx, 34);
-	else if (av[idx] == 39)
-		idx = find_next_quote(av, idx, 39);
-	return (idx);
-}
-
 char	*save_in(char *av, t_util *util)
 {
 	char	*str;
@@ -28,53 +19,80 @@ char	*save_in(char *av, t_util *util)
 	util->end = util->idx - 1;
 	util->flag = util->idx;
 	str = ft_strldup(av, util->start, util->end);
-	str = ft_strtrim(str, " ");
+	str = ft_strtrim(str, " \t");
 	if (!str)
 		return (NULL);
 	util->start = util->end + 2;
 	return (str);
 }
 
-char	**split_flag(char *av, int len, char flag)
+int	split_flag_save(char *av, char **str, t_util *u, char flag)
 {
-	char	**str;
-	t_util	util;
-
-	util_init(&util);
-	str = (char **)malloc(sizeof(char *) * (len + 2));
-	if (!str)
-		return (NULL);
-	while (av[++util.idx])
+	while (av[++u->idx])
 	{
-		if (av[util.idx] == flag)
+		if (av[u->idx] == flag)
 		{
-			str[++util.i] = save_in(av, &util);
-			if (!str[util.i])
+			str[++u->i] = save_in(av, u);
+			if (!str[u->i])
 			{
 				free_str(str);
-				return (NULL);
+				return (1);
 			}
 		}
 		else
-			util.idx = find_other(av, util.idx);
+			u->idx = find_other(av, u->idx);
 	}
-	if (util.flag == 0)
-		str[++util.i] = save_in(av, &util);
+	return (0);
+}
+
+char	**split_flag(char *av, int len, char flag)
+{
+	char	**str;
+	t_util	u;
+
+	util_init(&u);
+	str = (char **)malloc(sizeof(char *) * (len + 2));
+	if (!str)
+		return (NULL);
+	if (split_flag_save(av, str, &u, flag))
+		return (NULL);
+	if (u.flag == 0)
+		str[++u.i] = save_in(av, &u);
 	else
-		str[++util.i] = save_in(av, &util);
-	if (!str[util.i])
+		str[++u.i] = save_in(av, &u);
+	if (!str[u.i])
 	{
 		free_str(str);
 		return (NULL);
 	}
-	str[++util.i] = NULL;
+	str[++u.i] = NULL;
 	return (str);
+}
+
+int	split_by_pipe(char **str_smc, char ***str_pipe)
+{
+	int	i;
+	int	len;
+
+	i = -1;
+	while (str_smc[++i])
+	{
+		len = find_flag(str_smc[i], '|');
+		str_pipe[i] = split_flag(str_smc[i], len, '|');
+		if (!str_pipe[i])
+		{
+			free_str(str_smc);
+			free_str_three(str_pipe);
+			return (1);
+		}
+	}
+	str_pipe[i] = NULL;
+	return (0);
 }
 
 char	***parsing(char *av)
 {
 	int		len;
-	int		i;
 	char	**str_smc;
 	char	***str_pipe;
 
@@ -90,19 +108,8 @@ char	***parsing(char *av)
 		free_str(str_smc);
 		return (NULL);
 	}
-	i = -1;
-	while (str_smc[++i])
-	{
-		len = find_flag(str_smc[i], '|');
-		str_pipe[i] = split_flag(str_smc[i], len, '|');
-		if (!str_pipe[i])
-		{
-			free_str(str_smc);
-			free_str_three(str_pipe);
-			return (NULL);
-		}
-	}
+	if (split_by_pipe(str_smc, str_pipe))
+		return (NULL);
 	free_str(str_smc);
-	str_pipe[i] = NULL;
 	return (str_pipe);
 }

@@ -14,24 +14,22 @@
 
 char	**check_cmd(char **av)
 {
-	int		i;
+	t_util	u;
 	char	**str;
 
-	i = 0;
-	while (av[i])
-		i++;
-	str = malloc(sizeof(char *) * (i + 1));
+	util_init(&u);
+	u.cnt = count_str(av);
+	str = malloc(sizeof(char *) * (u.cnt + 1));
 	if (!str)
 	{
 		free_str(av);
 		return (NULL);
 	}
-	str[i] = NULL;
-	i = -1;
-	while (av[++i])
+	str[u.cnt] = NULL;
+	while (av[++u.i])
 	{
-		str[i] = del_quote(av[i]);
-		if (!str[i])
+		str[u.i] = del_quote(av[u.i]);
+		if (!str[u.i])
 		{
 			free_str(av);
 			free_str(str);
@@ -53,10 +51,10 @@ char	**split_space(char *av, int len)
 		return (NULL);
 	while (av[++util.idx])
 	{
-		if (av[util.idx] == ' ')
+		if ((av[util.idx] == ' ' || av[util.idx] == '\t')
+			&& (av[util.idx + 1] != ' ' && av[util.idx + 1] != '\t'))
 		{
-			if (av[util.idx + 1] != ' ')
-				str[++util.i] = save_in(av, &util);
+			str[++util.i] = save_in(av, &util);
 			if (!str[util.i])
 			{
 				free_str(str);
@@ -79,28 +77,6 @@ char	**split_space(char *av, int len)
 	return (str);
 }
 
-int	find_cut(char *av)
-{
-	int	cut;
-	int	i;
-
-	i = -1;
-	cut = 0;
-	while (av[++i])
-	{
-		if (av[i] == 34)
-		{
-			i = find_next_quote(av, i, 34);
-			cut += 2;
-		}
-		if (av[i] == 39)
-		{
-			i = find_next_quote(av, i, 39);
-			cut += 2;
-		}
-	}
-	return (cut);
-}
 
 void	del_q(char *av, char *str, t_util *u)
 {

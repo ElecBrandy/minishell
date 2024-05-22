@@ -62,3 +62,14 @@ void	append_node(t_node **head, t_node *new_node)
 		cur->next = new_node;
 	}
 }
+
+void	util_init(t_util *util)
+{
+	util->i = -1;
+	util->start = 0;
+	util->end = 0;
+	util->idx = -1;
+	util->flag = 0;
+	util->j = -1;
+	util->cnt = 0;
+}

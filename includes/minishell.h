@@ -27,6 +27,7 @@
 # include <sys/wait.h>
 # include <stdio.h>
 # include <errno.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <termios.h>
@@ -62,6 +63,7 @@ typedef struct s_env
 }	t_env;
 
 int		g_errnum;
+int		g_signal;
 /* ↓↓↓↓↓ ======== PARSER ======== ↓↓↓↓↓ */
 /* minishell.c */
 void	minishell(char *av, t_env *head_env);
@@ -98,6 +100,7 @@ char	*change_dollar(char *av, t_env *env, int env_len, int p_e);
 int		get_numlen(int num);
 void	put_errno(char *str, char *av, int p_e, t_util *u);
 int		file_error(void);
+
 /* parsing_free.c */
 void	free_str(char **str);
 void	free_str_three(char ***str);
@@ -129,6 +132,7 @@ void	is_infd(char **str, int *i, t_node *node, t_env *env);
 int		save_in_node(t_node *node, char **cmd, t_env *env);
 t_node	*create_node(int p_e);
 void	append_node(t_node **head, t_node *new_node);
+void	util_init(t_util *util);
 
 /* parsing_outfd.c */
 void	new_file(char **str, int *i, t_node *node);
@@ -139,9 +143,9 @@ char	**find_fd(char **str, t_node *node, t_env *e);
 /* parsing_util.c */
 int		find_flag(char *av, char flag);
 int		find_next_quote(char *av, int idx, char flag);
-void	util_init(t_util *util);
 int		ft_max(int a, int b);
 int		get_flagcnt(char *av);
+int		find_other(char *av, int idx);
 
 /* parsing_path.c*/
 int		find_path(char *cmd, t_env *env, t_node *node);
@@ -151,7 +155,9 @@ int		get_path(char **path, t_node *node, char *cmd);
 char	***parsing(char *av);
 char	**split_flag(char *av, int len, char flag);
 char	*save_in(char *av, t_util *util);
-int		find_other(char *av, int idx);
+int		split_by_pipe(char **str_smc, char ***str_pipe);
+int		split_flag_save(char *av, char **str, t_util *u, char flag);
+
 
 /* ↓↓↓↓↓ ======== EXEC ======== ↓↓↓↓↓ */
 /* builtin */

@@ -77,22 +77,20 @@ char	*add_space(char *av)
 
 int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 {
-	int		len;
+	t_util	u;
 	char	*tmp;
 	char	**str;
 	char	**cmd;
 
+	util_init(&u);
 	tmp = add_space(av);// error : malloc fail
 	if (!tmp)
 		return (12);
 	tmp = check_dollar(tmp, env, p_e);// error : malloc fail
 	if (!tmp)
 		return (12);
-	len = find_flag(tmp, ' ');
-	if (ft_find_quotes(tmp, 34) + ft_find_quotes(tmp, 39) == 0)
-		str = ft_split(tmp, ' ');
-	else
-		str = split_space(tmp, len);
+	u.cnt = find_flag(tmp, ' ') + find_flag(tmp, '\t');
+	str = split_space(tmp, u.cnt);
 	free(tmp);
 	if (!str) //error : malloc fail
 		return (12);
