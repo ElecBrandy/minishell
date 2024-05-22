@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:37 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 19:26:24 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/22 19:31:19 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,10 @@ static void echo_without_option(t_node *node)
 	i = 1;
 	while (node->cmd[i])
 	{
-		if (node->cmd[i] == '\\')
-		{
+		// if (node->cmd[i] == '\\')
+		// {
 			
-		}
+		// }
 		printf("%s", node->cmd[i]);
 		if (node->cmd[i + 1])
 			printf(" ");
