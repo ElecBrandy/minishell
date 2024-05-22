@@ -52,12 +52,47 @@
 - _echo with option -n_
 - `-n -nnnn -nnnnnn` = `-n`
 - `-n -ndf -nnnn` = 출력 `-ndf -nnnn`
-- 백슬래시 처리 ㅠㅠㅠㅠ
+- 백슬래시 처리? -> 그냥 무시해야하나
 
 #### cd (진행중)
 - _cd with only a relative or absolute path_
-- 
+
+/*
+	ft_cd
+	cd with only a relative or absolute path
+
+	인자가 여러개 들어와도 첫번째 인자만 처리
+	파싱부분에서 환경변수를 받아오지 못할 경우에 대하여..? 에러처리? 어떤 식으로 넘어오는지?
+	unset HOME 한 후 cd $HOME 했을 때
+	인자가 n개일때의 오류 -> 메세지상에서 무조건 첫번째 인자
+
+	unset HOME 한 후 cd $HOME 했을 때 
+	-> bash: cd: HOME not set
+
+	unset PWD 한 후 cd $PWD 했을 때 //파싱?
+	-> bash: cd: PWD not set
+
+	케이스분류
+	1. 'HOME'
+	- cd $HOME : bash: cd: HOME not set // Error  ::: cd
+	- cd : bash: cd: HOME not set ::: cd
+	- cd ~ : 정상동작 ::: cd ~
+
+	2. 'HOME='
+	- cd $HOME : cd . 처럼 동작 ::: cd
+	- cd : cd . 처럼 동작 ::: cd
+	- cd ~ : 정상동작 ::: cd ~
+
+	구분1 cd_withnoarg
+	- cd $HOME : bash: cd: HOME not set // Error  ::: cd
+	- cd : bash: cd: HOME not set ::: cd
+	- cd $HOME : cd . 처럼 동작 ::: cd ("$HOME=")
+	- cd : cd . 처럼 동작 ::: cd
+
+	구분2 cd_witharg
+*/ 
 
 #### exit (진행중)
 - _exit with no options_
+
 

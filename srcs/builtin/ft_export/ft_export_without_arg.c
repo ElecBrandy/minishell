@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:20:54 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 18:43:59 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/23 03:55:37 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 static int	sort_arr_2d(char **arr);
 
-void export_withoutarg(t_env *env)
+void export_withoutarg(t_env *head_env)
 {
 	int			i;
 	char		**str;
 	char		*sep_pos;
 	t_envutil	util;
 
-	str = env_list_to_array(env);
+	str = env_list_to_array(head_env);
 	if (str == NULL)
 		return ; // Error
 	sort_arr_2d(str);
@@ -53,6 +53,7 @@ void export_withoutarg(t_env *env)
 		}
 		i++;
 	}
+	ft_free_2d(str);
 }
 
 static int	sort_arr_2d(char **arr)

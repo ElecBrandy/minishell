@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:38 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 17:47:50 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/23 02:10:12 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ static void	delete_env(t_env *head_env, char *key)
 				prev->next = cur->next;
 			else // 첫 노드 삭제
 				head_env = cur->next;
+			ft_free((void **)&cur->cmd); // cmd 메모리 해제
 			ft_free((void **)&cur->key); // key 메모리 해제
 			ft_free((void **)&cur->value); // value 메모리 해제
 			ft_free((void **)&cur); // 노드 메모리 해제

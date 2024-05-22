@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 19:01:31 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/23 02:36:24 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ int run_cmd(t_env *head_env, t_node *node)
 	}
 	else // builtin 아니라 일반 함수인 경우
 	{
-		printf("not builtin\n");
 		exec_cmd(head_env, node);
 	}
 	return (0);
