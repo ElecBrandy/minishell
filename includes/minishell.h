@@ -32,7 +32,6 @@
 # include <readline/history.h>
 # include <termios.h>
 # include "../libft/libft.h"
-# include "../gnl/get_next_line.h"
 
 typedef struct s_node
 {
