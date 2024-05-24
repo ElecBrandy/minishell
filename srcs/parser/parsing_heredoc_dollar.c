@@ -26,6 +26,16 @@ void	putin_doublequote(char *av, char *str, t_env *env, t_util *u)
 	}
 }
 
+void	heredoc_change_dollar_two(char *av, char *str, int p_e, t_util *u)
+{
+	if (av[u->i] == '$' && av[u->i + 1] == '?')
+		put_errno(str, av, p_e, u);
+	else if (av[u->i] == 39)
+		put_str(str, av, &u->i, &u->idx);
+	else
+		str[++(u->idx)] = av[u->i];
+}
+
 char	*heredoc_change_dollar(char *av, t_env *env, int env_len, int p_e)
 {
 	t_util	u;
@@ -42,14 +52,10 @@ char	*heredoc_change_dollar(char *av, t_env *env, int env_len, int p_e)
 	{
 		if (av[u.i] == 34)
 			putin_doublequote(av, str, env, &u);
-		else if (av[u.i] == '$' && av[u.i + 1] == '?')
-			put_errno(str, av, p_e, &u);
-		else if (av[u.i] == 39)
-			put_str(str, av, &u.i, &u.idx);
 		else if (av[u.i] == '$' && is_print(av[u.i + 1]))
 			put_env(str, av, env, &u);
 		else
-			str[++u.idx] = av[u.i];
+			heredoc_change_dollar_two(av, str, p_e, &u);
 		if (av[u.i] == '\0')
 			break ;
 	}

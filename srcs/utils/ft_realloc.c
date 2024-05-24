@@ -6,13 +6,13 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:05:38 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/16 16:11:13 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/24 15:25:15 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void    *ft_realloc(void *ptr, int original_size, int new_size)
+void	*ft_realloc(void *ptr, int original_size, int new_size)
 {
 	void	*new_ptr;
 	int		min_size;

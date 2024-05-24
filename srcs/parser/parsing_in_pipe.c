@@ -75,7 +75,7 @@ char	*add_space(char *av)
 	return (str);
 }
 
-int	parsing_in_pipe(char *av, t_node *node, t_env *env, t_errnum *e)
+int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 {
 	t_util	u;
 	char	*tmp;
@@ -86,21 +86,19 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env, t_errnum *e)
 	tmp = add_space(av);// error : malloc fail
 	if (!tmp)
 		return (12);
-	tmp = check_dollar(tmp, env, e->prev_errnum);// error : malloc fail
+	tmp = check_dollar(tmp, env, p_e);// error : malloc fail
 	if (!tmp)
 		return (12);
 	u.cnt = find_flag(tmp, ' ') + find_flag(tmp, '\t');
 	str = split_space(tmp, u.cnt);
-	free(tmp);
 	if (!str) //error : malloc fail
 		return (12);
 	cmd = find_fd(str, node, env); // error:malloc(12)/file syntax error(258)/not file(1) 
-	if (!cmd || g_errnum)
+	if ((!cmd) || g_signal_error)
 		return (file_error());
 	cmd = check_cmd(cmd); // error : malloc fail
 	if (!cmd)
 		return (12);
-	g_errnum = save_in_node(node, cmd, env); //error : malloc fail
-	free_str(cmd);
-	return (g_errnum);
+	g_signal_error = save_in_node(node, cmd, env); //error : malloc fail
+	return (g_signal_error);
 }

@@ -39,7 +39,7 @@ int	heredoc_readline(char *av, char *limiter, t_node *node, t_env *env)
 	av = heredoc_check_dollar(av, env, node);
 	if (!av)
 	{
-		g_errnum = 12;
+		g_signal_error = 12;
 		return (-1);
 	}
 	write(node->in_fd, av, ft_strlen(av));
@@ -56,12 +56,11 @@ void	heredoc_process(char **str, int *i, t_node *node, t_env *env)
 	limiter = del_quote(str[(*i)]);
 	while (1)
 	{
+		if (g_signal_error)
+			break ;
 		av = readline("> ");
 		if (!av)
-		{
-			free(av);
 			break ;
-		}
 		else if (*av == '\0')
 			free(av);
 		else
@@ -73,30 +72,32 @@ void	heredoc_process(char **str, int *i, t_node *node, t_env *env)
 			break ;
 	}
 	free(limiter);
-	free(av);
+	exit (g_signal_error);
 }
 
 void	heredoc_infile(char **str, int *i, t_node *node, t_env *env)
 {
 	struct termios	ter;
+	pid_t			pid;
+	int				status;
 
-	tcgetattr(STDIN_FILENO, &ter);
-	ter.c_lflag &= ~(ECHOCTL);
-	tcsetattr(STDIN_FILENO, TCSANOW, &ter);
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, SIG_IGN);
 	unlink(".heredoc_tmp");
 	if (node->in_fd != 0)
 		close(node->in_fd);
 	node->in_fd = open(".heredoc_tmp", O_RDWR | O_CREAT | O_APPEND, 0666);
 	if (node->in_fd == -1)
 	{
-		printf("minishell: %s: %s\n", ".heredoc_tmp", strerror(2));
-		g_errnum = 1;
+		printf("minishell: .heredoc_tmp: %s\n", strerror(2));
+		g_signal_error = 1;
 		return ;
 	}
 	*i += 1;
-	heredoc_process(str, i, node, env);
+	pid = fork();
+	signal(SIGINT, heredoc_handler);
+	if (pid == 0)
+		heredoc_process(str, i, node, env);
+	wait(&status);
 	close(node->in_fd);
 	node->in_fd = open(".heredoc_tmp", O_RDONLY);
+	signal(SIGINT, sig_handler);
 }

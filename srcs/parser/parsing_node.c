@@ -19,17 +19,24 @@ int	save_in_node(t_node *node, char **cmd, t_env *env)
 	i = count_str(cmd);
 	node->cmd = malloc(sizeof(char *) * (i + 1));
 	if (!node->cmd)
+	{
+		free_str(cmd);
 		return (12);
+	}
 	i = -1;
 	while (cmd[++i])
 	{
 		node->cmd[i] = ft_strdup(cmd[i]);
 		if (!node->cmd[i])
+		{
+			free_str(cmd);
 			return (12);
+		}
 	}
 	node->cmd[i] = NULL;
-	g_errnum = find_path(cmd[0], env, node);
-	return (g_errnum);
+	g_signal_error = find_path(cmd[0], env, node);
+	free_str(cmd);
+	return (g_signal_error);
 }
 
 t_node	*create_node(int p_e)
@@ -72,4 +79,5 @@ void	util_init(t_util *util)
 	util->flag = 0;
 	util->j = -1;
 	util->cnt = 0;
+	util->prev_errnum = g_signal_error;
 }

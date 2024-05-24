@@ -12,28 +12,50 @@
 
 #include "../../includes/minishell.h"
 
-void	print_error(void)
+int	print_error(void)
 {
-	if (g_errnum == 0)
-		g_errnum = 12;
-	if (g_errnum == -1)
+	if (g_signal_error == 0)
+		g_signal_error = 12;
+	if (g_signal_error == -1)
 	{
 		printf("minishell: syntax error: unexpected end of file\n");
-		g_errnum = 258;
-		errno = 258;
+		g_signal_error = 258;
 	}
-	else if (g_errnum == 1)
-		return ;
-	else if (g_errnum == 127)
-		return ;
-	else if (g_errnum == 258)
-	{
-		printf("minishell: syntax error: unexpected token\n");
-		errno = 258;
-	}
+	else if (g_signal_error == 1)
+		return (0);
+	else if (g_signal_error == 127)
+		return (0);
+	else if (g_signal_error == 258)
+		return (0);
 	else
 	{
-		errno = g_errnum;
+		errno = g_signal_error;
 		perror("minishell");
+	}
+	return (0);
+}
+
+void	syntax_error(char *str, t_node *node)
+{
+	g_signal_error = 258;
+	printf("minishell: syntax error near unexpected token ");
+	if (node->in_fd != 0)
+		close(node->in_fd);
+	if (node->out_fd != 1)
+		close(node->out_fd);
+	if (!str)
+		printf("`newline'\n");
+	else
+	{
+		if (str[0] == '<' && str[1] == '>')
+			printf("`<>'\n");
+		else if (str[0] == '<' && str[1] == '<')
+			printf("`<<'\n");
+		else if (str[0] == '<')
+			printf("`<'\n");
+		if (str[0] == '>' && str[1] == '>')
+			printf("`>>'\n");
+		else if (str[0] == '>')
+			printf("`>'\n");
 	}
 }

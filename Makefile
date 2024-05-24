@@ -10,11 +10,12 @@ OBJ_FLAGS = -I/usr/local/include/readline
 
 # Directories
 LIB_DIR = libft/
+LIB_DIR2 = gnl/
 INC_DIR = includes/
 
 # Includes
 INC = -I$(INC_DIR)
-LIB = -L$(LIB_DIR) -lft
+LIB = -L$(LIB_DIR) -lft -L$(LIB_DIR2) -lgnl
 
 # Sources
 SRCS_P = \
@@ -23,6 +24,7 @@ SRCS_P = \
 	srcs/parser/parsing_dollar_find.c		\
 	srcs/parser/parsing_dollar.c			\
 	srcs/parser/parsing_error.c				\
+	srcs/parser/parsing_find.c				\
 	srcs/parser/parsing_free.c     			\
 	srcs/parser/parsing_heredoc_dollar.c	\
 	srcs/parser/parsing_heredoc.c			\
@@ -54,7 +56,8 @@ SRCS_E = \
 	srcs/utils/ft_free.c		\
 	srcs/utils/tmp.c			\
 	srcs/utils/ft_strcmp.c		\
-	srcs/utils/print_error.c
+	srcs/utils/print_error.c	\
+	srcs/utils/custom_handler.c	
 
 SRCS_M = \
 	srcs/minishell.c
@@ -77,6 +80,7 @@ all : $(NAME)
 
 $(NAME): $(OBJS)
 	$(MAKE) -C $(LIB_DIR) --silent
+	$(MAKE) -C $(LIB_DIR2) --silent
 	$(CC) $(CFLAGS) $(COMFILE_FLAGS) -o $@ $^ $(LIB)
 
 %.o: %.c
@@ -84,11 +88,13 @@ $(NAME): $(OBJS)
 
 clean:
 	$(MAKE) -C $(LIB_DIR) clean --silent
+	$(MAKE) -C $(LIB_DIR2) clean --silent
 	$(RM) $(OBJS)
 
 fclean:
 	$(MAKE) clean
 	$(MAKE) -C $(LIB_DIR) fclean --silent
+	$(MAKE) -C $(LIB_DIR2) fclean --silent
 	$(RM) $(NAME)
 
 re:

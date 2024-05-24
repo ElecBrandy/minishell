@@ -55,24 +55,20 @@ void	fork_process(t_env *head_env, t_node *node, int node_cnt)
 
 void	child_solo(t_env *head_env, t_node *node, int *cnt)
 {
-	pid_t				pid;
+	pid_t	pid;
 
-	//signal(SIGINT, SIG_DFL);
 	pid = fork();
 	if (pid == -1)
 		exit(1); // Error
 	if (pid == 0)
 	{
-		a = 1;
 		//fprintf(stderr, "child_solo\n");
 		redirect_io(node->in_fd, node->out_fd);
 		// system("lsof -p $$ >> log");
 		// system("lsof -p $$ >> solo_log");
 		head_env_chk(head_env, 100); // chk
 		run_cmd(head_env, node);
-		// signal(SIGINT, SIG_IGN);
 	}
-	//signal(SIGINT, sig_handler);
 	(*cnt)++;
 }
 

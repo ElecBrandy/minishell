@@ -42,7 +42,7 @@ void	put_errno(char *str, char *av, int p_e, t_util *u)
 
 int	file_error(void)
 {
-	if (!g_errnum)
+	if (!g_signal_error)
 		return (12);
-	return (g_errnum);
+	return (g_signal_error);
 }

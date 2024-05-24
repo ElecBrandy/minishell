@@ -40,43 +40,53 @@ char	**check_cmd(char **av)
 	return (str);
 }
 
-char	**split_space(char *av, int len)
+int	split_space_main(char *tmp, char **str, t_util *u)
 {
-	char	**str;
-	t_util	util;
-
-	util_init(&util);
-	str = (char **)malloc(sizeof(char *) * (len + 2));
-	if (!str)
-		return (NULL);
-	while (av[++util.idx])
+	while (tmp[++(u->idx)])
 	{
-		if ((av[util.idx] == ' ' || av[util.idx] == '\t')
-			&& (av[util.idx + 1] != ' ' && av[util.idx + 1] != '\t'))
+		if ((tmp[u->idx] == ' ' || tmp[u->idx] == '\t')
+			&& (tmp[u->idx + 1] != ' ' && tmp[u->idx + 1] != '\t'))
 		{
-			str[++util.i] = save_in(av, &util);
-			if (!str[util.i])
+			str[++(u->i)] = save_in(tmp, u);
+			if (!str[u->i])
 			{
+				free(tmp);
 				free_str(str);
-				return (NULL);
+				return (1);
 			}
 		}
 		else
-			util.idx = find_other(av, util.idx);
+			u->idx = find_other(tmp, u->idx);
 	}
-	if (util.flag == 0)
-		str[++util.i] = save_in(av, &util);
+	return (0);
+}
+
+char	**split_space(char *av, int len)
+{
+	char	**str;
+	char	*tmp;
+	t_util	u;
+
+	util_init(&u);
+	tmp = ft_strtrim(av, " ");
+	str = (char **)malloc(sizeof(char *) * (len + 2));
+	if (!str)
+		return (NULL);
+	if (split_space_main(tmp, str, &u))
+		return (NULL);
+	if (u.flag == 0)
+		str[++u.i] = save_in(tmp, &u);
 	else
-		str[++util.i] = save_in(av, &util);
-	if (!str[util.i])
+		str[++u.i] = save_in(tmp, &u);
+	free(tmp);
+	if (!str[u.i])
 	{
 		free_str(str);
 		return (NULL);
 	}
-	str[++util.i] = NULL;
+	str[++u.i] = NULL;
 	return (str);
 }
-
 
 void	del_q(char *av, char *str, t_util *u)
 {
