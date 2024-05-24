@@ -111,5 +111,7 @@ char	***parsing(char *av)
 	if (split_by_pipe(str_smc, str_pipe))
 		return (NULL);
 	free_str(str_smc);
+	if (check_line(str_pipe))
+		return (NULL);
 	return (str_pipe);
 }

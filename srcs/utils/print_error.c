@@ -18,7 +18,12 @@ int	print_error(void)
 		g_signal_error = 12;
 	if (g_signal_error == -1)
 	{
-		printf("minishell: syntax error: unexpected end of file\n");
+		printf("minishell: syntax error near unexpected end of file\n");
+		g_signal_error = 258;
+	}
+	if (g_signal_error == -2)
+	{
+		printf("minishell: syntax error near unexpected token `|'\n");
 		g_signal_error = 258;
 	}
 	else if (g_signal_error == 1)

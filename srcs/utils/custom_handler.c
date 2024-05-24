@@ -20,6 +20,7 @@ void	sig_handler(int signal)
 		exit(1);
 	rl_replace_line("", 1);
 	rl_redisplay();
+	g_signal_error = 1;
 }
 
 void	child_handler(int signal)

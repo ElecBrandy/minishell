@@ -38,3 +38,31 @@ int	get_flagcnt(char *av)
 	}
 	return (u.flag);
 }
+
+int	check_line(char ***str)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	if (str[0][0][0] == 0)
+	{
+		free_str_three(str);
+		g_signal_error = -2;
+		return (1);
+	}
+	while (str[++i])
+	{
+		j = -1;
+		while (str[i][++j])
+		{
+			if (str[i][j][0] == 0)
+			{
+				free_str_three(str);
+				g_signal_error = -1;
+				return (1);
+			}				
+		}
+	}
+	return (0);
+}
