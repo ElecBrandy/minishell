@@ -64,7 +64,10 @@ int	minishell(char *av, t_env *env)
 	{
 		head = NULL;
 		if (parsing_check_errno(&head, str[u.i], env, u.prev_errnum))
+		{
+			free_str_three(str); // 파싱된 문자열 해제
 			return (print_error()); // error print
+		}
 		u.cnt = count_node(head); // 노드 수 세기
 		signal(SIGINT, child_handler);// CTRL + c
 		signal(SIGQUIT, child_handler);// CTRL + |

@@ -10,12 +10,11 @@ OBJ_FLAGS = -I/usr/local/include/readline
 
 # Directories
 LIB_DIR = libft/
-LIB_DIR2 = gnl/
 INC_DIR = includes/
 
 # Includes
 INC = -I$(INC_DIR)
-LIB = -L$(LIB_DIR) -lft -L$(LIB_DIR2) -lgnl
+LIB = -L$(LIB_DIR) -lft
 
 # Sources
 SRCS_P = \
@@ -80,7 +79,6 @@ all : $(NAME)
 
 $(NAME): $(OBJS)
 	$(MAKE) -C $(LIB_DIR) --silent
-	$(MAKE) -C $(LIB_DIR2) --silent
 	$(CC) $(CFLAGS) $(COMFILE_FLAGS) -o $@ $^ $(LIB)
 
 %.o: %.c
@@ -88,13 +86,11 @@ $(NAME): $(OBJS)
 
 clean:
 	$(MAKE) -C $(LIB_DIR) clean --silent
-	$(MAKE) -C $(LIB_DIR2) clean --silent
 	$(RM) $(OBJS)
 
 fclean:
 	$(MAKE) clean
 	$(MAKE) -C $(LIB_DIR) fclean --silent
-	$(MAKE) -C $(LIB_DIR2) fclean --silent
 	$(RM) $(NAME)
 
 re:
