@@ -105,17 +105,9 @@ char	**find_fd(char **str, t_node *node, t_env *env)
 		else if (ft_strncmp(str[u.i], ">", 1) == 0)
 			is_outfd(str, &(u.i), node);
 		else if (get_cmd(cmd, &u, str) == 1)
-		{
-			free(cmd);
-			free_str(str);
 			return (NULL);
-		}
 		if (g_signal_error)
-		{
-			free(cmd);
-			free_str(str);	
-			return (NULL);
-		}
+			return (free_all(cmd, str));
 	}
 	cmd[u.flag] = NULL;
 	free_str(str);
