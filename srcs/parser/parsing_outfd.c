@@ -76,7 +76,7 @@ void	append_file(char **str, int *i, t_node *node)
 int	get_cmd(char **cmd, t_util *u, char **str)
 {
 	cmd[(u->flag)++] = ft_strdup(str[u->i]);
-	if (!cmd[u->flag])
+	if (!cmd[u->flag - 1])
 	{
 		free_str(str);
 		free_str(cmd);
@@ -104,7 +104,7 @@ char	**find_fd(char **str, t_node *node, t_env *env)
 			is_infd(str, &(u.i), node, env);
 		else if (ft_strncmp(str[u.i], ">", 1) == 0)
 			is_outfd(str, &(u.i), node);
-		else if (get_cmd(cmd, &u, str))
+		else if (get_cmd(cmd, &u, str) == 1)
 			return (NULL);
 		if (g_signal_error)
 			return (NULL);
