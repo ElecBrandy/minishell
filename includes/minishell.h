@@ -27,10 +27,12 @@
 # include <sys/wait.h>
 # include <stdio.h>
 # include <errno.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <termios.h>
 # include "../libft/libft.h"
+# include "../gnl/get_next_line.h"
 
 typedef struct s_node
 {
@@ -51,30 +53,30 @@ typedef struct s_util
 	int	j;
 	int	flag;
 	int	cnt;
+	int	prev_errnum;
 }t_util;
 
 typedef struct s_env
 {
-	char	*cmd;
-	char	*key;
-	char	*value;
+	char			*cmd;
+	char			*key;
+	char			*value;
 	struct s_env	*next;
 }	t_env;
 
-int		g_errnum;
+int		g_signal_error;
 /* ↓↓↓↓↓ ======== PARSER ======== ↓↓↓↓↓ */
 /* minishell.c */
-void	minishell(char *av, t_env *head_env);
-void	sig_handler(int signal);
 void	readline_minishell(t_env *env);
+int		minishell(char *av, t_env *head_env);
 int		parsing_minishell(t_node **head, char **str, t_env *env, int p_e);
 
 /* parsing_dollar_find.c */
 char	*get_word(char *av, int *idx);
-int		find_env(char *av, int *idx, t_env *env);
 int		find_dollar(char *av, t_env *env, int p_e);
 int		is_print(char s);
 void	jump_next_word(char *av, t_util *u);
+int		find_dollar_two(char *av, t_env *env, int p_e, t_util *u);
 
 /* parsing_dollar_put.c */
 void	put_str(char *str, char *av, int *a_idx, int *s_idx);
@@ -87,8 +89,8 @@ void	put_dollar(char *av, char *str, t_util *u);
 char	*del_quote(char *av);
 char	**split_space(char *av, int len);
 char	**check_cmd(char **av);
-int		find_cut(char *av);
 void	del_q(char *av, char *str, t_util *u);
+int		split_space_main(char *tmp, char **str, t_util *u);
 
 /* parsing_dollar.c */
 char	*check_dollar(char *av, t_env *env, int p_e);
@@ -97,6 +99,14 @@ char	*change_dollar(char *av, t_env *env, int env_len, int p_e);
 /* parsing_error.c*/
 int		get_numlen(int num);
 void	put_errno(char *str, char *av, int p_e, t_util *u);
+int		file_error(void);
+
+/* parsing_find.c */
+int		find_flag(char *av, char flag);
+int		find_env(char *av, int *idx, t_env *env);
+int		find_next_quote(char *av, int idx, char flag);
+int		find_other(char *av, int idx);
+int		find_cut(char *av);
 
 /* parsing_free.c */
 void	free_str(char **str);
@@ -107,8 +117,9 @@ int		count_str(char **str);
 /* parsing_heredoc_dollar.c*/
 void	putin_doublequote(char *av, char *str, t_env *env, t_util *u);
 char	*heredoc_change_dollar(char *av, t_env *env, int env_len, int p_e);
+void	heredoc_change_dollar_two(char *av, char *str, int p_e, t_util *u);
 int		heredoc_find_dollar(char *av, t_env *env, int p_e);
-void	in_doublequote(char *av, int p_e, t_env *env, t_util *u);
+int		in_doublequote(char *av, int p_e, t_env *env, t_util *u);
 
 /* parsing_heredoc.c */
 void	heredoc_infile(char **str, int *i, t_node *node, t_env *env);
@@ -129,29 +140,32 @@ void	is_infd(char **str, int *i, t_node *node, t_env *env);
 int		save_in_node(t_node *node, char **cmd, t_env *env);
 t_node	*create_node(int p_e);
 void	append_node(t_node **head, t_node *new_node);
+void	util_init(t_util *util);
 
 /* parsing_outfd.c */
 void	new_file(char **str, int *i, t_node *node);
 void	append_file(char **str, int *i, t_node *node);
 void	is_outfd(char **str, int *i, t_node *node);
+int		get_cmd(char **cmd, t_util *u, char **str);
 char	**find_fd(char **str, t_node *node, t_env *e);
 
 /* parsing_util.c */
-int		find_flag(char *av, char flag);
-int		find_next_quote(char *av, int idx, char flag);
-void	util_init(t_util *util);
 int		ft_max(int a, int b);
 int		get_flagcnt(char *av);
+int		check_line(char ***str);
 
 /* parsing_path.c*/
 int		find_path(char *cmd, t_env *env, t_node *node);
+int		find_path_two(char *cmd, t_env *env, t_node *node, char **path);
+int		get_path(char **path, t_node *node, char *cmd);
 int		get_path(char **path, t_node *node, char *cmd);
 
 /* parsing.c */
 char	***parsing(char *av);
 char	**split_flag(char *av, int len, char flag);
 char	*save_in(char *av, t_util *util);
-int		find_other(char *av, int idx);
+int		split_by_pipe(char **str_smc, char ***str_pipe);
+int		split_flag_save(char *av, char **str, t_util *u, char flag);
 
 /* ↓↓↓↓↓ ======== EXEC ======== ↓↓↓↓↓ */
 /* builtin */
@@ -190,8 +204,14 @@ void	ft_free_2d(char **str);
 void	print_node_details(t_node *node);
 void	print_linked_list(t_node *head);
 int		ft_strcmp(const char *s1, const char *s2);
-void    *ft_realloc(void *ptr, int original_size, int new_size);
+void	*ft_realloc(void *ptr, int original_size, int new_size);
 
 /* print_error.c*/
-void	print_error(void);
+int		print_error(void);
+void	syntax_error(char *str, t_node *node);
+
+/* custom_handler.c */
+void	sig_handler(int signal);
+void	child_handler(int signal);
+void	heredoc_handler(int signal);
 #endif

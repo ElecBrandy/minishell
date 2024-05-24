@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_node.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/21 19:28:12 by dongeunk          #+#    #+#             */
+/*   Updated: 2024/05/21 19:28:13 by dongeunk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../includes/minishell.h"
 
 int	save_in_node(t_node *node, char **cmd, t_env *env)
@@ -7,17 +19,24 @@ int	save_in_node(t_node *node, char **cmd, t_env *env)
 	i = count_str(cmd);
 	node->cmd = malloc(sizeof(char *) * (i + 1));
 	if (!node->cmd)
+	{
+		free_str(cmd);
 		return (12);
+	}
 	i = -1;
 	while (cmd[++i])
 	{
 		node->cmd[i] = ft_strdup(cmd[i]);
 		if (!node->cmd[i])
+		{
+			free_str(cmd);
 			return (12);
+		}
 	}
 	node->cmd[i] = NULL;
-	g_errnum = find_path(cmd[0], env, node);
-	return (g_errnum);
+	g_signal_error = find_path(cmd[0], env, node);
+	free_str(cmd);
+	return (g_signal_error);
 }
 
 t_node	*create_node(int p_e)
@@ -49,4 +68,16 @@ void	append_node(t_node **head, t_node *new_node)
 			cur = cur->next;
 		cur->next = new_node;
 	}
+}
+
+void	util_init(t_util *util)
+{
+	util->i = -1;
+	util->start = 0;
+	util->end = 0;
+	util->idx = -1;
+	util->flag = 0;
+	util->j = -1;
+	util->cnt = 0;
+	util->prev_errnum = g_signal_error;
 }

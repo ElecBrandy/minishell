@@ -52,7 +52,8 @@ void	fork_process(t_env *head_env, t_node *node, int node_cnt)
 	// printf("==========fork_process_end==========\n");
 }
 
-static void	child_solo(t_env *head_env, t_node *node, int *cnt)
+
+void	child_solo(t_env *head_env, t_node *node, int *cnt)
 {
 	pid_t	pid;
 
@@ -61,15 +62,14 @@ static void	child_solo(t_env *head_env, t_node *node, int *cnt)
 		exit(1); // Error
 	if (pid == 0)
 	{
-		// fprintf(stderr, "child_solo\n");
+		//fprintf(stderr, "child_solo\n");
 		redirect_io(node->in_fd, node->out_fd);
 		// system("lsof -p $$ >> log");
 		// system("lsof -p $$ >> solo_log");
 		head_env_chk(head_env, 100); // chk
 		run_cmd(head_env, node);
 	}
-	else
-		(*cnt)++;
+	(*cnt)++;
 }
 
 static void	child_normal(t_env *head_env, t_node *node, int *cnt)

@@ -12,16 +12,6 @@
 
 #include "../includes/minishell.h"
 
-void	sig_handler(int signal)
-{
-	if (signal == SIGINT)
-		printf("\033[Knimishell$ \n"); //있던 문자 지움
-	if (rl_on_new_line() == -1)
-		exit(1);
-	rl_replace_line("", 1);
-	rl_redisplay();
-}
-
 int	parsing_minishell(t_node **head, char **str, t_env *env, int p_e)
 {
 	t_node	*node;
@@ -42,45 +32,48 @@ int	parsing_minishell(t_node **head, char **str, t_env *env, int p_e)
 				return (12); // Error
 			append_node(head, node); // 추가 노드를 리스트에 추가
 		}
-		g_errnum = parsing_in_pipe(str[u.j], node, env, p_e); // 파이프라인 파싱
-		if (g_errnum)
+		u.cnt = parsing_in_pipe(str[u.j], node, env, p_e);
+		if (u.cnt)
 			break ;
 	}
-	return (g_errnum);
+	return (u.cnt);
 }
 
-void	minishell(char *av, t_env *env)
+int	parsing_check_errno(t_node **head, char **str, t_env *env, int p_e)
+{
+	if (parsing_minishell(head, str, env, p_e))
+	{
+		free_node(*head);
+		return (1);
+	}
+	return (0);
+}
+
+int	minishell(char *av, t_env *env)
 {
 	t_node	*head;
 	char	***str;
 	t_util	u;
-	int		prev_errnum;
 
 	util_init(&u);
-	prev_errnum = g_errnum;
-	g_errnum = 0;
+	g_signal_error = 0;
 	str = parsing(av); // str[세미콜론][파이프][파이프 내부]로 파싱
 	if (!str)
-	{
-		print_error();
-		return ;
-	}
+		return (print_error());
 	while (str[++u.i])
 	{
 		head = NULL;
-		parsing_minishell(&head, str[u.i], env, prev_errnum); // 파싱부분
-		if (g_errnum != 0) //파싱부분에서 에러나오면 다시 readline으로
-		{
-			free_node(head);
-			print_error();
-			break ;
-		}
+		if (parsing_check_errno(&head, str[u.i], env, u.prev_errnum))
+			return (print_error()); // error print
 		u.cnt = count_node(head); // 노드 수 세기
+		signal(SIGINT, child_handler);// CTRL + c
+		signal(SIGQUIT, child_handler);// CTRL + |
 		fork_process(env, head, u.cnt); // 프로세스 실행
 	//	print_linked_list(head); // 노드 다 출력
 		free_node(head); // 노드 메모리 해제
 	}
 	free_str_three(str); // 파싱된 문자열 해제
+	return (0);
 }
 
 void	readline_minishell(t_env *env)
@@ -89,12 +82,12 @@ void	readline_minishell(t_env *env)
 
 	while (1)
 	{
+		signal(SIGINT, sig_handler);// CTRL + c
+		signal(SIGQUIT, SIG_IGN);// CTRL + |
 		av = readline("nimishell$ ");
 		if (!av)
 		{
-			printf("\033[1A");
-			printf("\033[10C");
-			printf(" exit\n");
+			printf("exit\n");
 			exit (0);
 		}
 		else if (*av == '\0')
@@ -115,16 +108,13 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1 || !argv || !envp)
 	{
-		g_errnum = 3;
-		printf("%s\n", strerror(g_errnum));
-		exit (g_errnum);
+		printf("%s\n", strerror(3));
+		exit (3);
 	}
 	env = env_array_to_list(env, envp); // 연결리스트로 만들기
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	signal(SIGINT, sig_handler);// CTRL + c
-	signal(SIGQUIT, SIG_IGN);// CTRL + /
 	readline_minishell(env);
-	exit (g_errnum);
+	exit (g_signal_error);
 }

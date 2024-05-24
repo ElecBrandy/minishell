@@ -59,7 +59,7 @@ char	*add_space(char *av)
 	u.flag = get_flagcnt(av);
 	str = malloc(sizeof(char) * (original_length + (u.flag * 2) + 1));
 	if (!str)
-		return (NULL);// 메모리 할당 실패 시 NULL 반환
+		return (NULL);
 	while (av[++u.i])
 	{
 		if (av[u.i] == 34)
@@ -77,32 +77,28 @@ char	*add_space(char *av)
 
 int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 {
-	int		len;
+	t_util	u;
 	char	*tmp;
 	char	**str;
 	char	**cmd;
 
-	tmp = add_space(av);
+	util_init(&u);
+	tmp = add_space(av);// error : malloc fail
 	if (!tmp)
 		return (12);
-	tmp = check_dollar(tmp, env, p_e);
+	tmp = check_dollar(tmp, env, p_e);// error : malloc fail
 	if (!tmp)
 		return (12);
-	len = find_flag(tmp, ' ');
-	if (ft_find_quotes(tmp, 34) + ft_find_quotes(tmp, 39) == 0)
-		str = ft_split(tmp, ' ');
-	else
-		str = split_space(tmp, len);
-	free(tmp);
-	if (!str)
+	u.cnt = find_flag(tmp, ' ') + find_flag(tmp, '\t');
+	str = split_space(tmp, u.cnt);
+	if (!str) //error : malloc fail
 		return (12);
-	cmd = find_fd(str, node, env);
+	cmd = find_fd(str, node, env); // error:malloc(12)/file syntax error(258)/not file(1) 
+	if ((!cmd) || g_signal_error)
+		return (file_error());
+	cmd = check_cmd(cmd); // error : malloc fail
 	if (!cmd)
 		return (12);
-	cmd = check_cmd(cmd);
-	if (!cmd)
-		return (12);
-	g_errnum = save_in_node(node, cmd, env);
-	free_str(cmd);
-	return (g_errnum);
+	g_signal_error = save_in_node(node, cmd, env); //error : malloc fail
+	return (g_signal_error);
 }

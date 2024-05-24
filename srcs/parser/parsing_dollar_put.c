@@ -58,6 +58,8 @@ void	put_env(char *str, char *av, t_env *env, t_util *u)
 
 	e = env;
 	word = get_word(av, &u->i);
+	if (!word)
+		return ;
 	u->j = -1;
 	while (e)
 	{

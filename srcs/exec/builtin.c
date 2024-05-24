@@ -35,19 +35,19 @@ builtin 함수가 아닐 경우 : 0
 
 int		is_builtin(t_node *node)
 {
-	if (ft_strncmp(node->cmd[0], "echo", ft_strlen("echo")) == 0) // 내부에서 -n 옵션 체크 하기
+	if (ft_strncmp(node->cmd[0], "echo", ft_strlen(node->cmd[0])) == 0) // 내부에서 -n 옵션 체크 하기
 		return (7);
-	if (ft_strncmp(node->cmd[0], "cd", ft_strlen("env")) == 0) // 내부에서 경로체크 따로 하기
+	if (ft_strncmp(node->cmd[0], "cd", ft_strlen(node->cmd[0])) == 0) // 내부에서 경로체크 따로 하기
 		return (6);
-	if (ft_strncmp(node->cmd[0], "pwd", ft_strlen("pwd")) == 0)
+	if (ft_strncmp(node->cmd[0], "pwd", ft_strlen(node->cmd[0])) == 0)
 		return (5);
-	if (ft_strncmp(node->cmd[0], "export", ft_strlen("export")) == 0)
+	if (ft_strncmp(node->cmd[0], "export", ft_strlen(node->cmd[0])) == 0)
 		return (4);
-	if (ft_strncmp(node->cmd[0], "unset", ft_strlen("export")) == 0)
+	if (ft_strncmp(node->cmd[0], "unset", ft_strlen(node->cmd[0])) == 0)
 		return (3);
-	if (ft_strncmp(node->cmd[0], "env", ft_strlen("env")) == 0)
+	if (ft_strncmp(node->cmd[0], "env", ft_strlen(node->cmd[0])) == 0)
 		return (2);
-	if (ft_strncmp(node->cmd[0], "exit", ft_strlen("exit")) == 0)
+	if (ft_strncmp(node->cmd[0], "exit", ft_strlen(node->cmd[0])) == 0)
 		return (1);
 	return (0);
 }

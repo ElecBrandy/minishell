@@ -12,48 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-void	util_init(t_util *util)
-{
-	util->i = -1;
-	util->start = 0;
-	util->end = 0;
-	util->idx = -1;
-	util->flag = 0;
-	util->j = -1;
-	util->cnt = 0;
-}
-
-int	find_next_quote(char *av, int idx, char flag)
-{
-	while (av[++idx])
-	{
-		if (av[idx] == flag)
-			return (idx);
-	}
-	// 따옴표가 안닫혀있으면 에러처리
-	printf("error\n");
-	exit (1);
-}
-
-int	find_flag(char *av, char flag)
-{
-	int	idx;
-	int	len;
-
-	len = 0;
-	idx = -1;
-	while (av[++idx])
-	{
-		if (av[idx] == flag)
-			len++;
-		else if (av[idx] == 34)
-			idx = find_next_quote(av, idx, 34);
-		else if (av[idx] == 39)
-			idx = find_next_quote(av, idx, 39);
-	}
-	return (len);
-}
-
 int	ft_max(int a, int b)
 {
 	if (a > b)
@@ -79,4 +37,32 @@ int	get_flagcnt(char *av)
 			u.flag++;
 	}
 	return (u.flag);
+}
+
+int	check_line(char ***str)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	if (str[0][0][0] == 0)
+	{
+		free_str_three(str);
+		g_signal_error = -2;
+		return (1);
+	}
+	while (str[++i])
+	{
+		j = -1;
+		while (str[i][++j])
+		{
+			if (str[i][j][0] == 0)
+			{
+				free_str_three(str);
+				g_signal_error = -1;
+				return (1);
+			}				
+		}
+	}
+	return (0);
 }
