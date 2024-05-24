@@ -15,11 +15,6 @@
 - 131 -> cat 안에서 ctrl + \
 - 126 -> $HOME  /Users/dongeunk: is a directory - 이게 문제
 
-### heredoc 처리
-- ctrl + c가 bash와 같은 동작을 하지 않음
-- fork하여 자식프로세서에서 진행중
-- readline말고 gnl을 활용할 가능성이 있어 gnl추가
-
 ### headerfile
 - 전역변수 int g_signal_error 추가
 
