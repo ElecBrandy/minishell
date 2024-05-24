@@ -69,3 +69,10 @@ int	count_str(char **str)
 		i++;
 	return (i);
 }
+
+char	**free_all(char **cmd, char **str)
+{
+	free(cmd);
+	free_str(str);
+	return (NULL);
+}

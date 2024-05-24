@@ -112,6 +112,7 @@ void	free_str(char **str);
 void	free_str_three(char ***str);
 void	free_node(t_node *head);
 int		count_str(char **str);
+char	**free_all(char **cmd, char **str);
 
 /* parsing_heredoc_dollar.c*/
 void	putin_doublequote(char *av, char *str, t_env *env, t_util *u);
