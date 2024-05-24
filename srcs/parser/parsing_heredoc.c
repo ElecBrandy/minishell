@@ -54,10 +54,9 @@ void	heredoc_process(char **str, int *i, t_node *node, t_env *env)
 	char	*limiter;
 
 	limiter = del_quote(str[(*i)]);
+	signal(SIGINT, heredoc_handler);
 	while (1)
 	{
-		if (g_signal_error)
-			break ;
 		av = readline("> ");
 		if (!av)
 			break ;
@@ -68,8 +67,6 @@ void	heredoc_process(char **str, int *i, t_node *node, t_env *env)
 			if (heredoc_readline(av, limiter, node, env))
 				break ;
 		}
-		if (!str)
-			break ;
 	}
 	free(limiter);
 	exit (g_signal_error);
@@ -93,7 +90,7 @@ void	heredoc_infile(char **str, int *i, t_node *node, t_env *env)
 	}
 	*i += 1;
 	pid = fork();
-	signal(SIGINT, heredoc_handler);
+	signal(SIGINT, SIG_IGN);
 	if (pid == 0)
 		heredoc_process(str, i, node, env);
 	wait(&status);

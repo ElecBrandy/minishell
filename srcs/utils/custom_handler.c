@@ -36,10 +36,13 @@ void	child_handler(int signal)
 
 void	heredoc_handler(int signal)
 {
-	printf("\n");
-	if (rl_on_new_line() == -1)
-		exit(1);
-	rl_replace_line("", 1);
-	rl_redisplay();
-	g_signal_error = 1;
+	if (signal == SIGINT)
+	{
+		printf("\n");
+		if (rl_on_new_line() == -1)
+			exit(1);
+		rl_replace_line("", 1);
+		g_signal_error = 1;
+		exit (g_signal_error);
+	}
 }
