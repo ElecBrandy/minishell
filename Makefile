@@ -1,13 +1,8 @@
 # Complie
 CC = cc
 # CFLAGS = -Wall -Wextra -Werror # Norm
-<<<<<<< HEAD
 # CFLAGS = -g -fsanitize=address # catch segfault error
 CFLAGS = -g # if with (export MallocStackLogging=1) -> catch memory leaks
-=======
-#CFLAGS = -g -fsanitize=address # catch segfault error
-# CFLAGS = -g # if with (export MallocStackLogging=1) -> catch memory leaks
->>>>>>> temp2
 
 # Readline - Cluster ver
 COMFILE_FLAGS = -lreadline -L/usr/local/lib
@@ -66,13 +61,9 @@ SRCS_E = \
 	srcs/utils/ft_free.c		\
 	srcs/utils/tmp.c			\
 	srcs/utils/ft_strcmp.c		\
-<<<<<<< HEAD
 	srcs/utils/ft_strtoll.c		\
-	srcs/utils/print_error.c
-=======
 	srcs/utils/print_error.c	\
 	srcs/utils/custom_handler.c	
->>>>>>> temp2
 
 SRCS_M = \
 	srcs/minishell.c

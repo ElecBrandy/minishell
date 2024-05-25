@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 17:59:20 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:43:33 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,9 @@ void	child_solo(t_env *head_env, t_node *node, int *cnt)
 
 	if (is_builtin(node) != 0) // builtin 함수일 경우
 	{
-<<<<<<< HEAD
-=======
-		//fprintf(stderr, "child_solo\n");
->>>>>>> temp2
 		redirect_io(node->in_fd, node->out_fd);
 		exec_builtin(head_env, node);
 	}
-<<<<<<< HEAD
 	else
 	{
 		pid = fork();
@@ -75,9 +70,6 @@ void	child_solo(t_env *head_env, t_node *node, int *cnt)
 		else
 			(*cnt)++;
 	}
-=======
-	(*cnt)++;
->>>>>>> temp2
 }
 
 static void	child_normal(t_env *head_env, t_node *node, int *cnt)

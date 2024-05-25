@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 18:29:12 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:43:04 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-<<<<<<< HEAD
 typedef struct s_envutil
 {
 	char	*key;
@@ -82,9 +81,8 @@ typedef struct s_stdio
 } t_stdio;
 
 int		g_errnum;
-=======
 int		g_signal_error;
->>>>>>> temp2
+
 /* ↓↓↓↓↓ ======== PARSER ======== ↓↓↓↓↓ */
 /* minishell.c */
 void	readline_minishell(t_env *env);
@@ -261,7 +259,6 @@ void	ft_free_2d(char **str);
 
 /* ft_strcmp.c */
 int		ft_strcmp(const char *s1, const char *s2);
-<<<<<<< HEAD
 
 /* ft_strtoll */
 long long	ft_strtoll(const char *str, int *signal);
@@ -277,12 +274,9 @@ void	print_process_log(void);
 
 /* _ft_arrlen_2d */
 int		ft_arrlen_2d(char **array);
-#endif
-=======
 void	*ft_realloc(void *ptr, int original_size, int new_size);
 
 /* print_error.c*/
-int		print_error(void);
 void	syntax_error(char *str, t_node *node);
 
 /* custom_handler.c */
@@ -290,4 +284,3 @@ void	sig_handler(int signal);
 void	child_handler(int signal);
 void	heredoc_handler(int signal);
 #endif
->>>>>>> temp2

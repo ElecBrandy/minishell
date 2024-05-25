@@ -69,12 +69,8 @@ int	minishell(char *av, t_env *env)
 			return (print_error()); // error print
 		}
 		u.cnt = count_node(head); // 노드 수 세기
-<<<<<<< HEAD
-		// print_linked_list(head); // 노드 다 출력
-=======
 		signal(SIGINT, child_handler);// CTRL + c
 		signal(SIGQUIT, child_handler);// CTRL + |
->>>>>>> temp2
 		fork_process(env, head, u.cnt); // 프로세스 실행
 		free_node(head); // 노드 메모리 해제
 	}
