@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:31:14 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/23 03:24:44 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/25 19:35:28 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	append_node_env(t_env **head, t_env *new_node)
 void	add_env_to_list(t_env **head, char *original_str, char *key, char *value)
 {
     t_env *new_node;
-	
+
 	new_node = create_node_env(original_str, key, value);
     if (!new_node)
 	{

@@ -71,6 +71,7 @@ int	minishell(char *av, t_env *env)
 		u.cnt = count_node(head); // 노드 수 세기
 		signal(SIGINT, child_handler);// CTRL + c
 		signal(SIGQUIT, child_handler);// CTRL + |
+		// print_node_details(head); // 노드 디버깅용
 		fork_process(env, head, u.cnt); // 프로세스 실행
 		free_node(head); // 노드 메모리 해제
 	}
@@ -103,17 +104,11 @@ void	readline_minishell(t_env *env)
 	}
 }
 
-void	check_leak(void)
-{
-	system("leaks --list -- minishell");
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
 	t_env			*env;
 
-	// check_leak();
 	if (argc != 1 || !argv || !envp)
 	{
 		printf("%s\n", strerror(3));

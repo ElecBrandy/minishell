@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 03:55:02 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 18:44:14 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/25 19:50:54 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	print_node_details(t_node *node)
 	{
 		for (int i = 0; node->cmd[i] != NULL; i++)
 		{
-			printf("  cmd[%d]: %s\n", i, node->cmd[i]);
+			printf("  cmd[%d]: $%s$\n", i, node->cmd[i]);
 		}
 	}
 	else

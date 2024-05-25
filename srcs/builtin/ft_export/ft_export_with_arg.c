@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:21:36 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/23 03:57:36 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/25 20:38:42 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	export_witharg(t_env *head_env, t_node *node)
 	char    *value;
 	char	*tmp;
 
-	// printf("in child_solo :: node->cmd[i] : %s\n", node->cmd[1]);
 	i = 1;
 	while (node->cmd[i])
 	{
@@ -83,7 +82,7 @@ void    add_env(t_env *head_env, char *cmd, char *key, char *value)
 	t_env *new_node;
 
 	cur = head_env;
-	printf("in add_env :: cmd : %s, key : %s, value : %s\n", cmd, key, value);
+	// printf("in add_env :: cmd : %s, key : %s, value : %s\n", cmd, key, value);
 	new_node = create_node_env(cmd, key, value);
 	if (!new_node)
 	{

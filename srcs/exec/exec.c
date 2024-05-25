@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 18:34:24 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/25 22:53:20 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ static char	**split_paths(char **env);
 static char	*make_path(char *cmd, char **path_list);
 
 
-int run_cmd(t_env *head_env, t_node *node)
+int run_cmd(t_env *head_env, t_node *node, pid_t pid)
 {
 	if (is_builtin(node) != 0) // builtin 일 경우
 	{
-		exec_builtin(head_env, node);
+		exec_builtin(head_env, node, pid);
 		exit(1); // Error? : 정상종료
 	}
 	else // builtin 아니라 일반 함수인 경우
@@ -40,6 +40,11 @@ static void exec_cmd(t_env *head_env, t_node *node)
 	char 	**tmp;
 
 	tmp = env_list_to_array(head_env);
+	if (!tmp)
+	{
+		fprintf(stderr, "env is NULL\n");
+		exit(1); // Error
+	}
 	if (!head_env)
 	{
 		fprintf(stderr, "env is NULL\n");

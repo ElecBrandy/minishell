@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 18:43:33 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/25 22:39:33 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,15 @@ void	fork_process(t_env *head_env, t_node *node, int node_cnt)
 	restore_stdio(&stdin_origin);
 }
 
-
 void	child_solo(t_env *head_env, t_node *node, int *cnt)
 {
 	pid_t	pid;
 
+	pid = -2;
 	if (is_builtin(node) != 0) // builtin 함수일 경우
 	{
 		redirect_io(node->in_fd, node->out_fd);
-		exec_builtin(head_env, node);
+		exec_builtin(head_env, node, pid);
 	}
 	else
 	{
@@ -62,10 +62,8 @@ void	child_solo(t_env *head_env, t_node *node, int *cnt)
 			exit(1); // Error
 		if (pid == 0)
 		{
-			// printf("child_solo\n");
 			redirect_io(node->in_fd, node->out_fd);
-			// system("lsof -p $$ >> solo_log");
-			run_cmd(head_env, node);
+			run_cmd(head_env, node, pid);
 		}
 		else
 			(*cnt)++;
@@ -88,7 +86,7 @@ static void	child_normal(t_env *head_env, t_node *node, int *cnt)
 		close(fd[1]); // 닫고
 		redirect_io(node->in_fd, node->out_fd); // 입출력을 재설정한다.
 		close_pipe(fd);
-		run_cmd(head_env, node);
+		run_cmd(head_env, node, pid);
 	}
 	else
 	{
@@ -109,7 +107,7 @@ static void	child_end(t_env *head_env, t_node *node, int *cnt)
 	if (pid == 0)
 	{
 		redirect_io(node->in_fd, node->out_fd);
-		run_cmd(head_env, node);
+		run_cmd(head_env, node, pid);
 	}
 	else
 	{
