@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/23 03:22:38 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:29:12 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 
 # define STDIN 0
 # define STDOUT 1
+
+#define MAX_LONGLONG 9223372036854775807LL
+#define MIN_LONGLONG (-9223372036854775807LL - 1)
+
 
 # include <unistd.h>
 # include <sys/types.h>
@@ -178,7 +182,8 @@ void	cd_error_print(char *path, char *log);
 void	ft_cd_error(int check, char *path);
 void	ft_echo(t_node *node);
 void	ft_env(t_env *head_env, t_node *node);
-void	ft_exit(t_node *node);
+void    ft_exit(t_env *head_env, t_node *node);
+
 void	ft_pwd(t_node *node);
 void	ft_unset(t_env *head_env, t_node *node);
 
@@ -238,6 +243,9 @@ void	ft_free_2d(char **str);
 
 /* ft_strcmp.c */
 int		ft_strcmp(const char *s1, const char *s2);
+
+/* ft_strtoll */
+long long	ft_strtoll(const char *str, int *signal);
 
 /* tmp.c */
 void	print_node_details(t_node *node);

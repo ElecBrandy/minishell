@@ -1,31 +1,8 @@
 # minishell
 
-## 05.17
-
-### libft 수정
-- ft_strjoin free(s1)제거
-
-### Makefile 수정
-- c파일 추가
-
-### parsing 수정
-- '$'표시부분 환경변수로 치환완료 ('$'?는 어떤식으로 해야할지 생각, $$도 미정)
-- 주석을 제외한 모든 부분 norm검사 통과
-- node->path 추가(빌트인 함수를 제외하고 path가 없으면 에러처리로 할 예정)
-
-### headerfile
-- 전역변수 int g_errnum 추가
-
-### main file
-- 주석 처리를 제외한 부분 norm 통과를 위해 함수 분할
-- errornum 작업중 / command not found와 몇몇 에러 출력은 stderror, perror로는 안됨(직접 출력해야하는듯함)
-
-### 3. fd 설정
-- head free 할때 node안에 있는 in,out fd 모두 close
-- cat << a heredoc이 안읽힘 , fd가 3부터 시작을 안하는 경우?????
+## 실행 부분
 
 ### 빌트인 함수
-
 #### env (완)
 - _env with no options or arguments_
 - env 리스트를 순회하며 `=` 이 존재하는 경우만 출력
@@ -48,15 +25,11 @@
 - _pwd with no options_
 - 'print working directory'의 약자로 현재 작업 중인 디렉토리의 절대 경로를 반환
 
-#### echo (진행 중)
-- _echo with option -n_
-- `-n -nnnn -nnnnnn` = `-n`
-- `-n -ndf -nnnn` = 출력 `-ndf -nnnn`
-- 백슬래시 처리? -> 그냥 무시해야하나
-
-#### cd (진행중)
+#### cd (완)
 - _cd with only a relative or absolute path_
-
+- 인자가 여러개 들어와도 첫번째 인자만 처리
+- 인자가 n개인 경우의 오류 -> 첫번째 인자의 메세지만 출력
+- `cd` 동작 정리
 /*
 	ft_cd
 	cd with only a relative or absolute path
@@ -92,7 +65,28 @@
 	구분2 cd_witharg
 */ 
 
-#### exit (진행중)
+#### exit (완)
 - _exit with no options_
+- `exit` 동작 정리
+	1. 첫번째 인자가 숫자가 아닌경우 
+		- 에러메세지 : `minishell: exit: <str>: numeric argument required`
+		- 프로세스 : `종료 O`
+		- 리턴값 : `255`
+	2. 첫번째 인자(number)가 long long 범위를 초과할 경우
+		- 에러메세지 : `minishell: exit: <number>: numeric argument required`
+		- 프로세스 : `종료 O`
+		- 리턴값 : `255`
+	3. 인자가 2개 이상인 경우
+		- 에러메세지 : `minishell: exit: too many arguments`
+		- 프로세스 : `종료 O`
+		- 리턴값 : `1`
+	4. 정상 동작할 경우
+		- 출력 메세지 : `exit`
+		- 프로세스 : `종료 O`
+		- 리턴값 : `<number> % 256`
 
-
+#### echo (진행 중)
+- _echo with option -n_
+- `-n -nnnn -nnnnnn` = `-n`
+- `-n -ndf -nnnn` = 출력 `-ndf -nnnn`
+- 백슬래시 처리? -> 그냥 무시해야하나

@@ -36,10 +36,10 @@ SRCS_P = \
 
 SRCS_E = \
 	srcs/builtin/ft_cd/ft_cd.c						\
-	srcs/builtin/ft_cd/ft_cd_util.c						\
+	srcs/builtin/ft_cd/ft_cd_util.c					\
 	srcs/builtin/ft_echo/ft_echo.c					\
 	srcs/builtin/ft_env/ft_env.c					\
-	srcs/builtin/ft_exit/ft_exit.c							\
+	srcs/builtin/ft_exit/ft_exit.c					\
 	srcs/builtin/ft_export/ft_export.c				\
 	srcs/builtin/ft_export/ft_export_with_arg.c		\
 	srcs/builtin/ft_export/ft_export_without_arg.c	\
@@ -60,6 +60,7 @@ SRCS_E = \
 	srcs/utils/ft_free.c		\
 	srcs/utils/tmp.c			\
 	srcs/utils/ft_strcmp.c		\
+	srcs/utils/ft_strtoll.c		\
 	srcs/utils/print_error.c
 
 SRCS_M = \
