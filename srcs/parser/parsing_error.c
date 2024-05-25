@@ -6,7 +6,7 @@
 /*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:43:24 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/19 17:44:25 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/21 19:27:39 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int	get_numlen(int num)
 	int	i;
 
 	i = 0;
+	if (num == 0)
+		return (1);
 	while (num > 0)
 	{
 		num /= 10;
@@ -34,6 +36,13 @@ void	put_errno(char *str, char *av, int p_e, t_util *u)
 	word = ft_itoa(p_e);
 	while (word[++i])
 		str[++(u->idx)] = word[i];
-	(u->i)++;
+	(u->i) += 1;
 	free(word);
+}
+
+int	file_error(void)
+{
+	if (!g_signal_error)
+		return (12);
+	return (g_signal_error);
 }

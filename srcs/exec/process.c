@@ -45,15 +45,21 @@ void	fork_process(t_env *head_env, t_node *node, int node_cnt)
 	restore_stdio(&stdin_origin);
 }
 
-static void	child_solo(t_env *head_env, t_node *node, int *cnt)
+
+void	child_solo(t_env *head_env, t_node *node, int *cnt)
 {
 	pid_t	pid;
 
 	if (is_builtin(node) != 0) // builtin 함수일 경우
 	{
+<<<<<<< HEAD
+=======
+		//fprintf(stderr, "child_solo\n");
+>>>>>>> temp2
 		redirect_io(node->in_fd, node->out_fd);
 		exec_builtin(head_env, node);
 	}
+<<<<<<< HEAD
 	else
 	{
 		pid = fork();
@@ -69,6 +75,9 @@ static void	child_solo(t_env *head_env, t_node *node, int *cnt)
 		else
 			(*cnt)++;
 	}
+=======
+	(*cnt)++;
+>>>>>>> temp2
 }
 
 static void	child_normal(t_env *head_env, t_node *node, int *cnt)

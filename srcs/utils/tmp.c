@@ -6,18 +6,17 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 03:55:02 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/21 17:14:48 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/25 18:39:36 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void print_node_details(t_node *node)
+void	print_node_details(t_node *node)
 {
 	printf("Node details:\n");
 	printf("Path: %s\n", node->path ? node->path : "None");
 	printf("in_fd: %d, out_fd: %d\n", node->in_fd, node->out_fd);
-
 	printf("Commands:\n");
 	if (node->cmd)
 	{

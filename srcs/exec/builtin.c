@@ -34,10 +34,16 @@ int		is_builtin(t_node *node)
 {
 	if (ft_strncmp(node->cmd[0], "echo", ft_strlen(node->cmd[0])) == 0) // 내부에서 -n 옵션 체크 하기
 		return (7);
+<<<<<<< HEAD
 	if (ft_strncmp(node->cmd[0], "cd", ft_strlen(node->cmd[0])) == 0)
 		return (6);
 	if (ft_strncmp(node->cmd[0], "pwd", ft_strlen(node->cmd[0])) == 0 \
 	|| ft_strncmp(node->cmd[0], "PWD", ft_strlen(node->cmd[0])) == 0) // 대문자 pwd?
+=======
+	if (ft_strncmp(node->cmd[0], "cd", ft_strlen(node->cmd[0])) == 0) // 내부에서 경로체크 따로 하기
+		return (6);
+	if (ft_strncmp(node->cmd[0], "pwd", ft_strlen(node->cmd[0])) == 0)
+>>>>>>> temp2
 		return (5);
 	if (ft_strncmp(node->cmd[0], "export", ft_strlen(node->cmd[0])) == 0)
 		return (4);

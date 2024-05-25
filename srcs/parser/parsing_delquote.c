@@ -14,79 +14,78 @@
 
 char	**check_cmd(char **av)
 {
-	int		i;
+	t_util	u;
 	char	**str;
 
-	i = 0;
-	while (av[i])
-		i++;
-	str = malloc(sizeof(char *) * (i + 1));
-	str[i] = NULL;
-	i = -1;
-	while (av[++i])
-		str[i] = del_quote(av[i]);
+	util_init(&u);
+	u.cnt = count_str(av);
+	str = malloc(sizeof(char *) * (u.cnt + 1));
+	if (!str)
+	{
+		free_str(av);
+		return (NULL);
+	}
+	str[u.cnt] = NULL;
+	while (av[++u.i])
+	{
+		str[u.i] = del_quote(av[u.i]);
+		if (!str[u.i])
+		{
+			free_str(av);
+			free_str(str);
+			return (NULL);
+		}
+	}
 	free_str(av);
 	return (str);
+}
+
+int	split_space_main(char *tmp, char **str, t_util *u)
+{
+	while (tmp[++(u->idx)])
+	{
+		if ((tmp[u->idx] == ' ' || tmp[u->idx] == '\t')
+			&& (tmp[u->idx + 1] != ' ' && tmp[u->idx + 1] != '\t'))
+		{
+			str[++(u->i)] = save_in(tmp, u);
+			if (!str[u->i])
+			{
+				free(tmp);
+				free_str(str);
+				return (1);
+			}
+		}
+		else
+			u->idx = find_other(tmp, u->idx);
+	}
+	return (0);
 }
 
 char	**split_space(char *av, int len)
 {
 	char	**str;
-	t_util	util;
+	char	*tmp;
+	t_util	u;
 
-	util_init(&util);
+	util_init(&u);
+	tmp = ft_strtrim(av, " ");
 	str = (char **)malloc(sizeof(char *) * (len + 2));
 	if (!str)
 		return (NULL);
-	while (av[++util.idx])
-	{
-		if (av[util.idx] == ' ')
-		{
-			if (av[util.idx + 1] != ' ')
-				str[++util.i] = save_in(av, &util);
-			if (!str[util.i])
-			{
-				free_str(str);
-				return (NULL);
-			}
-		}
-		else
-			util.idx = find_other(av, util.idx);
-	}
-	if (util.flag == 0)
-		str[++util.i] = save_in(av, &util);
+	if (split_space_main(tmp, str, &u))
+		return (NULL);
+	if (u.flag == 0)
+		str[++u.i] = save_in(tmp, &u);
 	else
-		str[++util.i] = save_in(av, &util);
-	if (!str[util.i])
+		str[++u.i] = save_in(tmp, &u);
+	free(tmp);
+	if (!str[u.i])
 	{
 		free_str(str);
 		return (NULL);
 	}
-	str[++util.i] = NULL;
+	str[++u.i] = NULL;
 	return (str);
-}
-
-int	find_cut(char *av)
-{
-	int	cut;
-	int	i;
-
-	i = -1;
-	cut = 0;
-	while (av[++i])
-	{
-		if (av[i] == 34)
-		{
-			i = find_next_quote(av, i, 34);
-			cut += 2;
-		}
-		if (av[i] == 39)
-		{
-			i = find_next_quote(av, i, 39);
-			cut += 2;
-		}
-	}
-	return (cut);
 }
 
 void	del_q(char *av, char *str, t_util *u)
@@ -122,6 +121,8 @@ char	*del_quote(char *av)
 	cut = find_cut(av);
 	util_init(&u);
 	str = malloc(sizeof(char) * (ft_strlen(av) - cut + 1));
+	if (!str)
+		return (NULL);
 	u.i = -1;
 	while (av[++u.i])
 	{
