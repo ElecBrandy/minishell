@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 22:25:49 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/26 20:20:43 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ int		g_signal_error;
 
 /* ↓↓↓↓↓ ======== PARSER ======== ↓↓↓↓↓ */
 /* minishell.c */
-void	readline_minishell(t_env *env);
-int		minishell(char *av, t_env *head_env);
+void	readline_minishell(t_env *env, char *home);
+int		minishell(char *av, t_env *head_env, char *home);
 int		parsing_minishell(t_node **head, char **str, t_env *env, int p_e);
 
 /* parsing_dollar_find.c */
@@ -190,7 +190,7 @@ int		split_flag_save(char *av, char **str, t_util *u, char flag);
 
 /* Builtn */
 void	ft_cat(t_node *node);
-void	ft_cd(t_env *hea_env, t_node *node);
+void	ft_cd(t_env *hea_env, t_node *node, char *home);
 int		update_pwd(t_env *head_env, char *cur_path);
 int		update_oldpwd(t_env *head_env, char *cur_path);
 t_env	*is_env(t_env *head_env, char *key);
@@ -222,7 +222,7 @@ int		is_inenv(t_env *env, char *key);
 
 /* ===== ENV ===== */
 /* env_init.c */
-t_env	*env_array_to_list(t_env *head, char **envp);
+t_env	*env_array_to_list(t_env *head, char **envp, char **home);
 char	**env_list_to_array(t_env *head_env);
 
 /* env_util.c */
@@ -235,13 +235,13 @@ void	free_env_list(t_env *head);
 /* ===== EXEC ===== */
 /* builtin.c */
 int		is_builtin(t_node *node);
-int		exec_builtin(t_env *head_env, t_node *node, pid_t pid);
+int		exec_builtin(t_env *head_env, t_node *node, char *home, pid_t pid);
 
 /* exe.c */
-int run_cmd(t_env *head_env, t_node *node, pid_t pid);
+int run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid);
 
 /* process.c */
-void	fork_process(t_env *head_env, t_node *node, int node_cnt);
+void	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt);
 
 /* process_util.c */
 int		count_node(t_node *node);

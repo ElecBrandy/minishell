@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:56:28 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 22:21:13 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/26 20:09:01 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,43 +30,67 @@ exit with no options : 1
 no builtin : 0
 */
 
-int		is_builtin(t_node *node)
+static void make_lower(char *str);
+
+int	is_builtin(t_node *node)
 {
-	if (ft_strncmp(node->cmd[0], "echo", ft_strlen(node->cmd[0])) == 0) // 내부에서 -n 옵션 체크 하기
-		return (7);
-	if (ft_strncmp(node->cmd[0], "cd", ft_strlen(node->cmd[0])) == 0)
-		return (6);
-	if (ft_strncmp(node->cmd[0], "pwd", ft_strlen(node->cmd[0])) == 0 \
-	|| ft_strncmp(node->cmd[0], "PWD", ft_strlen(node->cmd[0])) == 0) // 대문자 pwd?
-		return (5);
-	if (ft_strncmp(node->cmd[0], "export", ft_strlen(node->cmd[0])) == 0)
-		return (4);
-	if (ft_strncmp(node->cmd[0], "unset", ft_strlen(node->cmd[0])) == 0)
-		return (3);
-	if (ft_strncmp(node->cmd[0], "env", ft_strlen(node->cmd[0])) == 0)
-		return (2);
-	if (ft_strncmp(node->cmd[0], "exit", ft_strlen(node->cmd[0])) == 0)
-		return (1);
+	if (ft_strlen(node->cmd[0]) <= 0)
+		return (0); //  Error -> exit code 0
+	{
+		if (ft_strncmp(node->cmd[0], "exit", ft_strlen(node->cmd[0])) == 0) // 무조건 소문자만 인식
+			return (1);
+		if (ft_strncmp(node->cmd[0], "export", ft_strlen(node->cmd[0])) == 0) // 무조건 소문자만 인식
+			return (4);
+		if (ft_strncmp(node->cmd[0], "unset", ft_strlen(node->cmd[0])) == 0) // 무조건 소문자만 인식
+			return (3);
+	}
+	make_lower(node->cmd[0]);
+	{
+		if (ft_strncmp(node->cmd[0], "echo", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
+			return (7);
+		if (ft_strncmp(node->cmd[0], "cd", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
+			return (6);
+		if (ft_strncmp(node->cmd[0], "pwd", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
+			return (5);
+		if (ft_strncmp(node->cmd[0], "env", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
+			return (2);
+	}
 	return (0);
 }
 
-int		exec_builtin(t_env *head_env, t_node *node, pid_t pid)
+int		exec_builtin(t_env *head_env, t_node *node, char *home, pid_t pid)
 {
-	if (is_builtin(node) == 0)
+	int		builtin;
+
+	builtin = is_builtin(node);
+	if (builtin == 0)
 		return (0);
-	if (is_builtin(node) == 7)
+	if (builtin == 7)
 		ft_echo(node);
-	if (is_builtin(node) == 6)
-		ft_cd(head_env, node);
-	if (is_builtin(node) == 5)
+	if (builtin == 6)
+		ft_cd(head_env, node, home);
+	if (builtin == 5)
 		ft_pwd(node);
-	if (is_builtin(node) == 4)
+	if (builtin == 4)
 		ft_export(head_env, node);
-	if (is_builtin(node) == 3)
+	if (builtin == 3)
 		ft_unset(head_env, node);
-	if (is_builtin(node) == 2)
+	if (builtin == 2)
 		ft_env(head_env, node);
-	if (is_builtin(node) == 1)
+	if (builtin == 1)
 		ft_exit(head_env, node, pid);
 	return (1);
+}
+
+static void make_lower(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] >= 'A' && str[i] <= 'Z')
+			str[i] += 32;
+		i++;
+	}
 }

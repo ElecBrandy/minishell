@@ -6,17 +6,17 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 22:39:33 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/26 20:15:33 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	child_solo(t_env *head_env, t_node *node, int *cnt);
-static void	child_normal(t_env *head_env, t_node *node, int *cnt);
-static void	child_end(t_env *head_env, t_node *node, int *cnt);
+static void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt);
+static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt);
+static void	child_end(t_env *head_env, t_node *node, char *home ,int *cnt);
 
-void	fork_process(t_env *head_env, t_node *node, int node_cnt)
+void	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)
 {
 	int		i;
 	int		fork_cnt;
@@ -29,31 +29,32 @@ void	fork_process(t_env *head_env, t_node *node, int node_cnt)
 	if (node_cnt == 0)		// 노드가 없는 경우
 		return ;
 	if (node_cnt == 1)		// pipe가 없는 경우
-		child_solo(head_env, cur, &fork_cnt);
+		child_solo(head_env, cur, home, &fork_cnt);
 	else
 	{
 		i = 0;
 		while (i < node_cnt - 1)
 		{
-			child_normal(head_env, cur, &fork_cnt);
+			child_normal(head_env, cur, home, &fork_cnt);
 			cur = cur->next;
 			i++;
 		}
-		child_end(head_env, cur, &fork_cnt);
+		child_end(head_env, cur, home, &fork_cnt);
 	}
 	wait_process(fork_cnt);
 	restore_stdio(&stdin_origin);
 }
 
-void	child_solo(t_env *head_env, t_node *node, int *cnt)
+void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
 
 	pid = -2;
 	if (is_builtin(node) != 0) // builtin 함수일 경우
 	{
+		// printf("builtin\n");
 		redirect_io(node->in_fd, node->out_fd);
-		exec_builtin(head_env, node, pid);
+		exec_builtin(head_env, node, home, pid);
 	}
 	else
 	{
@@ -63,14 +64,14 @@ void	child_solo(t_env *head_env, t_node *node, int *cnt)
 		if (pid == 0)
 		{
 			redirect_io(node->in_fd, node->out_fd);
-			run_cmd(head_env, node, pid);
+			run_cmd(head_env, node, home, pid);
 		}
 		else
 			(*cnt)++;
 	}
 }
 
-static void	child_normal(t_env *head_env, t_node *node, int *cnt)
+static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
 	int		fd[2];
@@ -86,7 +87,7 @@ static void	child_normal(t_env *head_env, t_node *node, int *cnt)
 		close(fd[1]); // 닫고
 		redirect_io(node->in_fd, node->out_fd); // 입출력을 재설정한다.
 		close_pipe(fd);
-		run_cmd(head_env, node, pid);
+		run_cmd(head_env, node, home, pid);
 	}
 	else
 	{
@@ -97,7 +98,7 @@ static void	child_normal(t_env *head_env, t_node *node, int *cnt)
 	}
 }
 
-static void	child_end(t_env *head_env, t_node *node, int *cnt)
+static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
 
@@ -107,7 +108,7 @@ static void	child_end(t_env *head_env, t_node *node, int *cnt)
 	if (pid == 0)
 	{
 		redirect_io(node->in_fd, node->out_fd);
-		run_cmd(head_env, node, pid);
+		run_cmd(head_env, node, home, pid);
 	}
 	else
 	{

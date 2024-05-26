@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 22:53:20 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/26 20:42:15 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,26 @@ static char	**split_paths(char **env);
 static char	*make_path(char *cmd, char **path_list);
 
 
-int run_cmd(t_env *head_env, t_node *node, pid_t pid)
+int run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid)
 {
+	t_env *cur;
+
 	if (is_builtin(node) != 0) // builtin 일 경우
 	{
-		exec_builtin(head_env, node, pid);
+		exec_builtin(head_env, node, home, pid);
 		exit(1); // Error? : 정상종료
 	}
 	else // builtin 아니라 일반 함수인 경우
 	{
-		exec_cmd(head_env, node);
+		// cur = is_env(head_env, "PATH");
+		// if (cur->value[0] == '\0')
+		// {
+		// 	ft_putstr_fd("minishell: ", 2);
+		// 	ft_putstr_fd(node->cmd[0], 2);
+		// 	ft_putstr_fd(": No such file or directory\n", 2);
+		// 	exit(1); // Error
+		// }
+		exec_cmd(head_env, node); // 환경변수단에 넣어보고 일단 실행
 	}
 	return (0);
 }
@@ -39,22 +49,29 @@ static void exec_cmd(t_env *head_env, t_node *node)
 	char	**cmd;
 	char 	**tmp;
 
+	if (!head_env)
+	{
+		fprintf(stderr, "env is NULL\n");
+		exit(1); // Error
+	}
 	tmp = env_list_to_array(head_env);
 	if (!tmp)
 	{
 		fprintf(stderr, "env is NULL\n");
 		exit(1); // Error
 	}
-	if (!head_env)
+	if (ft_strchr(node->cmd[0], '/') != NULL)
 	{
-		fprintf(stderr, "env is NULL\n");
-		exit(1); // Error
+		path = node->cmd[0];
 	}
-	path = check_path(tmp, node->cmd[0]);
-	if (!path)
+	else
 	{
-		fprintf(stderr, "path is NULL\n");
-		exit(1); // Error
+		path = check_path(tmp, node->cmd[0]);
+		if (!path)
+		{
+			fprintf(stderr, "path is NULL\n");
+			exit(1); // Error
+		}
 	}
 	if (execve(path, node->cmd, tmp) == -1)
 	{
@@ -94,14 +111,11 @@ static char	**split_paths(char **env)
 	i = 0;
 	if (env == NULL)
 		return (NULL);
-	// while (env[i])
-	// {
-	// 	printf("env[%d] : %s\n", i, env[i]);
-	// 	i++;
-	// }
 	i = 0;
 	while (env[i] && ft_strncmp("PATH=", env[i], 5) != 0)
 		i++;
+	if (!env[i])
+		return (NULL); // PATH가 없는 경우
 	path_list = ft_split(env[i] + 5, ':');
 	if (!path_list)
 		return (NULL);
@@ -120,8 +134,6 @@ static char	*make_path(char *cmd, char **path_list)
 	char	*path;
 
 	i = 0;
-	if (access(cmd, X_OK) == 0) // 만약 실행 파일이 지정위치에 존재할경우
-		return (cmd);
 	while (path_list[i])
 	{
 		tmp = ft_strjoin(path_list[i], "/");

@@ -6,18 +6,18 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 15:38:42 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/26 20:31:56 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static void		cd_withoutarg(t_env *head_env, t_node *node);
-static void		cd_witharg(t_env *head_env, t_node *node);
+static void		cd_witharg(t_env *head_env, t_node *node, char *home);
 static int		check_path(char *path);
 static int		move_path(t_env *head_env, char *path);
 
-void ft_cd(t_env *head_env, t_node *node)
+void ft_cd(t_env *head_env, t_node *node, char *home)
 {
 	if (ft_arrlen_2d(node->cmd) == 1) // 인자가 없는 경우 HOME 경로로 이동
 	{
@@ -25,7 +25,7 @@ void ft_cd(t_env *head_env, t_node *node)
 	}
 	else // 인자가 있는 경우
 	{
-		cd_witharg(head_env, node);
+		cd_witharg(head_env, node, home);
 	}
 }
 
@@ -36,14 +36,14 @@ static void	cd_withoutarg(t_env *head_env, t_node *node)
 	env = is_env(head_env, "HOME");
 	if (!env) // 환경변수에 '$HOME'이 없는 경우
 	{
-		ft_cd_error(5, "HOME"); // Error // Error bash: cd: HOME not set
+		ft_cd_error(4, "HOME"); // Error // Error bash: cd: HOME not set
 		return ;
 	}
 	else // 환경변수에 '$HOME'이 있는 경우
 	{
 		if (ft_strncmp(env->cmd, "HOME", ft_strlen(env->cmd)) == 0) // 'HOME' 인경우
 		{
-			ft_cd_error(5, "HOME"); // Error bash: cd: HOME not set
+			ft_cd_error(4, "HOME"); // Error bash: cd: HOME not set
 		}
 		else if (ft_strncmp(env->cmd, "HOME=", ft_strlen(env->cmd)) == 0) // 'HOME=' 인경우
 		{
@@ -57,12 +57,16 @@ static void	cd_withoutarg(t_env *head_env, t_node *node)
 	return ;
 }
 
-static void	cd_witharg(t_env *head_env, t_node *node)
+static void	cd_witharg(t_env *head_env, t_node *node, char *home)
 {
 	int		check;
 
 	check = check_path(node->cmd[1]);
-	if (check != 0)
+	if (check == 4) // cd ~
+	{
+		move_path(head_env, home);
+	}
+	else if (check != 0)
 	{
 		ft_cd_error(check, node->cmd[1]); // Error
 	}
@@ -77,6 +81,10 @@ static int check_path(char *path)
 {
 	int	fd;
 
+	if (ft_strlen(path) == 1 && path[0] == '~') // 절대 경로인가?
+	{
+		return (4);
+	}
 	if (access(path, F_OK) == -1) // 경로가 존재하는가?
 	{
 		return (1); // 경로가 존재하지 않음 : bash: cd: path: No such file or directory
