@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 19:27:48 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/26 15:13:16 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:51:26 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_file_or_cmd(char *cmd, char *tmp)
 	{
 		if (access(cmd, F_OK) == 0)
 		{
-        	printf("minishell: %s: is a directory\n", cmd);
+			printf("minishell: %s: is a directory\n", cmd);
 			g_signal_error = 126;
 		}
 		else

@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/08 10:26:26 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/16 19:13:07 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:53:09 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,22 +83,22 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 	char	**cmd;
 
 	util_init(&u);
-	tmp = add_space(av);// error : malloc fail
+	tmp = add_space(av);
 	if (!tmp)
 		return (12);
-	tmp = check_dollar(tmp, env, p_e);// error : malloc fail
+	tmp = check_dollar(tmp, env, p_e);
 	if (!tmp)
 		return (12);
 	u.cnt = find_flag(tmp, ' ') + find_flag(tmp, '\t');
 	str = split_space(tmp, u.cnt);
-	if (!str) //error : malloc fail
+	if (!str)
 		return (12);
-	cmd = find_fd(str, node, env); // error:malloc(12)/file syntax error(258)/not file(1) 
+	cmd = find_fd(str, node, env);
 	if ((!cmd) || g_signal_error)
 		return (file_error());
-	cmd = check_cmd(cmd); // error : malloc fail
+	cmd = check_cmd(cmd);
 	if (!cmd)
 		return (12);
-	g_signal_error = save_in_node(node, cmd, env); //error : malloc fail
+	g_signal_error = save_in_node(node, cmd, env);
 	return (g_signal_error);
 }

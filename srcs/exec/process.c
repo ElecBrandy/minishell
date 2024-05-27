@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/26 20:15:33 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:54:01 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt);
 static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt);
-static void	child_end(t_env *head_env, t_node *node, char *home ,int *cnt);
+static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt);
 static void	is_inchild(char *cmd);
 
 int	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)

@@ -6,15 +6,15 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/26 20:42:15 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:54:36 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid)
+int	run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid)
 {
-	char 	**tmp;
+	char	**tmp;
 
 	if (!head_env)
 		exit (12);

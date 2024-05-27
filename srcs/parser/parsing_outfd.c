@@ -6,7 +6,7 @@
 /*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:45:07 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/19 17:45:09 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/27 18:51:52 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ void	is_outfd(char **str, int *i, t_node *node)
 	else
 	{
 		if (!str[*i + 1])
-			syntax_error(NULL, node); //newline
+			syntax_error(NULL, node);
 		else if (str[(*i) + 1][0] == '<' || str[(*i) + 1][0] == '>')
-			syntax_error(str[*i + 1], node); // token < << > >>
+			syntax_error(str[*i + 1], node);
 		else if (ft_strlen(str[*i]) == 1)
 			new_file(str, i, node);
 		else if (str[*i][1] == '>' && ft_strlen(str[*i]) == 2)

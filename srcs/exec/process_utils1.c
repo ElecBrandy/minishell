@@ -12,7 +12,7 @@
 
 #include "../../includes/minishell.h"
 
-int		count_node(t_node *node)
+int	count_node(t_node *node)
 {
 	int		cnt;
 	t_node	*cur;
@@ -27,24 +27,18 @@ int		count_node(t_node *node)
 	return (cnt);
 }
 
-void redirect_io(int in_fd, int out_fd)
+void	redirect_io(int in_fd, int out_fd)
 {
 	if (in_fd != STDIN)
 	{
 		if (dup2(in_fd, STDIN) == -1)
-		{
-			exit(1); // Error
-		}
-		// fprintf(stderr, "in_fd : %d\n", in_fd);
+			exit(1);
 		close(in_fd);
 	}
 	if (out_fd != STDOUT)
 	{
 		if (dup2(out_fd, STDOUT) == -1)
-		{
-			exit(1); // Error
-		}
-		// fprintf(stderr, "out_fd : %d\n", out_fd);
+			exit(1);
 		close(out_fd);
 	}
 }
@@ -64,7 +58,7 @@ void	wait_process(int cnt)
 	}
 }
 
-void close_pipe(int *fd)
+void	close_pipe(int *fd)
 {
 	close(fd[0]);
 	close(fd[1]);

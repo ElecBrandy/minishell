@@ -13,17 +13,17 @@
 #include "../../includes/minishell.h"
 
 // 표준 입출력을 저장하는 함수
-void save_stdio(t_stdio *backup)
+void	save_stdio(t_stdio *backup)
 {
-    backup->stdin_backup = dup(STDIN_FILENO);
-    backup->stdout_backup = dup(STDOUT_FILENO);
+	backup->stdin_backup = dup(STDIN_FILENO);
+	backup->stdout_backup = dup(STDOUT_FILENO);
 }
 
 // 표준 입출력을 복원하는 함수
-void restore_stdio(t_stdio *backup)
+void	restore_stdio(t_stdio *backup)
 {
-    dup2(backup->stdin_backup, STDIN_FILENO);
-    dup2(backup->stdout_backup, STDOUT_FILENO);
-    close(backup->stdin_backup);
-    close(backup->stdout_backup);
+	dup2(backup->stdin_backup, STDIN_FILENO);
+	dup2(backup->stdout_backup, STDOUT_FILENO);
+	close(backup->stdin_backup);
+	close(backup->stdout_backup);
 }
