@@ -66,16 +66,10 @@ int	minishell(char *av, t_env *env, char *home)
 		if (parsing_check_errno(&head, str[u.i], env, u.prev_errnum))
 		{
 			free_str_three(str);
-			free_node(head);
 			return (print_error()); // error print
 		}
 		u.cnt = count_node(head); // 노드 수 세기
-		if (fork_process(env, head, home, u.cnt) || g_signal_error) // 프로세스 실행
-		{
-			free_str_three(str);
-			free_node(head);
-			return (print_error()); // error print
-		}
+		fork_process(env, head, home, u.cnt); // 프로세스 실행
 		free_node(head); // 노드 메모리 해제
 	}
 	free_str_three(str);

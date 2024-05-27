@@ -50,7 +50,7 @@ int	check_pipeline(char ***str)
 		j = -1;
 		while (str[i][++j])
 		{
-			if (str[i][j][0] == 0)
+			if (str[i][j][0] == 0 && str[i][j + 1])
 			{
 				g_signal_error = -2;
 				free_str_three(str);
