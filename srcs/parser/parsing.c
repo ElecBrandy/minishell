@@ -100,7 +100,7 @@ char	***parsing(char *av)
 	if (len == -1)
 		return (NULL);
 	str_smc = split_flag(av, len, ';');
-	if (!str_smc)
+	if (!str_smc || check_line(str_smc))
 		return (NULL);
 	str_pipe = malloc(sizeof(char **) * (len + 2));
 	if (!str_pipe)
@@ -110,8 +110,11 @@ char	***parsing(char *av)
 	}
 	if (split_by_pipe(str_smc, str_pipe))
 		return (NULL);
-	free_str(str_smc);
-	if (check_line(str_pipe))
+	if (check_pipeline(str_pipe))
+	{
+		free_str(str_smc);
 		return (NULL);
+	}
+	free_str(str_smc);
 	return (str_pipe);
 }

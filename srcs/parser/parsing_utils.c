@@ -39,18 +39,12 @@ int	get_flagcnt(char *av)
 	return (u.flag);
 }
 
-int	check_line(char ***str)
+int	check_pipeline(char ***str)
 {
 	int	i;
 	int	j;
 
 	i = -1;
-	if (str[0][0][0] == 0)
-	{
-		free_str_three(str);
-		g_signal_error = -2;
-		return (1);
-	}
 	while (str[++i])
 	{
 		j = -1;
@@ -58,10 +52,34 @@ int	check_line(char ***str)
 		{
 			if (str[i][j][0] == 0)
 			{
+				g_signal_error = -2;
 				free_str_three(str);
-				g_signal_error = -1;
 				return (1);
-			}				
+			}
+		}
+	}
+	return (0);
+}
+
+int	check_line(char **str)
+{
+	int	i;
+	int	j;
+
+	i = -1;
+	if (str[0][0] == '|')
+	{
+		free_str(str);
+		g_signal_error = -2;
+		return (1);
+	}
+	while (str[++i] && str[i][0])
+	{
+		if (str[i][ft_strlen(str[i]) - 1] == '|')
+		{
+			free_str(str);
+			g_signal_error = -1;
+			return (1);
 		}
 	}
 	return (0);

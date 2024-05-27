@@ -167,7 +167,8 @@ char	**find_fd(char **str, t_node *node, t_env *e);
 /* parsing_util.c */
 int		ft_max(int a, int b);
 int		get_flagcnt(char *av);
-int		check_line(char ***str);
+int		check_line(char **str);
+int		check_pipeline(char ***str);
 
 /* parsing_path.c*/
 int		find_path(char *cmd, t_env *env, t_node *node);

@@ -31,7 +31,7 @@ static void	check_infile(char **str, int *i, t_node *node)
 	if (node->in_fd == -1) // No such file or directory
 	{
 		printf("minishell: %s: %s\n", file, strerror(2));
-		g_signal_error = 1;
+		g_signal_error = 999;
 	}
 	*i += 1;
 	free(file);
@@ -52,7 +52,7 @@ static void	only_open(char **str, int *i)
 	if (fd == -1) // No such file or directory
 	{
 		printf("minishell: %s: %s\n", file, strerror(2));
-		g_signal_error = 1;
+		g_signal_error = 999;
 	}
 	close(fd);
 	free(file);

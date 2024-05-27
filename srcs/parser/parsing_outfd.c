@@ -48,7 +48,7 @@ static void	new_file(char **str, int *i, t_node *node)
 	if (node->out_fd == -1)
 	{
 		printf("minishell: %s: %s\n", file, strerror(2));
-		g_signal_error = 1;
+		g_signal_error = 999;
 	}
 	free(file);
 	*i += 1;
@@ -70,7 +70,7 @@ static void	append_file(char **str, int *i, t_node *node)
 	if (node->out_fd == -1)
 	{
 		printf("minishell: %s: %s\n", file, strerror(2));
-		g_signal_error = 1;
+		g_signal_error = 999;
 	}
 	*i += 1;
 	free(file);
