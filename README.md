@@ -26,7 +26,7 @@
 ### 빌트인 수정중...
 - envp
 	- shell 시작 후 `export | grep PWD` 할 경우 `OLDPWD` 또한 출력되어함.
-	- 현재 main에서 envp로 받아올때, `export aaa` 이런 식으로 추가된 환경변수의 경우 탐지하지 못하는 것 같음.
+	- 현재 main에서 envp로 받아올때, `export aaa` 이런 식으로 추가된 환경변수의 경우 탐지하지 못하는 것 같음. - 안되는게 맞음
 	- 다른 맥에서도 체크해보기(보류)
 ### 환경변수 수정중...
 - 환경변수 추가로 `export PATH=` 이후에 명령어 실행 시 `bash: cat: No such file or directory` -> 환경변수에 없는 경우 다시 로컬에서 찾아야함.
@@ -56,9 +56,9 @@ AddressSanitizer:DEADLYSIGNAL
 - cat | cat | cat 했을 때 SIGINT 주면 한번에 다 종료되는거
 - exit 88 | echo $? 했을 때 0 나오는지
 - ./.  ./..  권한없음 등 execve 에러면 종료코드 126
-- 없는 파일 실행하려고 한거면 종료코드 127
-- 없는 $NOT_EXISTS 같은거 그냥 타이핑 했을 때 새로운 프롬프트 나와야 함. 이때, exit코드는 0이어야 함.
-- echo hello > $NOT_EXISTS 같은거 했을때 ambiguous redirect 나와야 함. -> 이거 어떻게 할지?
+- 없는 파일 실행하려고 한거면 종료코드 127 -정상작동
+- 없는 $NOT_EXISTS 같은거 그냥 타이핑 했을 때 새로운 프롬프트 나와야 함. 이때, exit코드는 0이어야 함. -정상작동중
+- echo hello > $NOT_EXISTS 같은거 했을때 ambiguous redirect 나와야 함. -> 이거 어떻게 할지?  -에러넘버는 우선 같음
 
 ### 기타
 - 공백이 있는 환경 변수의 값을 인자로 넣었을 때, 해당 공백들이 인자 구분자가 되어야 함. (아래 예시 참고)
