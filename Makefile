@@ -1,8 +1,8 @@
 # Complie
 CC = cc
 # CFLAGS = -Wall -Wextra -Werror # Norm
-#CFLAGS = -g -fsanitize=address # catch segfault error
-# CFLAGS = -g # if with (export MallocStackLogging=1) -> catch memory leaks
+# CFLAGS = -g -fsanitize=address # catch segfault error
+CFLAGS = -g # if with (export MallocStackLogging=1) -> catch memory leaks
 
 # Readline - Cluster ver
 COMFILE_FLAGS = -lreadline -L/usr/local/lib
@@ -41,6 +41,7 @@ SRCS_E = \
 	srcs/builtin/ft_echo/ft_echo.c					\
 	srcs/builtin/ft_env/ft_env.c					\
 	srcs/builtin/ft_exit/ft_exit.c					\
+	srcs/builtin/ft_exit/ft_exit_util.c				\
 	srcs/builtin/ft_export/ft_export.c				\
 	srcs/builtin/ft_export/ft_export_with_arg.c		\
 	srcs/builtin/ft_export/ft_export_without_arg.c	\

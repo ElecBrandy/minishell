@@ -6,48 +6,57 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:38 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/23 02:10:12 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 22:02:47 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	unset_witharg(t_env *env, t_node *node);
+/*
+	ft_unset
+	- unset the environment variable
+	- if there is no argument, do nothing
+
+	error_log
+	- 0 : Success
+	- 1 : minishell: unset: `%s': not a valid identifier (invalid key)
+	- ex : perror
+*/
+
+static void	ft_unset_error(int error, char *path);
+static int	unset_witharg(t_env *env, t_node *node);
 static void	delete_env(t_env *env, char *key);
 
 void	ft_unset(t_env *head_env, t_node *node)
 {
-	if (ft_arrlen_2d(node->cmd) == 1) // 인자가 없는 경우
+	int	error;
+
+	if (ft_arrlen_2d(node->cmd) == 1 || head_env == NULL)
+		return ;
+	else
 	{
-		return ; // Error: unset: not enough arguments
-	}
-	else // 인자가 있는 경우 (key)
-	{
-		unset_witharg(head_env, node);
+		error = unset_witharg(head_env, node);
+		if (error != 0)
+			ft_unset_error(error, node->cmd[1]);
 	}
 }
 
-// 인자를 순회하며
-static void	unset_witharg(t_env *head_env, t_node *node)
+static int	unset_witharg(t_env *head_env, t_node *node)
 {
 	int     i;
 	char    *key;
 	char    *value;
 
 	i = 1;
-	while (node->cmd[i]) // 인자를 순회하며 인자를 검사. 이상한 인자가 있을 경우 에러 메세지 출력하고 이어서 검사 (끝까지 동작함!)
+	while (node->cmd[i])
 	{
-		// 인자의 조건 : 오로지 key 형식이어야함
-		if (!is_valid_key(node->cmd[i])) // 인자가 유효하지 않은 경우
-		{
-			printf("minishell: unset: `%s': not a valid identifier\n", node->cmd[i]); // Error 메세지 출력
-		}
-		else // 인자가 문제 없는 경우 (다중 삭제 가능)
-		{
-			delete_env(head_env, node->cmd[i]); // 존재하는 경우 삭제(없으면 그냥 패스)
-		}
+		if (!is_valid_key(node->cmd[i]))
+			return (1);
+		else
+			delete_env(head_env, node->cmd[i]);
 		i++;
 	}
+	return (0);
 }
 
 static void	delete_env(t_env *head_env, char *key)
@@ -59,20 +68,34 @@ static void	delete_env(t_env *head_env, char *key)
 	prev = NULL;
 	while (cur)
 	{
-		if (ft_strlen(cur->key) == ft_strlen(key) \
-		 && ft_strncmp(cur->key, key, ft_strlen(key)) == 0) // key가 일치하는 경우 찾고
+		if (ft_strcmp(cur->key, key) == 0)
 		{
-			if (prev) // 중간 노드 삭제
+			if (prev)
 				prev->next = cur->next;
-			else // 첫 노드 삭제
+			else
 				head_env = cur->next;
-			ft_free((void **)&cur->cmd); // cmd 메모리 해제
-			ft_free((void **)&cur->key); // key 메모리 해제
-			ft_free((void **)&cur->value); // value 메모리 해제
-			ft_free((void **)&cur); // 노드 메모리 해제
+			ft_free((void **)&cur->cmd);
+			ft_free((void **)&cur->key);
+			ft_free((void **)&cur->value);
+			ft_free((void **)&cur);
 			return ;
 		}
 		prev = cur;
 		cur = cur->next;
 	}
+}
+
+static void ft_unset_error(int error, char *path)
+{
+	if (error == 0)
+		return ;
+	else if (error == 1)
+	{
+		g_signal_error = 1;
+		ft_putstr_fd("minishell: unset: `", STDERR_FILENO);
+		ft_putstr_fd(path, STDERR_FILENO);
+		ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+	}
+	else
+		print_error();
 }

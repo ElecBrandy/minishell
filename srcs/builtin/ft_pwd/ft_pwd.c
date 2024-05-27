@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:48:20 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/23 02:15:32 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 21:16:37 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,12 @@ void ft_pwd(t_node *node)
 {
 	char	*str;
 
-	g_errnum = 0; // 이거 어떻게 하지?
-	// Error? 전역변수
 	str = getcwd(NULL, 0);
 	if (!str)
 	{
-		ft_putstr_fd("error?\n", 2); // Error?
-		return ; // Error?
+		g_signal_error = 1;
+		print_error();
+		return ;
 	}
 	ft_putstr_fd(str, node->out_fd);
 	write(node->out_fd, "\n", 1);

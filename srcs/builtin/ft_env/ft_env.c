@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 19:34:25 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 19:13:40 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,28 +18,44 @@
 	- If there is no argument, print all the environment variables.
 */
 
+static void	ft_env_error(int error);
+
 void	ft_env(t_env *head_env, t_node *node)
 {
 	int		i;
 	t_env	*cur;
 	char	**env;
 
-	if (ft_arrlen_2d(node->cmd) != 1) // 옵션 또는 인자가 있는 경우
-	{
-		printf("minishell: env: %s: No such file or directory\n", node->cmd[1]);
-		return ; // Error
-	}
-	else // 옵션 || 인자가 없는 경우 (정상 : 환경변수 출력)
+	if (ft_arrlen_2d(node->cmd) != 1)
+		ft_env_error(1);
+	if (head_env == NULL)
+		ft_env_error(2);
+	else
 	{
 		cur = head_env;
 		i = 0;
 		while (cur != NULL)
 		{
-			if (ft_strchr(cur->cmd, '=') != NULL) // '='가 존재하는 경우만 (출력 O)
+			if (ft_strchr(cur->cmd, '=') != NULL)
 			{
 				printf("%s=%s\n", cur->key, cur->value);
 			}
 			cur = cur->next;
 		}
 	}
+	return ;
+}
+
+static void	ft_env_error(int error)
+{
+	g_signal_error = 1;
+	if (error == 1)
+		ft_putstr_fd("minishell: env: too many arguments\n", 2);
+	else if (error == 2)
+	{
+		g_signal_error = 127;
+		ft_putstr_fd("minishell: env: No such file or directory\n", 2);
+	}
+	else
+		print_error();
 }

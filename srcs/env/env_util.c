@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:31:14 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 19:35:28 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 21:31:08 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,49 +101,3 @@ void	free_env_list(t_env *head)
 		cur = next;
 	}
 }
-
-// void print_env_list(t_env *head)
-// {
-// 	if (head == NULL) {
-// 		printf("The list is empty.\n");
-// 		return;
-// 	}
-
-// 	t_env *cur = head;
-// 	while (cur != NULL) {
-// 		printf("=== env ===\n");
-// 		printf("command: %s\n", cur->cmd);
-// 		printf("key: %s\n", cur->key);
-// 		printf("value: %s\n", cur->value);
-// 		printf("\n");
-// 		cur = cur->next;
-// 	}
-// }
-
-// t_env	*env_array_to_list(t_env *head, char **envp)
-// {
-// 	int			i;
-// 	t_envutil	util;
-// 	char	*sep_pos;
-// 	t_env	*new_node;
-
-// 	i = 0;
-// 	head = NULL;
-// 	while (envp[i])
-// 	{
-// 		sep_pos = strchr(envp[i], '=');  // '=' 위치 찾기
-// 		if (sep_pos)
-// 		{
-// 			util.tmp = ft_strdup(envp[i]);
-// 			*sep_pos = '\0';								// '=' 기호를 NULL로 바꿔 key와 value를 분리
-// 			util.key = envp[i];									// 키는 '=' 이전 부분
-// 			util.value = sep_pos + 1;							// 값은 '=' 다음 부분
-// 			new_node = create_node_env(util.tmp, util.key, util.value);	// 새로운 노드 생성 및 연결 리스트에 추가
-// 			if (new_node)									// 노드 생성에 성공한 경우만 추가
-// 				append_node_env(&head, new_node);
-// 			ft_free((void **)&util.tmp);
-// 		}
-// 		i++;
-// 	}
-// 	return (head);
-// }

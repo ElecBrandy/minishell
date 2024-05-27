@@ -6,23 +6,64 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:15 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 19:31:10 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 21:58:44 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
+	ft_export
+	- Export the environment variable.
+	- If there is no argument, print the environment variable.
+
+	error_log
+	- 0 : Success
+	- 1 : minishell: export: No such file or directory (no envp)
+	- 2 : minishell: export: `%s': not a valid identifier (invalid key or value)
+	- 88 : malloc error (shell not exited)
+	- ex : perror (shell exited)
+*/
+
 void ft_export(t_env *head_env, t_node *node)
 {
-	int	i;
+	int error;
 
-	if (ft_arrlen_2d(node->cmd) == 1) // 인자가 없는 경우
+	if (ft_arrlen_2d(node->cmd) == 1)
 	{
-		export_withoutarg(head_env); // 정상작동 확인
+		error = export_withoutarg(head_env);
+		if (error != 0)
+			ft_export_error(error, NULL);
 	}
-	else // 인자가 있는 경우 (key)
+	else
 	{
-		export_witharg(head_env, node);
+		error = export_witharg(head_env, node);
+		if (error != 0)
+			ft_export_error(error, NULL);
 	}
-	// print_env_list(head_env);
+}
+
+int	ft_export_error(int error, char *path)
+{
+	if (error == 1)
+	{
+		g_signal_error = 1;
+		ft_putstr_fd("minishell: export: No such file or directory\n", 2);
+	}
+	else if (error == 2)
+	{
+		g_signal_error = 1;
+		ft_putstr_fd("minishell: export: `", 2);
+		if (path)
+			ft_putstr_fd(path, 2);
+		ft_putstr_fd("\': not a valid identifier\n", 2);
+	}
+	else if (error == 88)
+	{
+		g_signal_error = 12;
+		print_error();
+	}
+	else
+		print_error();
+	return (0);
 }

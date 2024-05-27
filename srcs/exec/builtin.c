@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:56:28 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/26 20:09:01 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 16:28:54 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,28 @@ int	is_builtin(t_node *node)
 {
 	if (ft_strlen(node->cmd[0]) <= 0)
 		return (0); //  Error -> exit code 0
-	{
-		if (ft_strncmp(node->cmd[0], "exit", ft_strlen(node->cmd[0])) == 0) // 무조건 소문자만 인식
-			return (1);
-		if (ft_strncmp(node->cmd[0], "export", ft_strlen(node->cmd[0])) == 0) // 무조건 소문자만 인식
-			return (4);
-		if (ft_strncmp(node->cmd[0], "unset", ft_strlen(node->cmd[0])) == 0) // 무조건 소문자만 인식
-			return (3);
-	}
+	if (ft_strlen(node->cmd[0]) == ft_strlen("exit") \
+	&& ft_strncmp(node->cmd[0], "exit", ft_strlen(node->cmd[0])) == 0) // 무조건 소문자만 인식
+		return (1);
+	if (ft_strlen(node->cmd[0]) == ft_strlen("epxort") \
+	&& ft_strncmp(node->cmd[0], "export", ft_strlen(node->cmd[0])) == 0) // 무조건 소문자만 인식
+		return (4);
+	if (ft_strlen(node->cmd[0]) == ft_strlen("unset") \
+	&& ft_strncmp(node->cmd[0], "unset", ft_strlen(node->cmd[0])) == 0) // 무조건 소문자만 인식
+		return (3);
 	make_lower(node->cmd[0]);
-	{
-		if (ft_strncmp(node->cmd[0], "echo", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
-			return (7);
-		if (ft_strncmp(node->cmd[0], "cd", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
-			return (6);
-		if (ft_strncmp(node->cmd[0], "pwd", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
-			return (5);
-		if (ft_strncmp(node->cmd[0], "env", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
-			return (2);
-	}
+	if (ft_strlen(node->cmd[0]) == ft_strlen("echo") \
+	&& ft_strncmp(node->cmd[0], "echo", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
+		return (7);
+	if (ft_strlen(node->cmd[0]) == ft_strlen("cd") \
+	&& ft_strncmp(node->cmd[0], "cd", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
+		return (6);
+	if (ft_strlen(node->cmd[0]) == ft_strlen("pwd") \
+	&& ft_strncmp(node->cmd[0], "pwd", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
+		return (5);
+	if (ft_strlen(node->cmd[0]) == ft_strlen("env") \
+	&& ft_strncmp(node->cmd[0], "env", ft_strlen(node->cmd[0])) == 0) // 대문자 소문자 인식, 섞여도 인식
+		return (2);
 	return (0);
 }
 

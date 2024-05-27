@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:19:07 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/26 20:21:00 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 19:40:02 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ char	**env_list_to_array(t_env *head_env)
 		return (NULL);
 	while (cur)
 	{
-		arr[i] = ft_strdup(cur->cmd); // Error?
-		// printf("arr[%d]: %s\n", i, arr[i]);
+		arr[i] = ft_strdup(cur->cmd);
+		if (!arr[i])
+			return (NULL);
 		i++;
 		cur = cur->next;
 	}
