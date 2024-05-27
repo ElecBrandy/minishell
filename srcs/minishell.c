@@ -57,7 +57,7 @@ int	minishell(char *av, t_env *env, char *home)
 
 	util_init(&u);
 	g_signal_error = 0;
-	str = parsing(av); // str[세미콜론][파이프][파이프 내부]로 파싱
+	str = parsing(av);
 	if (!str)
 		return (print_error());
 	while (str[++u.i])
@@ -65,14 +65,20 @@ int	minishell(char *av, t_env *env, char *home)
 		head = NULL;
 		if (parsing_check_errno(&head, str[u.i], env, u.prev_errnum))
 		{
-			free_str_three(str); // 파싱된 문자열 해제
+			free_str_three(str);
+			free_node(head);
 			return (print_error()); // error print
 		}
 		u.cnt = count_node(head); // 노드 수 세기
-		fork_process(env, head, home, u.cnt); // 프로세스 실행
+		if (fork_process(env, head, home, u.cnt) || g_signal_error) // 프로세스 실행
+		{
+			free_str_three(str);
+			free_node(head);
+			return (print_error()); // error print
+		}
 		free_node(head); // 노드 메모리 해제
 	}
-	free_str_three(str); // 파싱된 문자열 해제
+	free_str_three(str);
 	return (0);
 }
 
@@ -82,8 +88,8 @@ void	readline_minishell(t_env *env, char *home)
 
 	while (1)
 	{
-		signal(SIGINT, sig_handler);// CTRL + c
-		signal(SIGQUIT, SIG_IGN);// CTRL + |
+		signal(SIGINT, sig_handler);
+		signal(SIGQUIT, SIG_IGN);
 		av = readline("nimishell$ ");
 		if (!av)
 		{

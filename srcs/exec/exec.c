@@ -14,17 +14,14 @@
 
 int run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid)
 {
-	t_env *cur;
-	char	*path;
-	char	**cmd;
 	char 	**tmp;
 
 	if (!head_env)
-		exit (1);
+		exit (12);
 	tmp = env_list_to_array(head_env);
 	if (!tmp)
-		exit (1);
+		exit (12);
 	if (execve(node->path, node->cmd, tmp) == -1)
-		exit (1);
-	return (0);
+		exit (12);
+	exit (0);
 }

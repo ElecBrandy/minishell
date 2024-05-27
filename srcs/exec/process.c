@@ -17,7 +17,7 @@ static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt);
 static void	child_end(t_env *head_env, t_node *node, char *home ,int *cnt);
 static void	is_inchild(char *cmd);
 
-void	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)
+int	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)
 {
 	t_util	u;
 	t_node	*cur;
@@ -30,7 +30,7 @@ void	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)
 		child_solo(head_env, cur, home, &u.cnt);
 	else
 	{
-		while (u.i++ < node_cnt - 1)
+		while (++u.i < node_cnt - 1)
 		{
 			child_normal(head_env, cur, home, &u.cnt);
 			cur = cur->next;
@@ -41,6 +41,7 @@ void	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)
 	restore_stdio(&stdin_origin);
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, SIG_IGN);
+	return (0);
 }
 
 void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt)

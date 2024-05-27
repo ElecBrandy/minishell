@@ -233,10 +233,10 @@ int		is_builtin(t_node *node);
 int		exec_builtin(t_env *head_env, t_node *node, char *home, pid_t pid);
 
 /* exe.c */
-int run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid);
+int 	run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid);
 
 /* process.c */
-void	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt);
+int		fork_process(t_env *head_env, t_node *node, char *home, int node_cnt);
 
 /* process_util.c */
 int		count_node(t_node *node);
