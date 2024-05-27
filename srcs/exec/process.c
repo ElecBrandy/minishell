@@ -15,34 +15,34 @@
 static void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt);
 static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt);
 static void	child_end(t_env *head_env, t_node *node, char *home ,int *cnt);
+static void	is_inchild(char *cmd);
 
 void	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)
 {
-	int		i;
-	int		fork_cnt;
+	t_util	u;
 	t_node	*cur;
 	t_stdio	stdin_origin;
 
-	fork_cnt = 0;
+	util_init(&u);
 	cur = node;
 	save_stdio(&stdin_origin);
 	if (node_cnt == 0)		// 노드가 없는 경우
 		return ;
 	if (node_cnt == 1)		// pipe가 없는 경우
-		child_solo(head_env, cur, home, &fork_cnt);
+		child_solo(head_env, cur, home, &u.cnt);
 	else
 	{
-		i = 0;
-		while (i < node_cnt - 1)
+		while (u.i++ < node_cnt - 1)
 		{
-			child_normal(head_env, cur, home, &fork_cnt);
+			child_normal(head_env, cur, home, &u.cnt);
 			cur = cur->next;
-			i++;
 		}
-		child_end(head_env, cur, home, &fork_cnt);
+		child_end(head_env, cur, home, &u.cnt);
 	}
-	wait_process(fork_cnt);
+	wait_process(u.cnt);
 	restore_stdio(&stdin_origin);
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt)
@@ -52,13 +52,14 @@ void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt)
 	pid = -2;
 	if (is_builtin(node) != 0) // builtin 함수일 경우
 	{
-		// printf("builtin\n");
 		redirect_io(node->in_fd, node->out_fd);
 		exec_builtin(head_env, node, home, pid);
 	}
 	else
 	{
 		pid = fork();
+		signal(SIGINT, SIG_IGN);
+		is_inchild(node->cmd[0]);
 		if (pid == -1)
 			exit(1); // Error
 		if (pid == 0)
@@ -66,8 +67,7 @@ void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt)
 			redirect_io(node->in_fd, node->out_fd);
 			run_cmd(head_env, node, home, pid);
 		}
-		else
-			(*cnt)++;
+		(*cnt)++;
 	}
 }
 
@@ -79,6 +79,8 @@ static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt)
 	if (pipe(fd) == -1)
 		exit(1);	// Error
 	pid = fork();
+	signal(SIGINT, SIG_IGN);
+	is_inchild(node->cmd[0]);
 	if (pid == -1)
 		exit(1);	// Error
 	if (pid == 0)
@@ -89,13 +91,10 @@ static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt)
 		close_pipe(fd);
 		run_cmd(head_env, node, home, pid);
 	}
-	else
-	{
-		(*cnt)++;
-		dup2(fd[0], STDIN);
-		close(fd[0]);
-		close_pipe(fd);
-	}
+	(*cnt)++;
+	dup2(fd[0], STDIN);
+	close(fd[0]);
+	close_pipe(fd);
 }
 
 static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
@@ -103,6 +102,8 @@ static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
 	pid_t	pid;
 
 	pid = fork();
+	signal(SIGINT, SIG_IGN);
+	is_inchild(node->cmd[0]);
 	if (pid == -1)
 		exit(1);	// Error
 	if (pid == 0)
@@ -110,8 +111,29 @@ static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
 		redirect_io(node->in_fd, node->out_fd);
 		run_cmd(head_env, node, home, pid);
 	}
-	else
+	(*cnt)++;
+}
+
+static void	is_inchild(char *cmd)
+{
+	int	flag;
+
+	flag = 0;
+	if (strncmp(cmd, "cat", 3) == 0)
+		flag = 1;
+	else if (strncmp(cmd, "/bin/cat", 8) == 0)
+		flag = 1;
+	else if (strncmp(cmd, "wc", 2) == 0)
+		flag = 1;
+	else if (strncmp(cmd, "/usr/bin/wc", 10) == 0)
+		flag = 1;
+	else if (strncmp(cmd, "sed", 3) == 0)
+		flag = 1;
+	else if (strncmp(cmd, "/usr/bin/sed", 12) == 0)
+		flag = 1;
+	if (flag == 1)
 	{
-		(*cnt)++;
+		signal(SIGINT, child_handler);
+		signal(SIGQUIT, child_handler);
 	}
 }

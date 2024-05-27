@@ -26,9 +26,15 @@ void	sig_handler(int signal)
 void	child_handler(int signal)
 {
 	if (signal == SIGINT)
+	{
 		printf("\n");
-	if (signal == SIGQUIT)
+		g_signal_error = 130;
+	}
+	else if (signal == SIGQUIT)
+	{
 		printf("Quit: 3\n");
+		g_signal_error = 131;
+	}
 	if (rl_on_new_line() == -1)
 		exit(1);
 	rl_replace_line("", 1);

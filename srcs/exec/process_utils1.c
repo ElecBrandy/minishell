@@ -58,7 +58,8 @@ void	wait_process(int cnt)
 	while (i < cnt)
 	{
 		wait(&status);
-		g_signal_error = WEXITSTATUS(status);
+		if (g_signal_error == 0)
+			g_signal_error = WEXITSTATUS(status);
 		i++;
 	}
 }
