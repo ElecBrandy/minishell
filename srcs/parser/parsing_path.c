@@ -86,9 +86,10 @@ static int	get_path(char **path, t_node *node, char *cmd)
 			return (check_file_or_cmd(cmd, NULL));
 	}
 	else
+	{
+		free(tmp);
 		node->path = ft_strdup(cmd);
-	if (!(node->path))
-		return (12);
+	}
 	return (0);
 }
 
