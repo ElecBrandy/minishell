@@ -25,7 +25,7 @@ int run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid)
 	if (is_builtin(node) != 0) // builtin 일 경우
 	{
 		exec_builtin(head_env, node, home, pid);
-		exit(1); // Error? : 정상종료
+		exit(0); // Error? : 정상종료
 	}
 	else // builtin 아니라 일반 함수인 경우
 	{
