@@ -26,9 +26,7 @@ void	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)
 	util_init(&u);
 	cur = node;
 	save_stdio(&stdin_origin);
-	if (node_cnt == 0)		// 노드가 없는 경우
-		return ;
-	if (node_cnt == 1)		// pipe가 없는 경우
+	if (node_cnt == 1)
 		child_solo(head_env, cur, home, &u.cnt);
 	else
 	{
@@ -50,7 +48,7 @@ void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt)
 	pid_t	pid;
 
 	pid = -2;
-	if (is_builtin(node) != 0) // builtin 함수일 경우
+	if (is_builtin(node) != 0)
 	{
 		redirect_io(node->in_fd, node->out_fd);
 		exec_builtin(head_env, node, home, pid);
@@ -61,7 +59,7 @@ void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt)
 		signal(SIGINT, SIG_IGN);
 		is_inchild(node->cmd[0]);
 		if (pid == -1)
-			exit(1); // Error
+			exit(1);
 		if (pid == 0)
 		{
 			redirect_io(node->in_fd, node->out_fd);
@@ -77,17 +75,17 @@ static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt)
 	int		fd[2];
 
 	if (pipe(fd) == -1)
-		exit(1);	// Error
+		exit(1);
 	pid = fork();
 	signal(SIGINT, SIG_IGN);
 	is_inchild(node->cmd[0]);
 	if (pid == -1)
-		exit(1);	// Error
+		exit(1);
 	if (pid == 0)
 	{
-		dup2(fd[1], STDOUT); // 일단 출력을 fd[1]로 보내고
-		close(fd[1]); // 닫고
-		redirect_io(node->in_fd, node->out_fd); // 입출력을 재설정한다.
+		dup2(fd[1], STDOUT);
+		close(fd[1]);
+		redirect_io(node->in_fd, node->out_fd);
 		close_pipe(fd);
 		run_cmd(head_env, node, home, pid);
 	}
@@ -105,7 +103,7 @@ static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
 	signal(SIGINT, SIG_IGN);
 	is_inchild(node->cmd[0]);
 	if (pid == -1)
-		exit(1);	// Error
+		exit(1);
 	if (pid == 0)
 	{
 		redirect_io(node->in_fd, node->out_fd);

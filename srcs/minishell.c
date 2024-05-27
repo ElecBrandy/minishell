@@ -69,8 +69,6 @@ int	minishell(char *av, t_env *env, char *home)
 			return (print_error()); // error print
 		}
 		u.cnt = count_node(head); // 노드 수 세기
-		// signal(SIGINT, child_handler);// CTRL + c
-		// signal(SIGQUIT, child_handler);// CTRL + |
 		fork_process(env, head, home, u.cnt); // 프로세스 실행
 		free_node(head); // 노드 메모리 해제
 	}
@@ -108,6 +106,7 @@ int	main(int argc, char **argv, char **envp)
 	struct termios	term;
 	t_env			*env;
 	char			*home;
+
 	if (argc != 1 || !argv || !envp)
 		exit (1);
 	env = env_array_to_list(env, envp, &home); // 연결리스트로 만들기

@@ -20,19 +20,11 @@ int run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid)
 	char 	**tmp;
 
 	if (!head_env)
-	{
-		fprintf(stderr, "env is NULL\n");
-		exit(1); // Error
-	}
+		exit (1);
 	tmp = env_list_to_array(head_env);
 	if (!tmp)
-	{
-		fprintf(stderr, "env is NULL\n");
-		exit(1); // Error
-	}
+		exit (1);
 	if (execve(node->path, node->cmd, tmp) == -1)
-	{
-		exit(1); // Error
-	}
+		exit (1);
 	return (0);
 }
