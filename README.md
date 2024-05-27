@@ -39,23 +39,7 @@
 - ls $NOT_EXISTS . 했을 때 ls . 만 한거처럼 나와야 함.
 - export PATH=  해서 PATH값을 비운 후에, cat, ls 같은거 했을 때 ‘No such file or directory’ 에러가 나와야 함.
 - `unset PATH` 이후 명령어 실행 시 `bash: cat: No such file or directory` 나오게 해야함.
-``` bash
-nimishell$ unset PATH
-nimishell$ cat
-AddressSanitizer:DEADLYSIGNAL
-=================================================================
-==85334==ERROR: AddressSanitizer: SEGV on unknown address 0x000000000000 (pc 0x000104ccf43e bp 0x7ffeeaf50ee0 sp 0x7ffeeaf50e70 T0)
-==85334==The signal is caused by a READ memory access.
-==85334==Hint: address points to the zero page.
-	#0 0x104ccf43e in find_path parsing_path.c:80
-	#1 0x104ccc6a8 in save_in_node parsing_node.c:37
-	#2 0x104ccb126 in parsing_in_pipe parsing_in_pipe.c:102
-	#3 0x104cd1d3f in parsing_minishell minishell.c:35
-	#4 0x104cd1f5a in parsing_check_errno minishell.c:44
-	#5 0x104cd23f7 in minishell minishell.c:66
-	#6 0x104cd27b9 in readline_minishell minishell.c:101
-	#7 0x104cd2984 in main minishell.c:121
-	#8 0x7fff67d11cc8 in start+0x0 (libdyld.dylib:x86_64+0x1acc8)
+
 ```
 ### 시그널 처리
 - 아직 자식 프로세스에 못 넣었음 ㅠㅠ
