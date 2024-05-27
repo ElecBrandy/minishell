@@ -90,10 +90,13 @@ static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt)
 		close_pipe(fd);
 		run_cmd(head_env, node, home, pid);
 	}
-	(*cnt)++;
-	dup2(fd[0], STDIN);
-	close(fd[0]);
-	close_pipe(fd);
+	else
+	{
+		(*cnt)++;
+		dup2(fd[0], STDIN);
+		close(fd[0]);
+		close_pipe(fd);
+	}
 }
 
 static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
@@ -110,7 +113,8 @@ static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
 		redirect_io(node->in_fd, node->out_fd);
 		run_cmd(head_env, node, home, pid);
 	}
-	(*cnt)++;
+	else
+		(*cnt)++;
 }
 
 static void	is_inchild(char *cmd)
