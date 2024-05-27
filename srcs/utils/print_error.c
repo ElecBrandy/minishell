@@ -32,6 +32,8 @@ int	print_error(void)
 		return (0);
 	else if (g_signal_error == 258)
 		return (0);
+	else if (g_signal_error == 126)
+		return (0);
 	else
 	{
 		errno = g_signal_error;

@@ -49,6 +49,7 @@ static void    exit_witharg(t_env *head_env, t_node *node, pid_t pid)
 	else // 넘지 않을 경우 -> 부모에게 255 기준으로 나눠가며 전달 / 종료 o
 	{
 		ft_exit_error(NULL, 4, pid);
+		g_signal_error = num;
 		exit(num % 256);
 	}
 	return ;

@@ -151,8 +151,6 @@ int		parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e);
 char	*add_space(char *av);
 
 /* paring_infd.c */
-void	check_infile(char **str, int *i, t_node *node);
-void	only_open(char **str, int *i);
 void	is_infd(char **str, int *i, t_node *node, t_env *env);
 
 /* parsing_node.c */
@@ -162,8 +160,6 @@ void	append_node(t_node **head, t_node *new_node);
 void	util_init(t_util *util);
 
 /* parsing_outfd.c */
-void	new_file(char **str, int *i, t_node *node);
-void	append_file(char **str, int *i, t_node *node);
 void	is_outfd(char **str, int *i, t_node *node);
 int		get_cmd(char **cmd, t_util *u, char **str);
 char	**find_fd(char **str, t_node *node, t_env *e);
@@ -175,9 +171,7 @@ int		check_line(char ***str);
 
 /* parsing_path.c*/
 int		find_path(char *cmd, t_env *env, t_node *node);
-int		find_path_two(char *cmd, t_env *env, t_node *node, char **path);
-int		get_path(char **path, t_node *node, char *cmd);
-int		get_path(char **path, t_node *node, char *cmd);
+int		check_file_or_cmd(char *cmd, char *tmp);
 
 /* parsing.c */
 char	***parsing(char *av);

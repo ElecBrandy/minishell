@@ -12,7 +12,10 @@
 
 #include "../../includes/minishell.h"
 
-void	check_infile(char **str, int *i, t_node *node)
+static void	only_open(char **str, int *i);
+static void	check_infile(char **str, int *i, t_node *node);
+
+static void	check_infile(char **str, int *i, t_node *node)
 {
 	char	*file;
 
@@ -34,7 +37,7 @@ void	check_infile(char **str, int *i, t_node *node)
 	free(file);
 }
 
-void	only_open(char **str, int *i)
+static void	only_open(char **str, int *i)
 {
 	char	*file;
 	int		fd;

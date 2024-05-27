@@ -12,6 +12,9 @@
 
 #include "../../includes/minishell.h"
 
+static void	append_file(char **str, int *i, t_node *node);
+static void	new_file(char **str, int *i, t_node *node);
+
 void	is_outfd(char **str, int *i, t_node *node)
 {
 	if (ft_strlen(str[*i]) > 2)
@@ -29,7 +32,7 @@ void	is_outfd(char **str, int *i, t_node *node)
 	}
 }
 
-void	new_file(char **str, int *i, t_node *node)
+static void	new_file(char **str, int *i, t_node *node)
 {
 	char	*file;
 
@@ -51,7 +54,7 @@ void	new_file(char **str, int *i, t_node *node)
 	*i += 1;
 }
 
-void	append_file(char **str, int *i, t_node *node)
+static void	append_file(char **str, int *i, t_node *node)
 {
 	char	*file;
 

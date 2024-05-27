@@ -12,8 +12,19 @@
 
 #include "../../includes/minishell.h"
 
-int	check_path(char **path, t_node *node, char *cmd, int *i)
+static char	**find_path_two(char *cmd, t_env *e, t_node *node);
+static int	get_path(char **path, t_node *node, char *cmd);
+static int	check_path(char **path, t_node *node, char *cmd, int *i);
+
+static int	check_path(char **path, t_node *node, char *cmd, int *i)
 {
+	if (access(cmd, X_OK) == 0)
+	{
+		node->path = ft_strdup(cmd);
+		if (!(node->path))
+			return (12);
+		return (0);
+	}
 	while (path[++(*i)])
 	{
 		node->path = ft_strjoin(path[*i], "/");
@@ -25,26 +36,54 @@ int	check_path(char **path, t_node *node, char *cmd, int *i)
 		else
 			free(node->path);
 	}
+	node->path = NULL;
 	return (1);
 }
 
-int	get_path(char **path, t_node *node, char *cmd)
+int	check_file_or_cmd(char *cmd, char *tmp)
 {
-	int	i;
-	int	flag;
+	if (tmp)
+		free(tmp);
+	if (ft_strchr(cmd, '/'))
+	{
+		if (access(cmd, F_OK) == 0)
+		{
+        	printf("minishell: %s: is a directory\n", cmd);
+			g_signal_error = 126;
+		}
+		else
+		{
+			printf("minishell: %s: No such file or directory\n", cmd);
+			g_signal_error = 127;
+		}
+	}
+	else
+	{
+		printf("minishell: %s: command not found\n", cmd);
+		g_signal_error = 127;
+	}
+	return (g_signal_error);
+}
 
-	i = -1;
+static int	get_path(char **path, t_node *node, char *cmd)
+{
+	t_util	u;
+	char	*temp;
+	char	*tmp;
+
+	util_init(&u);
+	temp = ft_strdup(cmd);
+	tmp = ft_strtrim(temp, "./");
 	if (is_builtin(node) == 0)
 	{
-		flag = check_path(path, node, cmd, &i);
-		if (flag == 0 || flag == 12)
-			return (flag);
-		if (!path[i])
-		{
-			node->path = NULL;
-			printf("minishell: %s: command not found\n", cmd);
-			return (127);
-		}
+		if (!tmp[0])
+			return (check_file_or_cmd(cmd, tmp));
+		free(tmp);
+		u.flag = check_path(path, node, cmd, &u.i);
+		if (u.flag == 0 || u.flag == 12)
+			return (u.flag);
+		if (!path[u.i])
+			return (check_file_or_cmd(cmd, NULL));
 	}
 	else
 		node->path = ft_strdup(cmd);
@@ -53,45 +92,53 @@ int	get_path(char **path, t_node *node, char *cmd)
 	return (0);
 }
 
-int	find_path_two(char *cmd, t_env *env, t_node *node, char **path)
+static char	**find_path_two(char *cmd, t_env *e, t_node *node)
 {
-	if (access(cmd, X_OK) == 0)
-		node->path = ft_strdup(cmd);
-	else
-		g_signal_error = get_path(path, node, cmd);
+	char	**path;
+	char	*env_path;
+
+	env_path = ft_strdup(e->value);
+	if (!env_path)
+		return (NULL);
+	path = ft_split(env_path, ':');
+	free(env_path);
+	if (!path)
+		return (NULL);
+	if (ft_strchr(cmd, '/') && cmd[0] == '/')
+	{
+		check_file_or_cmd(cmd, NULL);
+		free_str(path);
+		return (NULL);
+	}
+	g_signal_error = get_path(path, node, cmd);
 	free_str(path);
-	if (g_signal_error)
-		return (g_signal_error);
-	if (!(node->path))
-		return (12);
-	return (0);
+	if (g_signal_error || !(node->path))
+		return (NULL);
+	return (path);
 }
 
 int	find_path(char *cmd, t_env *env, t_node *node)
 {
-	char	*env_path;
 	char	**path;
-	int		i;
 	t_env	*e;
 
 	if (!cmd)
 		return (1);
 	e = env;
-	while (e->cmd)
+	while (e)
 	{
 		if (ft_strncmp(e->key, "PATH", 4) == 0)
 			break ;
 		e = e->next;
 	}
-	env_path = ft_strdup(e->value);
-	if (!env_path)
-		return (12);
-	path = ft_split(env_path, ':');
-	free(env_path);
-	if (!path)
-		return (12);
-	i = find_path_two(cmd, env, node, path);
-	if (i)
-		return (i);
+	if (!e)
+	{
+		if (is_builtin(node))
+			return (0);
+		return (check_file_or_cmd(cmd, NULL));
+	}
+	path = find_path_two(cmd, e, node);
+	if (!path || g_signal_error)
+		return (file_error());
 	return (g_signal_error);
 }
