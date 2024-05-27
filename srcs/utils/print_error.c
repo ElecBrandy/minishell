@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 19:29:40 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/25 18:51:13 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 15:49:34 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	print_error(void)
 		printf("minishell: syntax error near unexpected token `|'\n");
 		g_signal_error = 258;
 	}
-	else if (g_signal_error == 1)
-		return (0);
+	// else if (g_signal_error == 1)
+	// 	return (0);
 	else if (g_signal_error == 127)
 		return (0);
 	else if (g_signal_error == 258)

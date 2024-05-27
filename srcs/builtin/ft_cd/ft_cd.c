@@ -6,124 +6,125 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/26 20:31:56 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 22:03:31 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void		cd_withoutarg(t_env *head_env, t_node *node);
-static void		cd_witharg(t_env *head_env, t_node *node, char *home);
-static int		check_path(char *path);
-static int		move_path(t_env *head_env, char *path);
+/*
+	ft_cd
+	- Change directory
+
+	error_log
+	0 : Success
+	1 : minishell: cd: HOME not set
+	2 : minishell: cd: path: No such file or directory
+	3 : minishell: cd: path: Permission denied
+	4 : minishell: cd: path: Not a directory
+	88 : malloc error;
+	ex : perror
+*/
+
+static int	cd_withoutarg(t_env *head_env, t_node *node);
+static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home);
+static int	check_path(char *path);
+static int	move_path(t_env *head_env, char *path);
 
 void ft_cd(t_env *head_env, t_node *node, char *home)
 {
-	if (ft_arrlen_2d(node->cmd) == 1) // 인자가 없는 경우 HOME 경로로 이동
-	{
-		cd_withoutarg(head_env, node);
-	}
-	else // 인자가 있는 경우
-	{
-		cd_witharg(head_env, node, home);
-	}
-}
+	int error;
 
-static void	cd_withoutarg(t_env *head_env, t_node *node)
-{
-	t_env *env;
-
-	env = is_env(head_env, "HOME");
-	if (!env) // 환경변수에 '$HOME'이 없는 경우
+	if (ft_arrlen_2d(node->cmd) == 1)
 	{
-		ft_cd_error(4, "HOME"); // Error // Error bash: cd: HOME not set
-		return ;
-	}
-	else // 환경변수에 '$HOME'이 있는 경우
-	{
-		if (ft_strncmp(env->cmd, "HOME", ft_strlen(env->cmd)) == 0) // 'HOME' 인경우
-		{
-			ft_cd_error(4, "HOME"); // Error bash: cd: HOME not set
-		}
-		else if (ft_strncmp(env->cmd, "HOME=", ft_strlen(env->cmd)) == 0) // 'HOME=' 인경우
-		{
-			move_path(head_env, ".");
-		}
-		else
-		{
-			move_path(head_env, env->value);
-		}
-	}
-	return ;
-}
-
-static void	cd_witharg(t_env *head_env, t_node *node, char *home)
-{
-	int		check;
-
-	check = check_path(node->cmd[1]);
-	if (check == 4) // cd ~
-	{
-		move_path(head_env, home);
-	}
-	else if (check != 0)
-	{
-		ft_cd_error(check, node->cmd[1]); // Error
+		error = cd_withoutarg(head_env, node);
+		if (error != 0)
+			ft_cd_error(error, node->cmd[1]);
 	}
 	else
 	{
-		move_path(head_env, node->cmd[1]);
+		error = cd_witharg(head_env, node, node->cmd[1], home);
+		if (error != 0)
+			ft_cd_error(error, node->cmd[1]);
 	}
-	return ;
+}
+
+static int	cd_withoutarg(t_env *head_env, t_node *node)
+{
+	t_env	*env;
+
+	env = is_env(head_env, "HOME");
+	if (!env)
+		return (1);
+	else
+	{
+		if (ft_strncmp(env->cmd, "HOME", ft_strlen(env->cmd)) == 0)
+			return (1);
+		else if (ft_strncmp(env->cmd, "HOME=", ft_strlen(env->cmd)) == 0)
+		{
+			return (move_path(head_env, "."));
+		}
+		else
+		{
+			return (move_path(head_env, env->value));
+		}
+	}
+	return (0);
+}
+
+static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home)
+{
+	
+	int		error;
+
+	if (ft_strlen(path) == 1 && path[0] == '~') // cd ~
+		return (move_path(head_env, home));
+	else if (ft_strlen(path) == 1 && path[0] == '-') // cd -
+		return (move_path(head_env, is_env(head_env, "OLDPWD")->value));
+	error = check_path(node->cmd[1]);
+	if (error != 0)
+		return (error);
+	return (move_path(head_env, node->cmd[1]));
 }
 
 static int check_path(char *path)
 {
 	int	fd;
 
-	if (ft_strlen(path) == 1 && path[0] == '~') // 절대 경로인가?
-	{
-		return (4);
-	}
-	if (access(path, F_OK) == -1) // 경로가 존재하는가?
-	{
-		return (1); // 경로가 존재하지 않음 : bash: cd: path: No such file or directory
-	}
-	if (access(path, X_OK) == -1) // 접근 권한이 있는가?
-	{
-		return (2); // 접근 권한이 없음 : bash: cd: path: Permission denied
-	}
-	fd = open(path, O_DIRECTORY); // 경로가 폴더가 맞는가? (파일일수도 있으니까)
+	if (access(path, F_OK) == -1)
+		return (2);
+	if (access(path, X_OK) == -1)
+		return (3);
+	fd = open(path, O_DIRECTORY);
 	if (fd == -1)
-		return (3); // Error : bash: cd: path: Not a directory
+		return (4);
 	close(fd);
 	return (0);
 }
 
 static int	move_path(t_env *head_env, char *path)
 {
-	int		signal;
 	char	*cur_path;
 	char	*pre_path;
 
-	signal = FALSE;
+	if (!head_env)
+		return (1);
 	pre_path = getcwd(NULL, 0);
-	if (!pre_path)
-		return (signal); // Error
 	if (chdir(path) == -1)
-		return (signal); // Error
+		return (88);
+	if (!pre_path)
+		return (88);
 	cur_path = getcwd(NULL, 0);
 	if (!cur_path)
 	{
 		ft_free((void **)&pre_path);
-		return (signal); // Error
+		return (88);
 	}
-	if (update_pwd(head_env, cur_path))
-		signal = TRUE;
-	if (update_oldpwd(head_env, pre_path)) // 디렉토리 변경 성공 시 $OLDPWD 갱신
-		signal = TRUE;
+	if (update_pwd(head_env, cur_path) == FALSE)
+		return (12);
+	if (update_oldpwd(head_env, pre_path) == FALSE)
+		return (12);
 	ft_free((void **)&pre_path);
 	ft_free((void **)&cur_path);
-	ft_free((void **)&pre_path);
-	return (signal);
+	return (0);
 }

@@ -6,13 +6,17 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:27:16 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/25 19:31:06 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 21:12:50 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// \ -> 처리를 잊지말자. 일단 나중에
+/*
+	Rule of env KEY
+	1. first character must be an alphabet or an underscore
+	2. the rest of characters must be an alphabet, an underscore, or a digit
+*/
 
 int is_valid_key(char *key)
 {
@@ -20,12 +24,12 @@ int is_valid_key(char *key)
 
 	if (!key)
 		return (FALSE);
-	if (ft_isdigit(key[0])) // 첫 글자가 숫자면 유효하지 않음
+	if (ft_isdigit(key[0]))
 		return (FALSE);
-	if (!ft_isalnum(key[0]) && key[0] != '_') // 첫 글자가 알파벳 또는 언더스코어가 아니면 유효하지 않음
+	if (!ft_isalnum(key[0]) && key[0] != '_')
 		return (FALSE);
 	i = 1;
-	while (key[i]) // 나머지 문자 검사
+	while (key[i])
 	{
 		if (!ft_isalnum(key[i]) && key[i] != '_' && key[i] != '=')
 			return (FALSE);
@@ -34,21 +38,30 @@ int is_valid_key(char *key)
 	return (TRUE);
 }
 
-int is_valid_value(char *value) // 슬래시 나중에 어떻게 할것인지 생각해보기...
+/*
+	Rule of env VALUE
+	1. NULL is valid
+	2. control characters are invalid
+	3. only printable characters are valid(in minishell)
+*/
+
+int is_valid_value(char *value)
 {
 	int i = 0;
 
-	if (value == NULL || *value == '\0') // NULL도 유효함
+	if (value == NULL || *value == '\0')
 	{
 		return (TRUE);
 	}
 	while (value[i])
 	{
-		if (value[i] < 32 || value[i] == 127) // 컨트롤 문자가 포함되어 있으면 유효하지 않음
+		if (value[i] < 32 || value[i] == 127)
+		{
 			return (FALSE);
+		}
 		i++;
 	}
-	return (TRUE); // 위 조건에 걸리지 않으면 유효한 값
+	return (TRUE);
 }
 
 int is_inenv(t_env *env, char *key)
@@ -59,7 +72,7 @@ int is_inenv(t_env *env, char *key)
 	while (cur)
 	{
 		if (ft_strlen(cur->key) == ft_strlen(key) \
-		 && ft_strncmp(cur->key, key, ft_strlen(key)) == 0)
+		&& ft_strncmp(cur->key, key, ft_strlen(key)) == 0)
 			return (TRUE);
 		cur = cur->next;
 	}
