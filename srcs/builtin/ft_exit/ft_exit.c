@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:03 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 22:10:21 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/27 22:14:53 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ static int   exit_witharg(t_env *head_env, t_node *node, pid_t pid)
 
 static void ft_exit_error(int error, char *str)
 {
-	printf("error : %d\n", error);
 	if (error == 1)
 	{
 		g_signal_error = 255;
