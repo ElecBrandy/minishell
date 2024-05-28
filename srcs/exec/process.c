@@ -121,6 +121,7 @@ static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
 
 static void	is_inchild(char *cmd)
 {
+	
 	if (ft_strncmp(cmd, "./", 2))
 	{
 		signal(SIGINT, child_handler);

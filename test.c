@@ -1,15 +1,26 @@
 #include "includes/minishell.h"
 
-int main(void)
+int	main(void)
 {
-    char *a= "../../.q..";
-    char *c;
+	const char	*cmds[18];
 
-    char *b = ft_strdup(a);
-    c = ft_strtrim(b,"./");
-    if (!c[0])
-        printf("asdasd");
-    else
-        printf("%s\n",c);
-    return (1);
+	cmds[0] = "wc";
+	cmds[1] = "cmp";
+	cmds[2] = "awk";
+	cmds[3] = "split";
+	cmds[4] = "cat";
+	cmds[5] = "cut";
+	cmds[6] = "sed";
+	cmds[7] = "tr";
+	cmds[8] = "diff";
+	cmds[9] = "diff3";
+	cmds[10] = "grep";
+	cmds[11] = "egrep";
+	cmds[12] = "fgrep";
+	cmds[13] = "head";
+	cmds[14] = "tail";
+	cmds[15] = "rev";
+	cmds[16] = "sort";
+	cmds[17] = NULL;
+	return (1);
 }

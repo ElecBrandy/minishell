@@ -241,6 +241,7 @@ int		exec_builtin(t_env *head_env, t_node *node, char *home, pid_t pid);
 
 /* exe.c */
 int 	run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid);
+//void	is_inchild(char *cmd);
 
 /* process.c */
 int		fork_process(t_env *head_env, t_node *node, char *home, int node_cnt);
