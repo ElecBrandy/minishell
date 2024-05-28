@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 21:55:25 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 21:35:34 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/28 18:07:04 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ t_env *is_env(t_env *head_env, char *key)
 {
 	t_env *cur;
 
-	// if (!head_env || !key || ft_strlen(key) == 0)
-	// 	return (NULL);
 	cur = head_env;
 	while (cur)
 	{

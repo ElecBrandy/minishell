@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 18:54:01 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/28 17:04:07 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt)
 		if (pid == 0)
 		{
 			redirect_io(node->in_fd, node->out_fd);
-			run_cmd(head_env, node, home, pid);
+			ft_execve(head_env, node, home, pid);
 		}
 		(*cnt)++;
 	}
@@ -88,7 +88,7 @@ static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt)
 		close(fd[1]);
 		redirect_io(node->in_fd, node->out_fd);
 		close_pipe(fd);
-		run_cmd(head_env, node, home, pid);
+		ft_execve(head_env, node, home, pid);
 	}
 	else
 	{
@@ -111,7 +111,7 @@ static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
 	if (pid == 0)
 	{
 		redirect_io(node->in_fd, node->out_fd);
-		run_cmd(head_env, node, home, pid);
+		ft_execve(head_env, node, home, pid);
 	}
 	else
 		(*cnt)++;
