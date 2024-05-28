@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:31:14 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 21:31:08 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/28 20:44:21 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_env	*create_node_env(const char *cmd, const char *key, const char *value)
 	new_node->cmd = ft_strdup(cmd);
 	new_node->key = ft_strdup(key);
 	if (value == NULL)
-		new_node->value = ft_strdup(""); // 여기여기여기
+		new_node->value = ft_strdup("");
 	else if (value[0] == '\0')
 		new_node->value = ft_strdup("");
 	else

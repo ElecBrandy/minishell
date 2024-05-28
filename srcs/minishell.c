@@ -49,7 +49,7 @@ int	parsing_check_errno(t_node **head, char **str, t_env *env, int p_e)
 	return (0);
 }
 
-int	minishell(char *av, t_env *env, char *home)
+int	minishell(char *av, t_env **env, char *home)
 {
 	t_node	*head;
 	char	***str;
@@ -63,7 +63,7 @@ int	minishell(char *av, t_env *env, char *home)
 	while (str[++u.i])
 	{
 		head = NULL;
-		if (parsing_check_errno(&head, str[u.i], env, u.prev_errnum))
+		if (parsing_check_errno(&head, str[u.i], *env, u.prev_errnum))
 		{
 			free_str_three(str);
 			return (print_error()); // error print
@@ -76,7 +76,7 @@ int	minishell(char *av, t_env *env, char *home)
 	return (0);
 }
 
-void	readline_minishell(t_env *env, char *home)
+void	readline_minishell(t_env **env, char *home)
 {
 	char	*av;
 
@@ -113,6 +113,6 @@ int	main(int argc, char **argv, char **envp)
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	readline_minishell(env, home);
+	readline_minishell(&env, home);
 	exit (g_signal_error);
 }

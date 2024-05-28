@@ -6,18 +6,18 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 17:04:07 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/28 20:56:06 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt);
-static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt);
-static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt);
+static void	child_solo(t_env **head_env, t_node *node, char *home, int *cnt);
+static void	child_normal(t_env **head_env, t_node *node, char *home, int *cnt);
+static void	child_end(t_env **head_env, t_node *node, char *home, int *cnt);
 static void	is_inchild(char *cmd);
 
-int	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)
+int	fork_process(t_env **head_env, t_node *node, char *home, int node_cnt)
 {
 	t_util	u;
 	t_node	*cur;
@@ -46,7 +46,7 @@ int	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)
 	return (0);
 }
 
-void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt)
+void	child_solo(t_env **head_env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
 
@@ -72,7 +72,7 @@ void	child_solo(t_env *head_env, t_node *node, char *home, int *cnt)
 	}
 }
 
-static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt)
+static void	child_normal(t_env **head_env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
 	int		fd[2];
@@ -101,7 +101,7 @@ static void	child_normal(t_env *head_env, t_node *node, char *home, int *cnt)
 	}
 }
 
-static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
+static void	child_end(t_env **head_env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
 

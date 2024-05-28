@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 19:48:10 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/28 20:57:33 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ int		g_signal_error;
 
 /* ↓↓↓↓↓ ======== PARSER ======== ↓↓↓↓↓ */
 /* minishell.c */
-void	readline_minishell(t_env *env, char *home);
-int		minishell(char *av, t_env *head_env, char *home);
+void	readline_minishell(t_env **env, char *home);
+int		minishell(char *av, t_env **head_env, char *home);
 int		parsing_minishell(t_node **head, char **str, t_env *env, int p_e);
 
 /* parsing_dollar_find.c */
@@ -204,7 +204,7 @@ int		check_first_arg(t_node *node, long long *num, int *ll_flag, pid_t pid);
 int		is_numeric(char *str);
 
 void	ft_pwd(t_node *node);
-void	ft_unset(t_env *head_env, t_node *node);
+void	ft_unset(t_env **head_env, t_node *node);
 
 /* ===== FT_EXPROT ===== */
 /* ft_export.c */
@@ -239,13 +239,13 @@ void	free_env_list(t_env *head);
 /* ===== EXEC ===== */
 /* builtin.c */
 int		is_builtin(t_node *node);
-int		exec_builtin(t_env *head_env, t_node *node, char *home, pid_t pid);
+int exec_builtin(t_env **head_env, t_node *node, char *home, pid_t pid);
 
 /* exe.c */
-int		ft_execve(t_env *head_env, t_node *node, char *home, pid_t pid);
+int	ft_execve(t_env **head_env, t_node *node, char *home, pid_t pid);
 
 /* process.c */
-int		fork_process(t_env *head_env, t_node *node, char *home, int node_cnt);
+int		fork_process(t_env **head_env, t_node *node, char *home, int node_cnt);
 
 /* process_util.c */
 int		count_node(t_node *node);

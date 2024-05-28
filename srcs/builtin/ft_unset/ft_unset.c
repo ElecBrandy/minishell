@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:38 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 19:40:54 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/28 20:47:27 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@
 */
 
 static void	ft_unset_error(int error, char *path);
-static int	unset_witharg(t_env *head_env, t_node *node);
+static int	unset_witharg(t_env **head_env, t_node *node);
 static void	delete_env(t_env **head_env, char *key);
 
-void	ft_unset(t_env *head_env, t_node *node)
+void	ft_unset(t_env **head_env, t_node *node)
 {
 	int	error;
 
@@ -40,7 +40,7 @@ void	ft_unset(t_env *head_env, t_node *node)
 	}
 }
 
-static int	unset_witharg(t_env *head_env, t_node *node)
+static int	unset_witharg(t_env **head_env, t_node *node)
 {
 	int     i;
 	char    *key;
@@ -52,7 +52,7 @@ static int	unset_witharg(t_env *head_env, t_node *node)
 		if (!is_valid_key(node->cmd[i]))
 			return (1);
 		else
-			delete_env(&head_env, node->cmd[i]);
+			delete_env(head_env, node->cmd[i]);
 		i++;
 	}
 	return (0);
@@ -73,7 +73,6 @@ static void	delete_env(t_env **head_env, char *key)
                 prev->next = cur->next;
             else
                 *head_env = cur->next;
-
             ft_free((void **)&cur->cmd);
             ft_free((void **)&cur->key);
             ft_free((void **)&cur->value);

@@ -24,15 +24,9 @@
 ### headerfile
 - 전역변수 int g_signal_error 추가
 
-### fd
-- fd가 3부터가 아니라 이상하게 열리는 경우가 많음
-
 ## 05.27
-### 빌트인 수정중...(g_signal_error)
-- envp
-	- shell 시작 후 `export | grep PWD` 할 경우 `OLDPWD` 또한 출력되어함.
-	- 현재 main에서 envp로 받아올때, `export aaa` 이런 식으로 추가된 환경변수의 경우 탐지하지 못하는 것 같음. - 안되는게 맞음
-	- 다른 맥에서도 체크해보기(보류)
+### 의문의 세그(완료)
+- 이제 export가 정상적입니다!
 
 ### 환경변수 수정중...
 - 환경변수 추가로 `export PATH=` 이후에 명령어 실행 시 `bash: cat: No such file or directory` -> 환경변수에 없는 경우 다시 로컬에서 찾아야함.
@@ -40,9 +34,7 @@
 - export PATH=  해서 PATH값을 비운 후에, cat, ls 같은거 했을 때 ‘No such file or directory’ 에러가 나와야 함.
 - `unset PATH` 이후 명령어 실행 시 `bash: cat: No such file or directory` 나오게 해야함.
 
-```
 ### 시그널 처리
-- 아직 자식 프로세스에 못 넣었음 ㅠㅠ
 - cat | cat | cat 했을 때 SIGINT 주면 한번에 다 종료되는거
 - exit 88 | echo $? 했을 때 0 나오는지
 - ./.  ./..  권한없음 등 execve 에러면 종료코드 126
