@@ -6,58 +6,101 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/26 20:42:15 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/28 19:44:25 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	exec_cmd(t_env *head_env, t_node *node);
-// static int	check_cmds(char **cmds, char *cmd);
-// static int	ft_find_word(char *str, char *word);
+static int	run_cmd(t_env *head_env, t_node *node);
+static char	*check_path(char **envp, char *cmd);
+static char	*make_path(char **path_list, char *cmd);
+static int is_onlycmd(char *cmd);
 
-int run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid)
+int	ft_execve(t_env *head_env, t_node *node, char *home, pid_t pid)
 {
-	t_env *cur;
+	int	error;
 
-	if (is_builtin(node) != 0) // builtin 일 경우
-	{
+	if (is_builtin(node) != 0)
 		exec_builtin(head_env, node, home, pid);
-		exit(0); // Error? : 정상종료
-	}
-	else // builtin 아니라 일반 함수인 경우
+	else
 	{
-		// cur = is_env(head_env, "PATH");
-		// if (cur->value[0] == '\0')
-		// {
-		// 	ft_putstr_fd("minishell: ", 2);
-		// 	ft_putstr_fd(node->cmd[0], 2);
-		// 	ft_putstr_fd(": No such file or directory\n", 2);
-		// 	exit(1); // Error
-		// }
-		exec_cmd(head_env, node); // 환경변수단에 넣어보고 일단 실행
+		error = run_cmd(head_env, node);
+		if (error == 88)
+			g_signal_error = 12;
+		print_error();
 	}
+	exit(g_signal_error);
+}
+
+static int run_cmd(t_env *head_env, t_node *node)
+{
+	char	*path;
+	char	**envp;
+
+	envp = env_list_to_array(head_env);
+	if (!envp)
+		return (88);
+	path = check_path(envp, node->cmd[0]);
+	if (!path)
+		return (88);
+	if (execve(path, node->cmd, envp) == -1)
+		return (127);
 	return (0);
 }
 
-// cmd 실행
-void exec_cmd(t_env *head_env, t_node *node)
+static char *check_path(char **envp, char *cmd)
 {
-	char 	**tmp;
+	char	*path;
+	char	**path_list;
 
-	if (!head_env)
+	while (*envp && ft_strncmp("PATH=", *envp, 5) != 0)
+		envp++;
+	path_list = ft_split(*envp + 5, ':');
+	if (!path_list)
+		return (NULL);
+	path = make_path(path_list, cmd);
+	if (!path)
+		return (NULL);
+	return (path);
+}
+
+static char *make_path(char **path_list, char *cmd)
+{
+	char	*tmp;
+	char	*path;
+
+	if (is_onlycmd(cmd) == TRUE)
 	{
-		exit(1); // Error
+		while (*path_list)
+		{
+			tmp = ft_strjoin(*path_list, "/");
+			if (!tmp)
+				return (NULL);
+			path = ft_strjoin(tmp, cmd);
+			ft_free((void **)&tmp);
+			if (!path)
+				return (NULL);
+			if (access(path, F_OK) == 0 && access(path, X_OK) == 0)
+				return (path);
+			ft_free((void **)&path);
+			path_list++;
+		}
 	}
-	tmp = env_list_to_array(head_env);
-	if (!tmp)
-	{
-		exit(1); // Error
-	}
-	if (execve(node->path, node->cmd, tmp) == -1)
-	{
-		exit(1); // Error
-	}
+	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+		return (cmd);
+	return (NULL);
+}
+
+static int is_onlycmd(char *cmd)
+{
+	if (cmd == NULL)
+		return (TRUE);
+	if (cmd[0] == '/')
+		return (FALSE);
+	if (ft_strncmp(cmd, "./", 2) == 0 || ft_strncmp(cmd, "../", 3) == 0)
+		return (FALSE);
+	return (TRUE);
 }
 
 // void	is_inchild(char *cmd)

@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:38 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 22:02:47 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/28 19:40:54 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@
 */
 
 static void	ft_unset_error(int error, char *path);
-static int	unset_witharg(t_env *env, t_node *node);
-static void	delete_env(t_env *env, char *key);
+static int	unset_witharg(t_env *head_env, t_node *node);
+static void	delete_env(t_env **head_env, char *key);
 
 void	ft_unset(t_env *head_env, t_node *node)
 {
@@ -36,8 +36,7 @@ void	ft_unset(t_env *head_env, t_node *node)
 	else
 	{
 		error = unset_witharg(head_env, node);
-		if (error != 0)
-			ft_unset_error(error, node->cmd[1]);
+		ft_unset_error(error, node->cmd[1]);
 	}
 }
 
@@ -53,37 +52,39 @@ static int	unset_witharg(t_env *head_env, t_node *node)
 		if (!is_valid_key(node->cmd[i]))
 			return (1);
 		else
-			delete_env(head_env, node->cmd[i]);
+			delete_env(&head_env, node->cmd[i]);
 		i++;
 	}
 	return (0);
 }
 
-static void	delete_env(t_env *head_env, char *key)
+static void	delete_env(t_env **head_env, char *key)
 {
-	t_env	*cur;
-	t_env	*prev;
+    t_env	*cur;
+    t_env	*prev;
 
-	cur = head_env;
-	prev = NULL;
-	while (cur)
-	{
-		if (ft_strcmp(cur->key, key) == 0)
-		{
-			if (prev)
-				prev->next = cur->next;
-			else
-				head_env = cur->next;
-			ft_free((void **)&cur->cmd);
-			ft_free((void **)&cur->key);
-			ft_free((void **)&cur->value);
-			ft_free((void **)&cur);
-			return ;
-		}
-		prev = cur;
-		cur = cur->next;
-	}
+    cur = *head_env;
+    prev = NULL;
+    while (cur)
+    {
+        if (ft_strcmp(cur->key, key) == 0)
+        {
+            if (prev)
+                prev->next = cur->next;
+            else
+                *head_env = cur->next;
+
+            ft_free((void **)&cur->cmd);
+            ft_free((void **)&cur->key);
+            ft_free((void **)&cur->value);
+            ft_free((void **)&cur);
+            return;
+        }
+        prev = cur;
+        cur = cur->next;
+    }
 }
+
 
 static void ft_unset_error(int error, char *path)
 {

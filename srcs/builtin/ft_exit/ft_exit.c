@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:03 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 22:14:53 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/28 19:43:45 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	ft_exit(t_env *head_env, t_node *node, pid_t pid)
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{
 		error = exit_withoutarg(head_env, node, pid);
+		ft_putstr_fd("exit\n", 2);
 		exit(error);
 	}
 	else

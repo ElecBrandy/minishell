@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 22:03:31 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/28 19:50:36 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,17 @@ static int	move_path(t_env *head_env, char *path);
 
 void ft_cd(t_env *head_env, t_node *node, char *home)
 {
-	int error;
+	int		error;
 
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{
 		error = cd_withoutarg(head_env, node);
-		if (error != 0)
-			ft_cd_error(error, node->cmd[1]);
+		ft_cd_error(error, node->cmd[1]);
 	}
 	else
 	{
 		error = cd_witharg(head_env, node, node->cmd[1], home);
-		if (error != 0)
-			ft_cd_error(error, node->cmd[1]);
+		ft_cd_error(error, node->cmd[1]);
 	}
 }
 
@@ -77,9 +75,9 @@ static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home)
 	
 	int		error;
 
-	if (ft_strlen(path) == 1 && path[0] == '~') // cd ~
+	if (ft_strlen(path) == 1 && path[0] == '~')
 		return (move_path(head_env, home));
-	else if (ft_strlen(path) == 1 && path[0] == '-') // cd -
+	else if (ft_strlen(path) == 1 && path[0] == '-')
 		return (move_path(head_env, is_env(head_env, "OLDPWD")->value));
 	error = check_path(node->cmd[1]);
 	if (error != 0)

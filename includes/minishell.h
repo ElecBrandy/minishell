@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 21:26:23 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/28 19:48:10 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 # define STDIN 0
 # define STDOUT 1
+
+# define PATH_MAX 1024
 
 #define MAX_LONGLONG 9223372036854775807LL
 #define MIN_LONGLONG (-9223372036854775807LL - 1)
@@ -240,8 +242,7 @@ int		is_builtin(t_node *node);
 int		exec_builtin(t_env *head_env, t_node *node, char *home, pid_t pid);
 
 /* exe.c */
-int 	run_cmd(t_env *head_env, t_node *node, char *home, pid_t pid);
-//void	is_inchild(char *cmd);
+int		ft_execve(t_env *head_env, t_node *node, char *home, pid_t pid);
 
 /* process.c */
 int		fork_process(t_env *head_env, t_node *node, char *home, int node_cnt);
@@ -277,7 +278,6 @@ void	print_process_log(void);
 
 /* _ft_arrlen_2d */
 int		ft_arrlen_2d(char **array);
-void	*ft_realloc(void *ptr, int original_size, int new_size);
 
 /* print_error.c*/
 void	syntax_error(char *str, t_node *node);
