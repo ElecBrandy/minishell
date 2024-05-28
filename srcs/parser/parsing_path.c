@@ -76,7 +76,7 @@ static int	get_path(char **path, t_node *node, char *cmd)
 	tmp = ft_strtrim(temp, "./");
 	if (is_builtin(node) == 0)
 	{
-		if (!tmp[0])
+		if (!tmp[0] && cmd[0] != 0)
 			return (check_file_or_cmd(cmd, tmp));
 		free(tmp);
 		u.flag = check_path(path, node, cmd, &u.i);
@@ -105,7 +105,7 @@ static char	**find_path_two(char *cmd, t_env *e, t_node *node)
 	free(env_path);
 	if (!path)
 		return (NULL);
-	if (ft_strchr(cmd, '/') && cmd[0] == '/')
+	if (ft_strchr(cmd, '/') && cmd[0] == '/' && is_path(cmd) == 1)
 	{
 		check_file_or_cmd(cmd, NULL);
 		free_str(path);
@@ -124,7 +124,7 @@ int	find_path(char *cmd, t_env *env, t_node *node)
 	t_env	*e;
 
 	if (!cmd)
-		return (1);
+		return (0);
 	e = env;
 	while (e)
 	{
@@ -136,7 +136,10 @@ int	find_path(char *cmd, t_env *env, t_node *node)
 	{
 		if (is_builtin(node))
 			return (0);
-		return (check_file_or_cmd(cmd, NULL));
+		if (is_path(cmd))
+			return (check_file_or_cmd(cmd, NULL));
+		node->path = ft_strdup(cmd);
+		return (0);
 	}
 	path = find_path_two(cmd, e, node);
 	if (!path || g_signal_error)

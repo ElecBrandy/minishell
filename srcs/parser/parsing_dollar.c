@@ -12,10 +12,32 @@
 
 #include "../../includes/minishell.h"
 
+static int	is_redirect(char *av, int i, int *flag)
+{
+	if (av[i] == '<' && (av[i + 1] == '<' || av[i + 1] == '>'))
+	{
+		(*flag) = 2;
+		return (2);
+	}
+	if (av[i] == '>' && av[i + 1] == '>')
+	{
+		(*flag) = 2;
+		return (2);
+	}
+	if (av[i] == '<' || av[i] == '>')
+	{
+		(*flag) = 1;
+		return (1);
+	}
+	return (0);
+}
+
 void	put_dollar(char *av, char *str, t_util *u)
 {
 	u->cnt = 1;
 	str[++(u->idx)] = av[u->i];
+	if (u->flag == 2)
+		str[++(u->idx)] = av[++(u->i)];
 	while (av[++(u->i)])
 	{
 		if (av[u->i] != ' ')
@@ -43,13 +65,13 @@ char	*change_dollar(char *av, t_env *env, int env_len, int p_e)
 
 	util_init(&u);
 	u.cnt = ft_strlen(av);
-	u.flag = p_e;
+	u.prev_errnum = p_e;
 	str = malloc(sizeof(char) * (u.cnt + env_len + 1));
 	if (!str)
 		return (NULL);
 	while (av[++u.i])
 	{
-		if (u.i > 0 && (av[u.i] == '<' && av[u.i - 1] == '<'))
+		if (is_redirect(av, u.i, &(u.flag)))
 			u.cnt = 0;
 		if (u.cnt == 0)
 			put_dollar(av, str, &u);

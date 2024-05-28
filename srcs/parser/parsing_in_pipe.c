@@ -93,7 +93,8 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 	str = split_space(tmp, u.cnt);
 	if (!str)
 		return (12);
-	cmd = find_fd(str, node, env);
+	cmd = find_fd(str, node, env, p_e);
+	free_str(str);
 	if ((!cmd) || g_signal_error)
 		return (file_error());
 	cmd = check_cmd(cmd);

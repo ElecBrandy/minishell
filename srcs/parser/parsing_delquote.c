@@ -29,7 +29,7 @@ char	**check_cmd(char **av)
 	while (av[++u.i])
 	{
 		str[u.i] = del_quote(av[u.i]);
-		if (!str[u.i])
+		if (!str[u.i] && av[0])
 		{
 			free_str(av);
 			free_str(str);

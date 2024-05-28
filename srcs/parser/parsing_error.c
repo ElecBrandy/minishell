@@ -46,3 +46,9 @@ int	file_error(void)
 		return (12);
 	return (g_signal_error);
 }
+
+void	notfile_error(char *file)
+{
+	printf("minishell: %s: %s\n", file, strerror(2));
+	g_signal_error = 999;
+}

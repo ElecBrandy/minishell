@@ -28,7 +28,7 @@ void	jump_next_word(char *av, t_util *u)
 	u->flag = 0;
 	while (av[++u->i])
 	{
-		if (av[u->i] != ' ')
+		if (av[u->i] != ' ' || av[u->i] != '<' || av[u->i] != '>')
 			break ;
 	}
 	if (av[u->i] == '\0')
@@ -66,7 +66,7 @@ int	find_dollar(char *av, t_env *env, int p_e)
 	util_init(&u);
 	while (av[++u.i])
 	{
-		if (u.i > 0 && (av[u.i] == '<' && av[u.i - 1] == '<'))
+		if (av[u.i] == '<' || av[u.i] == '>')
 			u.flag = 1;
 		if (u.flag == 1)
 			jump_next_word(av, &u);

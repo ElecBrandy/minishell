@@ -23,6 +23,8 @@ int	fork_process(t_env *head_env, t_node *node, char *home, int node_cnt)
 	t_node	*cur;
 	t_stdio	stdin_origin;
 
+	if (!node->cmd[0])
+		return (0);
 	util_init(&u);
 	cur = node;
 	save_stdio(&stdin_origin);
@@ -119,22 +121,7 @@ static void	child_end(t_env *head_env, t_node *node, char *home, int *cnt)
 
 static void	is_inchild(char *cmd)
 {
-	int	flag;
-
-	flag = 0;
-	if (strncmp(cmd, "cat", 3) == 0)
-		flag = 1;
-	else if (strncmp(cmd, "/bin/cat", 8) == 0)
-		flag = 1;
-	else if (strncmp(cmd, "wc", 2) == 0)
-		flag = 1;
-	else if (strncmp(cmd, "/usr/bin/wc", 10) == 0)
-		flag = 1;
-	else if (strncmp(cmd, "sed", 3) == 0)
-		flag = 1;
-	else if (strncmp(cmd, "/usr/bin/sed", 12) == 0)
-		flag = 1;
-	if (flag == 1)
+	if (ft_strncmp(cmd, "./", 2))
 	{
 		signal(SIGINT, child_handler);
 		signal(SIGQUIT, child_handler);

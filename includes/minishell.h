@@ -118,6 +118,7 @@ char	*change_dollar(char *av, t_env *env, int env_len, int p_e);
 int		get_numlen(int num);
 void	put_errno(char *str, char *av, int p_e, t_util *u);
 int		file_error(void);
+void	notfile_error(char *file);
 
 /* parsing_find.c */
 int		find_flag(char *av, char flag);
@@ -131,7 +132,7 @@ void	free_str(char **str);
 void	free_str_three(char ***str);
 void	free_node(t_node *head);
 int		count_str(char **str);
-char	**free_all(char **cmd, char **str);
+char	**free_all(char **cmd);
 
 /* parsing_heredoc_dollar.c*/
 void	putin_doublequote(char *av, char *str, t_env *env, t_util *u);
@@ -151,24 +152,28 @@ int		parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e);
 char	*add_space(char *av);
 
 /* paring_infd.c */
-void	is_infd(char **str, int *i, t_node *node, t_env *env);
+void	is_infd(char **str, t_util *u, t_node *node, t_env *env);
+char	*file_check_dollar(char *av, t_env *env, int p_e);
+int		check_file(char *str);
 
 /* parsing_node.c */
 int		save_in_node(t_node *node, char **cmd, t_env *env);
 t_node	*create_node(int p_e);
 void	append_node(t_node **head, t_node *new_node);
 void	util_init(t_util *util);
+int		is_path(char *cmd);
 
 /* parsing_outfd.c */
-void	is_outfd(char **str, int *i, t_node *node);
+void	is_outfd(char **str, t_util *u, t_node *node, t_env *env);
 int		get_cmd(char **cmd, t_util *u, char **str);
-char	**find_fd(char **str, t_node *node, t_env *e);
+char	**find_fd(char **str, t_node *node, t_env *e, int p_e);
 
 /* parsing_util.c */
 int		ft_max(int a, int b);
 int		get_flagcnt(char *av);
 int		check_line(char **str);
 int		check_pipeline(char ***str);
+int		check_file_two(char *str, t_util *u);
 
 /* parsing_path.c*/
 int		find_path(char *cmd, t_env *env, t_node *node);

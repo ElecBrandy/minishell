@@ -18,7 +18,7 @@ void	putin_doublequote(char *av, char *str, t_env *env, t_util *u)
 	while (av[++u->i])
 	{
 		if (av[u->i] == '$' && av[u->i + 1] == '?')
-			put_errno(str, av, u->flag, u);
+			put_errno(str, av, u->prev_errnum, u);
 		else if (av[u->i] == '$' && is_print(av[u->i + 1]))
 			put_env(str, av, env, u);
 		else

@@ -84,3 +84,21 @@ int	check_line(char **str)
 	}
 	return (0);
 }
+
+int	check_file_two(char *str, t_util *u)
+{
+	while (str[u->i] && str[u->i] != 34 && str[u->i] != 39)
+	{
+		if (u->flag == 2 && (str[u->i] != ' ' && str[u->i] != '\t'))
+		{
+			free(str);
+			return (1);
+		}
+		else if (u->flag == 1 && (str[u->i] == ' ' || str[u->i] == '\t'))
+			u->flag = 2;
+		else if (str[u->i] != ' ' && str[u->i] != '\t')
+			u->flag = 1;
+		(u->i)++;
+	}
+	return (0);
+}

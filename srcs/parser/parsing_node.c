@@ -12,6 +12,16 @@
 
 #include "../../includes/minishell.h"
 
+int	is_path(char *cmd)
+{
+	if (!ft_strncmp(cmd, "/usr/local/bin", 14) || !ft_strncmp(cmd, "/usr/bin", 8)
+		|| !ft_strncmp(cmd, "/bin", 4) || !ft_strncmp(cmd, "/usr/sbin", 9)
+		|| !ft_strncmp(cmd, "/sbin", 5) || !ft_strncmp(cmd, "/usr/local/munki", 16)
+		|| !ft_strncmp(cmd, "/Library/Apple/usr/bin", 22))
+		return (0);
+	return (1);
+}
+
 int	save_in_node(t_node *node, char **cmd, t_env *env)
 {
 	int	i;

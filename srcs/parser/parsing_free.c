@@ -70,9 +70,8 @@ int	count_str(char **str)
 	return (i);
 }
 
-char	**free_all(char **cmd, char **str)
+char	**free_all(char **cmd)
 {
 	free(cmd);
-	free_str(str);
 	return (NULL);
 }

@@ -12,33 +12,43 @@
 
 #include "../../includes/minishell.h"
 
-static void	append_file(char **str, int *i, t_node *node);
-static void	new_file(char **str, int *i, t_node *node);
+static void	append_file(char **str, t_util *u, t_node *node, t_env *env);
+void	new_file(char **str, t_util *u, t_node *node, t_env *env);
 
-void	is_outfd(char **str, int *i, t_node *node)
+void	is_outfd(char **str, t_util *u, t_node *node, t_env *env)
 {
-	if (ft_strlen(str[*i]) > 2)
-		syntax_error((str[*i] + 2), node);
+	if (ft_strlen(str[u->i]) > 2)
+		syntax_error((str[u->i] + 2), node);
 	else
 	{
-		if (!str[*i + 1])
+		if (!str[u->i + 1])
 			syntax_error(NULL, node);
-		else if (str[(*i) + 1][0] == '<' || str[(*i) + 1][0] == '>')
-			syntax_error(str[*i + 1], node);
-		else if (ft_strlen(str[*i]) == 1)
-			new_file(str, i, node);
-		else if (str[*i][1] == '>' && ft_strlen(str[*i]) == 2)
-			append_file(str, i, node);
+		else if (str[u->i + 1][0] == '<' || str[u->i + 1][0] == '>')
+			syntax_error(str[u->i + 1], node);
+		else if (ft_strlen(str[u->i]) == 1)
+			new_file(str, u, node, env);
+		else if (str[u->i][1] == '>' && ft_strlen(str[u->i]) == 2)
+			append_file(str, u, node, env);
 	}
 }
 
-static void	new_file(char **str, int *i, t_node *node)
+void	new_file(char **str, t_util *u, t_node *node, t_env *env)
 {
 	char	*file;
+	char	*tmp;
 
 	if (node->out_fd != 1)
 		close(node->out_fd);
-	file = del_quote(str[(*i) + 1]);
+	tmp = file_check_dollar(str[u->i + 1], env, u->prev_errnum);
+	if (check_file(tmp))
+	{
+		printf("minishell: %s: ambiguous redirect\n", str[u->i + 1]);
+		g_signal_error = 999;
+		free(tmp);
+		return ;
+	}
+	file = del_quote(tmp);
+	free(tmp);
 	if (!file)
 	{
 		g_signal_error = 12;
@@ -46,21 +56,28 @@ static void	new_file(char **str, int *i, t_node *node)
 	}
 	node->out_fd = open(file, O_RDWR | O_CREAT | O_TRUNC, 0666);
 	if (node->out_fd == -1)
-	{
-		printf("minishell: %s: %s\n", file, strerror(2));
-		g_signal_error = 999;
-	}
+		notfile_error(file);
 	free(file);
-	*i += 1;
+	(u->i) += 1;
 }
 
-static void	append_file(char **str, int *i, t_node *node)
+static void	append_file(char **str, t_util *u, t_node *node, t_env *env)
 {
 	char	*file;
+	char	*tmp;
 
 	if (node->out_fd != 1)
 		close(node->out_fd);
-	file = del_quote(str[(*i) + 1]);
+	tmp = file_check_dollar(str[u->i + 1], env, u->prev_errnum);
+	if (check_file(tmp))
+	{
+		printf("minishell: %s: ambiguous redirect\n", str[u->i + 1]);
+		g_signal_error = 999;
+		free(tmp);
+		return ;
+	}
+	file = del_quote(tmp);
+	free(tmp);
 	if (!file)
 	{
 		g_signal_error = 12;
@@ -68,11 +85,8 @@ static void	append_file(char **str, int *i, t_node *node)
 	}
 	node->out_fd = open(file, O_RDWR | O_CREAT | O_APPEND, 0666);
 	if (node->out_fd == -1)
-	{
-		printf("minishell: %s: %s\n", file, strerror(2));
-		g_signal_error = 999;
-	}
-	*i += 1;
+		notfile_error(file);
+	(u->i) += 1;
 	free(file);
 }
 
@@ -81,38 +95,34 @@ int	get_cmd(char **cmd, t_util *u, char **str)
 	cmd[(u->flag)++] = ft_strdup(str[u->i]);
 	if (!cmd[u->flag - 1])
 	{
-		free_str(str);
 		free_str(cmd);
 		return (1);
 	}
 	return (0);
 }
 
-char	**find_fd(char **str, t_node *node, t_env *env)
+char	**find_fd(char **str, t_node *node, t_env *env, int p_e)
 {
 	char	**cmd;
 	t_util	u;
 
 	util_init(&u);
+	u.prev_errnum = p_e;
 	u.cnt = count_str(str);
 	cmd = malloc(sizeof(char *) * (u.cnt + 1));
 	if (!cmd)
-	{
-		free_str(str);
 		return (NULL);
-	}
 	while (str[++u.i])
 	{
 		if (ft_strncmp(str[u.i], "<", 1) == 0)
-			is_infd(str, &(u.i), node, env);
+			is_infd(str, &u, node, env);
 		else if (ft_strncmp(str[u.i], ">", 1) == 0)
-			is_outfd(str, &(u.i), node);
+			is_outfd(str, &u, node, env);
 		else if (get_cmd(cmd, &u, str) == 1)
 			return (NULL);
 		if (g_signal_error)
-			return (free_all(cmd, str));
+			return (free_all(cmd));
 	}
 	cmd[u.flag] = NULL;
-	free_str(str);
 	return (cmd);
 }
