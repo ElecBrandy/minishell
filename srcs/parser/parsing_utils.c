@@ -90,7 +90,6 @@ int	check_file_two(char *str, t_util *u)
 	{
 		if (u->flag == 2 && (str[u->i] != ' ' && str[u->i] != '\t'))
 		{
-			free(str);
 			return (1);
 		}
 		else if (u->flag == 1 && (str[u->i] == ' ' || str[u->i] == '\t'))
@@ -99,5 +98,6 @@ int	check_file_two(char *str, t_util *u)
 			u->flag = 1;
 		(u->i)++;
 	}
+	(u->i)--;
 	return (0);
 }

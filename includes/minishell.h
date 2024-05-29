@@ -188,7 +188,6 @@ int			split_flag_save(char *av, char **str, t_util *u, char flag);
 /* >>>>> ======== EXEC ======== <<<<< */
 
 /* Builtn */
-void		ft_cat(t_node *node);
 void		ft_cd(t_env *hea_env, t_node *node, char *home);
 int			update_pwd(t_env *head_env, char *cur_path);
 int			update_oldpwd(t_env *head_env, char *cur_path);
@@ -199,7 +198,6 @@ void		ft_env(t_env *head_env, t_node *node);
 void		ft_exit(t_env *head_env, t_node *node, pid_t pid);
 int			check_first_arg(t_node *node, long long *num, int *ll_flag);
 int			is_numeric(char *str);
-
 void		ft_pwd(t_node *node);
 void		ft_unset(t_env **head_env, t_node *node);
 
@@ -255,7 +253,6 @@ void		save_stdio(t_stdio *backup);
 void		restore_stdio(t_stdio *backup);
 
 /* ===== UTILS ===== */
-
 /* ft_free.c */
 void		ft_free(void **target);
 void		ft_free_2d(char **str);
@@ -266,14 +263,6 @@ int			ft_strcmp(const char *s1, const char *s2);
 /* ft_strtoll */
 long long	ft_strtoll(const char *str, int *signal);
 int			check_longlong(long long result, int digit, int sign, int *signal);
-/* tmp.c */
-void		print_node_details(t_node *node);
-void		print_linked_list(t_node *head);
-void		print_env_list(t_env *head_env);
-void		print_arry_2d(char **arr);
-int			print_error(void);
-void		head_env_chk(t_env *head_env, int i);
-void		print_process_log(void);
 
 /* _ft_arrlen_2d */
 int			ft_arrlen_2d(char **array);
