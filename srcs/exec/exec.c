@@ -6,25 +6,25 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 16:36:43 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	run_cmd(t_env *head_env, t_node *node);
+static int	run_cmd(t_env *env, t_node *node);
 static int	check_cmds(char **cmds, char *cmd);
 static int	ft_find_word(char *str, char *word);
 
-int	ft_execve(t_env **head_env, t_node *node, char *home, pid_t pid)
+int	ft_execve(t_env **env, t_node *node, char *home, pid_t pid)
 {
 	int	error;
 
 	if (is_builtin(node) != 0)
-		exec_builtin(head_env, node, home, pid);
+		exec_builtin(env, node, home, pid);
 	else
 	{
-		error = run_cmd(*head_env, node);
+		error = run_cmd(*env, node);
 		if (error == 12)
 			g_signal_error = 12;
 		print_error();
@@ -32,11 +32,11 @@ int	ft_execve(t_env **head_env, t_node *node, char *home, pid_t pid)
 	exit(g_signal_error);
 }
 
-static int	run_cmd(t_env *head_env, t_node *node)
+static int	run_cmd(t_env *env, t_node *node)
 {
 	char	**envp;
 
-	envp = env_list_to_array(head_env);
+	envp = env_list_to_array(env);
 	if (!envp)
 		return (12);
 	if (execve(node->path, node->cmd, envp) == -1)

@@ -58,13 +58,12 @@ SRCS_E = \
 	srcs/exec/process_utils1.c   \
 	srcs/exec/process_utils2.c   \
 	\
-	srcs/utils/ft_arrlen_2d.c	\
-	srcs/utils/ft_free.c		\
-	srcs/utils/tmp.c			\
-	srcs/utils/ft_strcmp.c		\
-	srcs/utils/ft_strtoll.c		\
-	srcs/utils/print_error.c	\
-	srcs/utils/custom_handler.c	
+	srcs/util/ft_arrlen_2d.c	\
+	srcs/util/ft_free.c		\
+	srcs/util/ft_strcmp.c		\
+	srcs/util/ft_strtoll.c		\
+	srcs/util/print_error.c	\
+	srcs/util/custom_handler.c	
 
 SRCS_M = \
 	srcs/minishell.c

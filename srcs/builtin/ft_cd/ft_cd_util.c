@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 21:55:25 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 17:54:32 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 static void	cd_error_print(char *path, char *log);
 
-int	update_pwd(t_env **head_env, char *cur_path)
+int	update_pwd(t_env **env, char *cur_path)
 {
 	t_env	*cur;
 	char	*new_cmd;
 
-	cur = is_env(*head_env, "PWD");
+	cur = is_env(*env, "PWD");
 	if (!cur)
 	{
 		new_cmd = ft_strjoin("PWD=", cur_path);
 		if (!new_cmd)
 			return (FALSE);
-		add_env(head_env, new_cmd, "PWD", cur_path);
+		add_env(env, new_cmd, "PWD", cur_path);
 	}
 	else
 	{
@@ -38,18 +38,18 @@ int	update_pwd(t_env **head_env, char *cur_path)
 	return (TRUE);
 }
 
-int	update_oldpwd(t_env **head_env, char *cur_path)
+int	update_oldpwd(t_env **env, char *cur_path)
 {
 	t_env	*cur;
 	char	*new_cmd;
 
-	cur = is_env(*head_env, "OLDPWD");
+	cur = is_env(*env, "OLDPWD");
 	if (!cur)
 	{
 		new_cmd = ft_strjoin("OLDPWD=", cur_path);
 		if (!new_cmd)
 			return (FALSE);
-		add_env(head_env, new_cmd, "OLDPWD", cur_path);
+		add_env(env, new_cmd, "OLDPWD", cur_path);
 	}
 	else
 	{
@@ -62,11 +62,11 @@ int	update_oldpwd(t_env **head_env, char *cur_path)
 	return (TRUE);
 }
 
-t_env	*is_env(t_env *head_env, char *key)
+t_env	*is_env(t_env *env, char *key)
 {
 	t_env	*cur;
 
-	cur = head_env;
+	cur = env;
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, key) == 0)

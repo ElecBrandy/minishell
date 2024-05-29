@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:03 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 17:45:18 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,17 @@
 	- ex : perror (shell exited)
 */
 
-static int	exit_withoutarg(t_env *head_env);
+static int	exit_withoutarg(t_env *env);
 static int	exit_witharg(t_node *node, pid_t pid);
 static void	ft_exit_error(int error, char *str);
 
-void	ft_exit(t_env *head_env, t_node *node, pid_t pid)
+void	ft_exit(t_env *env, t_node *node, pid_t pid)
 {
 	int		error;
 
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{
-		error = exit_withoutarg(head_env);
+		error = exit_withoutarg(env);
 		if (pid < 0)
 			ft_putstr_fd("exit\n", 2);
 		exit(error);
@@ -51,9 +51,9 @@ void	ft_exit(t_env *head_env, t_node *node, pid_t pid)
 	}
 }
 
-static int	exit_withoutarg(t_env *head_env)
+static int	exit_withoutarg(t_env *env)
 {
-	free_env_list(head_env);
+	free_env_list(env);
 	return (0);
 }
 

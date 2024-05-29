@@ -6,47 +6,81 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:19:07 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 13:52:34 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:35:27 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static int	count_env(t_env *head_env);
+static int	count_env(t_env *env);
+static int	env_array_to_list(t_env **env, char **envp);
 
-t_env	*env_array_to_list(t_env *head_env, char **envp, char **home)
+void	set_home(char **envp, char **home)
 {
 	int		i;
-	char	*key;
-	char	*value;
-	char	*temp;
 
 	i = 0;
-	head_env = NULL;
+	if (!envp)
+		return ;
 	while (envp[i])
 	{
 		if (ft_strncmp(envp[i], "HOME=", 5) == 0)
 		{
-			*home = ft_strdup(envp[i] + 5); // HOME 환경변수 값 저장
+			*home = ft_strdup(envp[i] + 5);
+			if (!*home)
+			{
+				g_signal_error = 12;
+				print_error();
+				exit(g_signal_error);
+			}
 		}
-		temp = ft_strdup(envp[i]); // 원본 문자열 복사 // 나중에 제대로 작동한다면, 이 복사본 temp가 과연 필요한지 확인해보기
-		parse_env_str(envp[i], &key, &value); //key와 value 추출
-		add_env_to_list(&head_env, temp, key, value); // 파싱 성공 시 노드 추가
-		ft_free((void **)&temp); // 사용한 임시 문자열 메모리 해제
 		i++;
 	}
-	return (head_env);
 }
 
-char	**env_list_to_array(t_env *head_env)
+void	set_env_list(t_env **env, char **envp)
+{
+	if (env_array_to_list(env, envp) == FALSE)
+	{
+		free_env_list(*env);
+		g_signal_error = 12;
+		print_error();
+		exit(g_signal_error);
+	}
+}
+
+static int	env_array_to_list(t_env **env, char **envp)
+{
+	int			i;
+	t_envutil	util;
+
+	i = 0;
+	while (envp[i])
+	{
+		util.tmp = ft_strdup(envp[i]);
+		if (!util.tmp)
+			return (FALSE);
+		parse_env_str(envp[i], &util.key, &util.value);
+		if (add_env_to_list(env, util.tmp, util.key, util.value) == FALSE)
+		{
+			ft_free((void **)&util.tmp);
+			return (FALSE);
+		}
+		ft_free((void **)&util.tmp);
+		i++;
+	}
+	return (TRUE);
+}
+
+char	**env_list_to_array(t_env *env)
 {
 	int		i;
 	t_env	*cur;
 	char	**arr;
 
 	i = 0;
-	cur = head_env;
-	arr = (char **)malloc(sizeof(char *) * (count_env(head_env) + 1));
+	cur = env;
+	arr = (char **)malloc(sizeof(char *) * (count_env(env) + 1));
 	if (!arr)
 		return (NULL);
 	while (cur)
@@ -61,13 +95,13 @@ char	**env_list_to_array(t_env *head_env)
 	return (arr);
 }
 
-static int	count_env(t_env *head_env)
+static int	count_env(t_env *env)
 {
 	int		cnt;
 	t_env	*cur;
 
 	cnt = 0;
-	cur = head_env;
+	cur = env;
 	while (cur != NULL)
 	{
 		cnt++;
