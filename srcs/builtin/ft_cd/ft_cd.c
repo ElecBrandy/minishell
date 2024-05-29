@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 16:12:27 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:33:37 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,18 @@ static int	cd_withoutarg(t_env *head_env, t_node *node)
 
 static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home)
 {
-	
 	int		error;
+	t_env	*cur;
 
 	if (ft_strlen(path) == 1 && path[0] == '~')
 		return (move_path(head_env, home));
 	else if (ft_strlen(path) == 1 && path[0] == '-')
-		return (move_path(head_env, is_env(head_env, "OLDPWD")->value));
+	{
+		cur = is_env(head_env, "OLDPWD");
+		if (!cur)
+			return (5);
+		return (move_path(head_env, cur->value));
+	}
 	error = check_path(node->cmd[1]);
 	if (error != 0)
 		return (error);
