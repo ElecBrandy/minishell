@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:01:50 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:56:06 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,9 +189,9 @@ int			split_flag_save(char *av, char **str, t_util *u, char flag);
 
 /* Builtn */
 void		ft_cat(t_node *node);
-void		ft_cd(t_env *hea_env, t_node *node, char *home);
-int			update_pwd(t_env *head_env, char *cur_path);
-int			update_oldpwd(t_env *head_env, char *cur_path);
+void		ft_cd(t_env **head_env, t_node *node, char *home);
+int			update_pwd(t_env **head_env, char *cur_path);
+int			update_oldpwd(t_env **head_env, char *cur_path);
 t_env		*is_env(t_env *head_env, char *key);
 void		ft_cd_error(int check, char *path);
 void		ft_echo(t_node *node);
@@ -205,12 +205,12 @@ void		ft_unset(t_env **head_env, t_node *node);
 
 /* ===== FT_EXPROT ===== */
 /* ft_export.c */
-void		ft_export(t_env *head_env, t_node *node);
+void		ft_export(t_env **head_env, t_node *node);
 
 /* ft_export_witharg.c */
-int			export_witharg(t_env *head_env, t_node *node);
+int			export_witharg(t_env **head_env, t_node *node);
 int			renew_env(t_env *cur, char *cmd, char *value);
-int			add_env(t_env *head_env, char *cmd, char *key, char *value);
+int			add_env(t_env **head_env, char *cmd, char *key, char *value);
 int			ft_export_error(int error, char *path);
 
 /* ft_export_outarg.c */

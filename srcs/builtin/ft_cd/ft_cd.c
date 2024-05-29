@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 16:38:14 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:56:07 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,12 @@
 	ex : perror
 */
 
-static int	cd_withoutarg(t_env *head_env);
-static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home);
+static int	cd_withoutarg(t_env **head_env);
+static int	cd_witharg(t_env **head_env, t_node *node, char *path, char *home);
 static int	check_path(char *path);
-static int	move_path(t_env *head_env, char *path);
+static int	move_path(t_env **head_env, char *path);
 
-void	ft_cd(t_env *head_env, t_node *node, char *home)
+void	ft_cd(t_env **head_env, t_node *node, char *home)
 {
 	int	error;
 
@@ -47,11 +47,11 @@ void	ft_cd(t_env *head_env, t_node *node, char *home)
 	}
 }
 
-static int	cd_withoutarg(t_env *head_env)
+static int	cd_withoutarg(t_env **head_env)
 {
 	t_env	*env;
 
-	env = is_env(head_env, "HOME");
+	env = is_env(*head_env, "HOME");
 	if (!env)
 		return (1);
 	else
@@ -70,7 +70,7 @@ static int	cd_withoutarg(t_env *head_env)
 	return (0);
 }
 
-static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home)
+static int	cd_witharg(t_env **head_env, t_node *node, char *path, char *home)
 {
 	int		error;
 	t_env	*cur;
@@ -79,7 +79,7 @@ static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home)
 		return (move_path(head_env, home));
 	else if (ft_strlen(path) == 1 && path[0] == '-')
 	{
-		cur = is_env(head_env, "OLDPWD");
+		cur = is_env(*head_env, "OLDPWD");
 		if (!cur)
 			return (5);
 		return (move_path(head_env, cur->value));
@@ -105,7 +105,7 @@ static int	check_path(char *path)
 	return (0);
 }
 
-static int	move_path(t_env *head_env, char *path)
+static int	move_path(t_env **head_env, char *path)
 {
 	char	*cur_path;
 	char	*pre_path;
