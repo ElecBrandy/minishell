@@ -12,20 +12,6 @@
 
 #include "../../../includes/minishell.h"
 
-/*
-	ft_cd
-	- Change directory
-
-	error_log
-	0 : Success
-	1 : minishell: cd: HOME not set
-	2 : minishell: cd: path: No such file or directory
-	3 : minishell: cd: path: Permission denied
-	4 : minishell: cd: path: Not a directory
-	12 : malloc error;
-	ex : perror
-*/
-
 static int	cd_withoutarg(t_env **head_env);
 static int	cd_witharg(t_env **head_env, t_node *node, char *path, char *home);
 static int	check_path(char *path);

@@ -269,6 +269,7 @@ int			ft_arrlen_2d(char **array);
 
 /* print_error.c*/
 void		syntax_error(char *str, t_node *node);
+int			print_error(void);
 
 /* custom_handler.c */
 void		sig_handler(int signal);

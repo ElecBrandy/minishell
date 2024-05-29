@@ -60,7 +60,6 @@ SRCS_E = \
 	\
 	srcs/utils/ft_arrlen_2d.c	\
 	srcs/utils/ft_free.c		\
-	srcs/utils/tmp.c			\
 	srcs/utils/ft_strcmp.c		\
 	srcs/utils/ft_strtoll.c		\
 	srcs/utils/print_error.c	\
