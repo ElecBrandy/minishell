@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:03 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 16:37:34 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:45:18 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ void	ft_exit(t_env *head_env, t_node *node, pid_t pid)
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{
 		error = exit_withoutarg(head_env);
-		ft_putstr_fd("exit\n", 2);
+		if (pid < 0)
+			ft_putstr_fd("exit\n", 2);
 		exit(error);
 	}
 	else
@@ -63,7 +64,7 @@ static int	exit_witharg(t_node *node, pid_t pid)
 	int			ll_flag;
 
 	if (pid < 0)
-		ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("exit\n", 1);
 	ll_flag = TRUE;
 	error = check_first_arg(node, &num, &ll_flag);
 	if (error != 0)
@@ -92,6 +93,7 @@ static void	ft_exit_error(int error, char *str)
 	{
 		g_signal_error = 12;
 		print_error();
+		exit(g_signal_error);
 	}
 	else
 	{

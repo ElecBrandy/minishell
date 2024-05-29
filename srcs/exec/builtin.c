@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:56:28 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:04:25 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 18:48:59 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,13 +71,13 @@ int	exec_builtin(t_env **head_env, t_node *node, char *home, pid_t pid)
 	if (builtin == 7)
 		ft_echo(node);
 	if (builtin == 6)
-		ft_cd(*head_env, node, home);  // head_env가 수정될 필요가 없다면, *head_env 사용
+		ft_cd(head_env, node, home);
 	if (builtin == 5)
 		ft_pwd(node);
 	if (builtin == 4)
-		ft_export(*head_env, node);   // 마찬가지로 *head_env 사용
+		ft_export(head_env, node);
 	if (builtin == 3)
-		ft_unset(head_env, node);    // *head_env로 수정 필요
+		ft_unset(head_env, node);
 	if (builtin == 2)
 		ft_env(*head_env, node);
 	if (builtin == 1)

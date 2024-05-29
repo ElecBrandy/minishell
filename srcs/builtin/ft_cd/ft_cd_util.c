@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 21:55:25 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 16:37:42 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 17:54:32 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 static void	cd_error_print(char *path, char *log);
 
-int	update_pwd(t_env *head_env, char *cur_path)
+int	update_pwd(t_env **head_env, char *cur_path)
 {
 	t_env	*cur;
 	char	*new_cmd;
 
-	cur = is_env(head_env, "PWD");
+	cur = is_env(*head_env, "PWD");
 	if (!cur)
 	{
 		new_cmd = ft_strjoin("PWD=", cur_path);
@@ -38,12 +38,12 @@ int	update_pwd(t_env *head_env, char *cur_path)
 	return (TRUE);
 }
 
-int	update_oldpwd(t_env *head_env, char *cur_path)
+int	update_oldpwd(t_env **head_env, char *cur_path)
 {
 	t_env	*cur;
 	char	*new_cmd;
 
-	cur = is_env(head_env, "OLDPWD");
+	cur = is_env(*head_env, "OLDPWD");
 	if (!cur)
 	{
 		new_cmd = ft_strjoin("OLDPWD=", cur_path);
