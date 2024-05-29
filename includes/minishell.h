@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 18:49:23 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:41:01 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,7 @@
 # define STDIN 0
 # define STDOUT 1
 
-# define PATH_MAX 1024
-
-# define MAX_LONGLONG 9223372036854775807LL
-# define MIN_LONGLONG (-9223372036854775807LL - 1)
+# define MAX_LL 9223372036854775807LL
 
 # include <unistd.h>
 # include <sys/types.h>
@@ -82,10 +79,12 @@ typedef struct s_stdio
 }	t_stdio;
 
 int		g_signal_error;
-/* ↓↓↓↓↓ ======== PARSER ======== ↓↓↓↓↓ */
+
+/* PARSER */
+
 /* minishell.c */
 void		readline_minishell(t_env **env, char *home);
-int			minishell(char *av, t_env **head_env, char *home);
+int			minishell(char *av, t_env **env, char *home);
 int			parsing_minishell(t_node **head, char **str, t_env *env, int p_e);
 
 /* parsing_dollar_find.c */
@@ -185,93 +184,96 @@ char		*save_in(char *av, t_util *util);
 int			split_by_pipe(char **str_smc, char ***str_pipe);
 int			split_flag_save(char *av, char **str, t_util *u, char flag);
 
-/* >>>>> ======== EXEC ======== <<<<< */
+/* EXEC */
 
-/* Builtn */
-void		ft_cd(t_env **head_env, t_node *node, char *home);
-int			update_pwd(t_env **head_env, char *cur_path);
-int			update_oldpwd(t_env **head_env, char *cur_path);
-t_env		*is_env(t_env *head_env, char *key);
+/* builtin/ft_cd */
+void		ft_cd(t_env **env, t_node *node, char *home);
 void		ft_cd_error(int check, char *path);
+int			update_pwd(t_env **env, char *cur_path);
+int			update_oldpwd(t_env **env, char *cur_path);
+t_env		*is_env(t_env *env, char *key);
+
+/* builtin/ft_echo */
 void		ft_echo(t_node *node);
-void		ft_env(t_env *head_env, t_node *node);
-void		ft_exit(t_env *head_env, t_node *node, pid_t pid);
-int			check_first_arg(t_node *node, long long *num, int *ll_flag);
+
+/* builtin/ft_env */
+void		ft_env(t_env *env, t_node *node);
+
+/* builtin/ft_exit */
+void		ft_exit(t_env *env, t_node *node, pid_t pid);
 int			is_numeric(char *str);
-void		ft_pwd(t_node *node);
-void		ft_unset(t_env **head_env, t_node *node);
+int			check_first_arg(t_node *node, long long *num, int *ll_flag);
 
-/* ===== FT_EXPROT ===== */
-/* ft_export.c */
-void		ft_export(t_env **head_env, t_node *node);
-
-/* ft_export_witharg.c */
-int			export_witharg(t_env **head_env, t_node *node);
+/* builtin/ft_export */
+void		ft_export(t_env **env, t_node *node);
+int			export_witharg(t_env **env, t_node *node);
 int			renew_env(t_env *cur, char *cmd, char *value);
-int			add_env(t_env **head_env, char *cmd, char *key, char *value);
+int			add_env(t_env **env, char *cmd, char *key, char *value);
 int			ft_export_error(int error, char *path);
-
-/* ft_export_outarg.c */
-int			export_withoutarg(t_env *head_env);
-
-/* ft_export_util.c */
+int			export_withoutarg(t_env *env);
 int			is_valid_key(char *key);
 int			is_valid_value(char *value);
-int			is_inenv(t_env *env, char *key);
 
-/* ===== ENV ===== */
-/* env_init.c */
-t_env		*env_array_to_list(t_env *head, char **envp, char **home);
-char		**env_list_to_array(t_env *head_env);
+/* builtin/ft_pwd */
+void		ft_pwd(t_node *node);
 
-/* env_util.c */
-t_env		*create_node_env(const char *cmd, const char *key, const char *value);
+/* builtin/ft_unset */
+void		ft_unset(t_env **env, t_node *node);
+
+/* env/env_init.c */
+void		set_home(char **envp, char **home);
+void		set_env_list(t_env **env, char **envp);
+char		**env_list_to_array(t_env *env);
+
+/* env/env_util.c */
+t_env		*create_node_env(char *cmd, char *key, char *value);
 void		append_node_env(t_env **head, t_env *new_node);
-void		add_env_to_list(t_env **head, char *ori_str, char *key, char *value);
+int			add_env_to_list(t_env **head, char *ori, char *key, char *value);
 void		parse_env_str(char *env_str, char **key, char **value);
 void		free_env_list(t_env *head);
 
-/* ===== EXEC ===== */
-/* builtin.c */
+/* exec/builtin.c */
 int			is_builtin(t_node *node);
-int			exec_builtin(t_env **head_env, t_node *node, char *home, pid_t pid);
+int			exec_builtin(t_env **env, t_node *node, char *home, pid_t pid);
 
-/* exe.c */
-int			ft_execve(t_env **head_env, t_node *node, char *home, pid_t pid);
+/* exec/exe.c */
+int			ft_execve(t_env **env, t_node *node, char *home, pid_t pid);
 void		is_inchild(char *cmd);
 
-/* process.c */
-int			fork_process(t_env **head_env, t_node *node, char *home, int node_cnt);
+/* exec/process.c */
+int			fork_process(t_env **env, t_node *node, char *home, int node_cnt);
 int			processing(t_env **env, t_node *head, char *home);
 
-/* process_util.c */
+/* exec/process_util1.c */
 int			count_node(t_node *node);
 void		redirect_io(int in_fd, int out_fd);
 void		wait_process(int cnt);
 void		close_pipe(int *fd);
+
+/* exec/process_util2.c */
 void		save_stdio(t_stdio *backup);
 void		restore_stdio(t_stdio *backup);
 
-/* ===== UTILS ===== */
-/* ft_free.c */
+/* util/custom_handler.c */
+void		sig_handler(int signal);
+void		child_handler(int signal);
+void		heredoc_handler(int signal);
+
+/* util/ft_arrlen_2d.c */
+int			ft_arrlen_2d(char **array);
+
+/* util/ft_free.c */
 void		ft_free(void **target);
 void		ft_free_2d(char **str);
 
 /* ft_strcmp.c */
 int			ft_strcmp(const char *s1, const char *s2);
 
-/* ft_strtoll */
+/* ft_strtoll.c */
 long long	ft_strtoll(const char *str, int *signal);
-int			check_longlong(long long result, int digit, int sign, int *signal);
 
-/* _ft_arrlen_2d */
-int			ft_arrlen_2d(char **array);
-
-/* print_error.c*/
+/* print_error.c */
+int			print_error(void);
 void		syntax_error(char *str, t_node *node);
 
-/* custom_handler.c */
-void		sig_handler(int signal);
-void		child_handler(int signal);
-void		heredoc_handler(int signal);
 #endif

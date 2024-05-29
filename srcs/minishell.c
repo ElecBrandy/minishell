@@ -107,8 +107,8 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1 || !argv || !envp)
 		exit (1);
-	env = NULL;
-	env = env_array_to_list(env, envp, &home); // 연결리스트로 만들기
+	set_home(envp, &home);
+	set_env_list(&env, envp);
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);

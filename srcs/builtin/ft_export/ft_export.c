@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:15 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 17:53:47 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,19 @@
 	- ex : perror (shell exited)
 */
 
-void	ft_export(t_env **head_env, t_node *node)
+void	ft_export(t_env **env, t_node *node)
 {
 	int	error;
 
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{
-		error = export_withoutarg(*head_env);
+		error = export_withoutarg(*env);
 		if (error != 0)
 			ft_export_error(error, NULL);
 	}
 	else
 	{
-		error = export_witharg(head_env, node);
+		error = export_witharg(env, node);
 		if (error != 0)
 			ft_export_error(error, NULL);
 	}
