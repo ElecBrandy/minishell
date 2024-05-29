@@ -39,10 +39,7 @@ static int	run_cmd(t_env *head_env, t_node *node)
 	envp = env_list_to_array(head_env);
 	if (!envp)
 		return (12);
-	path = check_path(envp, node->cmd[0]);
-	if (!path)
-		return (12);
-	if (execve(path, node->cmd, envp) == -1)
+	if (execve(node->path, node->cmd, envp) == -1)
 		return (127);
 	return (0);
 }
