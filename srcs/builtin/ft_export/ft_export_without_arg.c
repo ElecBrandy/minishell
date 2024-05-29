@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../../includes/minishell.h"
 
 static int	print_arg(char *str, char *sep_pos);
 static int	forech_arg(char **str);
