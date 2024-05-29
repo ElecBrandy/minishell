@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:56:28 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 20:53:49 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:04:25 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,12 @@ exit with no options : 1
 no builtin : 0
 */
 
-static void make_lower(char *str);
+static void	make_lower(char *str);
 
 int	is_builtin(t_node *node)
 {
 	if (ft_strlen(node->cmd[0]) <= 0)
-		return (0); //  Error -> exit code 0
+		return (0);//  Error -> exit code 0
 	if (ft_strlen(node->cmd[0]) == ft_strlen("exit") \
 	&& ft_strncmp(node->cmd[0], "exit", ft_strlen(node->cmd[0])) == 0) // 무조건 소문자만 인식
 		return (1);
@@ -61,34 +61,33 @@ int	is_builtin(t_node *node)
 	return (0);
 }
 
-int exec_builtin(t_env **head_env, t_node *node, char *home, pid_t pid)
+int	exec_builtin(t_env **head_env, t_node *node, char *home, pid_t pid)
 {
-    int builtin;
+	int	builtin;
 
-    builtin = is_builtin(node);
-    if (builtin == 0)
-        return (0);
-    if (builtin == 7)
-        ft_echo(node);
-    if (builtin == 6)
-        ft_cd(*head_env, node, home);  // head_env가 수정될 필요가 없다면, *head_env 사용
-    if (builtin == 5)
-        ft_pwd(node);
-    if (builtin == 4)
-        ft_export(*head_env, node);   // 마찬가지로 *head_env 사용
-    if (builtin == 3)
-        ft_unset(head_env, node);    // *head_env로 수정 필요
-    if (builtin == 2)
-        ft_env(*head_env, node);
-    if (builtin == 1)
-        ft_exit(*head_env, node, pid);
-    return (1);
+	builtin = is_builtin(node);
+	if (builtin == 0)
+		return (0);
+	if (builtin == 7)
+		ft_echo(node);
+	if (builtin == 6)
+		ft_cd(*head_env, node, home);  // head_env가 수정될 필요가 없다면, *head_env 사용
+	if (builtin == 5)
+		ft_pwd(node);
+	if (builtin == 4)
+		ft_export(*head_env, node);   // 마찬가지로 *head_env 사용
+	if (builtin == 3)
+		ft_unset(head_env, node);    // *head_env로 수정 필요
+	if (builtin == 2)
+		ft_env(*head_env, node);
+	if (builtin == 1)
+		ft_exit(*head_env, node, pid);
+	return (1);
 }
 
-
-static void make_lower(char *str)
+static void	make_lower(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])

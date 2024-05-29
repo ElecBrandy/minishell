@@ -6,11 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:15 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 21:58:44 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:08:34 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 /*
 	ft_export
@@ -25,9 +25,9 @@
 	- ex : perror (shell exited)
 */
 
-void ft_export(t_env *head_env, t_node *node)
+void	ft_export(t_env *head_env, t_node *node)
 {
-	int error;
+	int	error;
 
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{

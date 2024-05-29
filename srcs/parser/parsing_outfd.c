@@ -6,14 +6,14 @@
 /*   By: dongeunk <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:45:07 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/27 18:51:52 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:37:33 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 static void	append_file(char **str, t_util *u, t_node *node, t_env *env);
-void	new_file(char **str, t_util *u, t_node *node, t_env *env);
+static void	new_file(char **str, t_util *u, t_node *node, t_env *env);
 
 void	is_outfd(char **str, t_util *u, t_node *node, t_env *env)
 {
@@ -32,7 +32,7 @@ void	is_outfd(char **str, t_util *u, t_node *node, t_env *env)
 	}
 }
 
-void	new_file(char **str, t_util *u, t_node *node, t_env *env)
+static void	new_file(char **str, t_util *u, t_node *node, t_env *env)
 {
 	char	*file;
 	char	*tmp;

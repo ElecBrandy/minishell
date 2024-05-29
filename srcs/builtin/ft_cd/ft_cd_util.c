@@ -6,15 +6,15 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 21:55:25 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 18:07:04 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:17:39 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
-static void cd_error_print(char *path, char *log);
+static void	cd_error_print(char *path, char *log);
 
-int update_pwd(t_env *head_env, char *cur_path)
+int	update_pwd(t_env *head_env, char *cur_path)
 {
 	t_env	*cur;
 	char	*new_cmd;
@@ -35,10 +35,10 @@ int update_pwd(t_env *head_env, char *cur_path)
 		renew_env(cur, new_cmd, cur_path);
 	}
 	ft_free((void **)&new_cmd);
-	return (TRUE);	
+	return (TRUE);
 }
 
-int update_oldpwd(t_env *head_env, char *cur_path)
+int	update_oldpwd(t_env *head_env, char *cur_path)
 {
 	t_env	*cur;
 	char	*new_cmd;
@@ -59,12 +59,12 @@ int update_oldpwd(t_env *head_env, char *cur_path)
 		renew_env(cur, new_cmd, cur_path);
 	}
 	ft_free((void **)&new_cmd);
-	return (TRUE);	
+	return (TRUE);
 }
 
-t_env *is_env(t_env *head_env, char *key)
+t_env	*is_env(t_env *head_env, char *key)
 {
-	t_env *cur;
+	t_env	*cur;
 
 	cur = head_env;
 	while (cur)
@@ -101,7 +101,7 @@ void	ft_cd_error(int error, char *path)
 	}
 }
 
-static void cd_error_print(char *path, char *log)
+static void	cd_error_print(char *path, char *log)
 {
 	ft_putstr_fd("minishell: cd: ", 2);
 	ft_putstr_fd(path, 2);

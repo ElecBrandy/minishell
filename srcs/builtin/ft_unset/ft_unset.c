@@ -6,11 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:38 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 20:47:27 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:07:23 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 /*
 	ft_unset
@@ -42,7 +42,7 @@ void	ft_unset(t_env **head_env, t_node *node)
 
 static int	unset_witharg(t_env **head_env, t_node *node)
 {
-	int     i;
+	int	i;
 
 	i = 1;
 	while (node->cmd[i])
@@ -58,32 +58,31 @@ static int	unset_witharg(t_env **head_env, t_node *node)
 
 static void	delete_env(t_env **head_env, char *key)
 {
-    t_env	*cur;
-    t_env	*prev;
+	t_env	*cur;
+	t_env	*prev;
 
-    cur = *head_env;
-    prev = NULL;
-    while (cur)
-    {
-        if (ft_strcmp(cur->key, key) == 0)
-        {
-            if (prev)
-                prev->next = cur->next;
-            else
-                *head_env = cur->next;
-            ft_free((void **)&cur->cmd);
-            ft_free((void **)&cur->key);
-            ft_free((void **)&cur->value);
-            ft_free((void **)&cur);
-            return;
-        }
-        prev = cur;
-        cur = cur->next;
-    }
+	cur = *head_env;
+	prev = NULL;
+	while (cur)
+	{
+		if (ft_strcmp(cur->key, key) == 0)
+		{
+			if (prev)
+				prev->next = cur->next;
+			else
+				*head_env = cur->next;
+			ft_free((void **)&cur->cmd);
+			ft_free((void **)&cur->key);
+			ft_free((void **)&cur->value);
+			ft_free((void **)&cur);
+			return ;
+		}
+		prev = cur;
+		cur = cur->next;
+	}
 }
 
-
-static void ft_unset_error(int error, char *path)
+static void	ft_unset_error(int error, char *path)
 {
 	if (error == 0)
 		return ;

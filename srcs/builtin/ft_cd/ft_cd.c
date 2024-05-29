@@ -6,11 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 19:50:36 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:16:39 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 /*
 	ft_cd
@@ -31,9 +31,9 @@ static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home);
 static int	check_path(char *path);
 static int	move_path(t_env *head_env, char *path);
 
-void ft_cd(t_env *head_env, t_node *node, char *home)
+void	ft_cd(t_env *head_env, t_node *node, char *home)
 {
-	int		error;
+	int	error;
 
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{
@@ -72,8 +72,7 @@ static int	cd_withoutarg(t_env *head_env)
 
 static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home)
 {
-	
-	int		error;
+	int	error;
 
 	if (ft_strlen(path) == 1 && path[0] == '~')
 		return (move_path(head_env, home));
@@ -85,7 +84,7 @@ static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home)
 	return (move_path(head_env, node->cmd[1]));
 }
 
-static int check_path(char *path)
+static int	check_path(char *path)
 {
 	int	fd;
 

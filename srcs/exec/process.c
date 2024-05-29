@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 20:56:06 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:05:30 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,13 +118,3 @@ static void	child_end(t_env **head_env, t_node *node, char *home, int *cnt)
 	else
 		(*cnt)++;
 }
-
-// static void	is_inchild(char *cmd)
-// {
-	
-// 	if (ft_strncmp(cmd, "./", 2))
-// 	{
-// 		signal(SIGINT, child_handler);
-// 		signal(SIGQUIT, child_handler);
-// 	}
-// }

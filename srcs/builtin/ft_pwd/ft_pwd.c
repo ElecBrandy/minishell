@@ -6,13 +6,13 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:48:20 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 21:16:37 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:07:53 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void ft_pwd(t_node *node)
+void	ft_pwd(t_node *node)
 {
 	char	*str;
 

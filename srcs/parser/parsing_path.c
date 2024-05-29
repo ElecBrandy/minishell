@@ -6,13 +6,13 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 19:27:48 by dongeunk          #+#    #+#             */
-/*   Updated: 2024/05/28 20:30:53 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:38:00 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static char	**find_path_two(char *cmd, t_env *e, t_node *node);
+static int	find_path_two(char *cmd, t_env *e, t_node *node);
 static int	get_path(char **path, t_node *node, char *cmd);
 static int	check_path(char **path, t_node *node, char *cmd, int *i);
 
@@ -93,39 +93,35 @@ static int	get_path(char **path, t_node *node, char *cmd)
 	return (0);
 }
 
-static char	**find_path_two(char *cmd, t_env *e, t_node *node)
+static int	find_path_two(char *cmd, t_env *e, t_node *node)
 {
 	char	**path;
 	char	*env_path;
 
 	if (cmd[0] == 0)
-	{
-		check_file_or_cmd(cmd, NULL);
-		return (NULL);
-	}
+		return (check_file_or_cmd(cmd, NULL));
 	env_path = ft_strdup(e->value);
 	if (!env_path)
-		return (NULL);
+		return (1);
 	path = ft_split(env_path, ':');
 	free(env_path);
 	if (!path)
-		return (NULL);
+		return (1);
 	if (ft_strchr(cmd, '/') && cmd[0] == '/' && is_path(cmd) == 1)
 	{
 		check_file_or_cmd(cmd, NULL);
 		free_str(path);
-		return (NULL);
+		return (1);
 	}
 	g_signal_error = get_path(path, node, cmd);
 	free_str(path);
 	if (g_signal_error || !(node->path))
-		return (NULL);
-	return (path);
+		return (1);
+	return (0);
 }
 
 int	find_path(char *cmd, t_env *env, t_node *node)
 {
-	char	**path;
 	t_env	*e;
 
 	if (!cmd)
@@ -146,8 +142,7 @@ int	find_path(char *cmd, t_env *env, t_node *node)
 		node->path = ft_strdup(cmd);
 		return (0);
 	}
-	path = find_path_two(cmd, e, node);
-	if (!path || g_signal_error)
+	if (find_path_two(cmd, e, node) || g_signal_error)
 		return (file_error());
 	return (g_signal_error);
 }

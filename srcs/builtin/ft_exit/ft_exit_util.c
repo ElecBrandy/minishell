@@ -6,12 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:27:02 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 19:44:56 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:14:26 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 /*
 	check_first_arg
@@ -30,7 +29,7 @@
 	- ...
 */
 
-int check_first_arg(t_node *node, long long *num, int *ll_flag)
+int	check_first_arg(t_node *node, long long *num, int *ll_flag)
 {
 	char	**tmp;
 
@@ -48,7 +47,7 @@ int check_first_arg(t_node *node, long long *num, int *ll_flag)
 		if (is_numeric(tmp[0]) == FALSE)
 		{
 			ft_free_2d(tmp);
-			return (1);	
+			return (1);
 		}
 		ft_free_2d(tmp);
 		if (*ll_flag == FALSE)
@@ -69,4 +68,3 @@ int	is_numeric(char *str)
 	}
 	return (TRUE);
 }
-

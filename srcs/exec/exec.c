@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 20:55:00 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:04:56 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_execve(t_env **head_env, t_node *node, char *home, pid_t pid)
 	exit(g_signal_error);
 }
 
-static int run_cmd(t_env *head_env, t_node *node)
+static int	run_cmd(t_env *head_env, t_node *node)
 {
 	char	**envp;
 
@@ -46,7 +46,7 @@ static int run_cmd(t_env *head_env, t_node *node)
 
 void	is_inchild(char *cmd)
 {
-	char	**cmds;	
+	char	**cmds;
 
 	cmds = malloc(sizeof(char *) * (18));
 	cmds[17] = NULL;

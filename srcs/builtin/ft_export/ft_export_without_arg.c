@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:20:54 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 21:10:10 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:12:12 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	forech_arg(char **str)
 
 	i = 0;
 	sep_pos = NULL;
-	while(str[i])
+	while (str[i])
 	{
 		error = print_arg(str[i], sep_pos);
 		if (error != 0)
@@ -52,7 +52,7 @@ static int	forech_arg(char **str)
 	return (0);
 }
 
-static int print_arg(char *str, char *sep_pos)
+static int	print_arg(char *str, char *sep_pos)
 {
 	int			error;
 	t_envutil	util;
@@ -105,8 +105,6 @@ static int	sort_arr_2d(char **arr)
 	}
 	return (TRUE);
 }
-
-
 // int	export_withoutarg(t_env *head_env)
 // {
 // 	int			i;

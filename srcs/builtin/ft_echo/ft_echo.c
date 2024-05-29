@@ -6,20 +6,20 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:37 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 17:09:54 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:15:52 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 /*
 	ft_echo
 	- Print the arguments.
 */
 
-static int is_option(char *str);
-static void echo_without_option(t_node *node);
-static void echo_with_option(t_node *node);
+static int	is_option(char *str);
+static void	echo_without_option(t_node *node);
+static void	echo_with_option(t_node *node);
 
 void	ft_echo(t_node *node)
 {
@@ -30,7 +30,7 @@ void	ft_echo(t_node *node)
 	i = 1;
 	if (ft_arrlen_2d(node->cmd) == 1)
 		printf("\n");
-	else // 인자가 존재하는 경우
+	else
 	{
 		if (is_option(node->cmd[1]))
 		{
@@ -44,9 +44,9 @@ void	ft_echo(t_node *node)
 	}
 }
 
-static void echo_without_option(t_node *node)
+static void	echo_without_option(t_node *node)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (node->cmd[i])
@@ -58,9 +58,9 @@ static void echo_without_option(t_node *node)
 	}
 }
 
-static void echo_with_option(t_node *node)
+static void	echo_with_option(t_node *node)
 {
-	int i;
+	int	i;
 
 	i = 2;
 	while (node->cmd[i] && is_option(node->cmd[i]))
@@ -74,9 +74,9 @@ static void echo_with_option(t_node *node)
 	}
 }
 
-static int is_option(char *cmd)
+static int	is_option(char *cmd)
 {
-	int i;
+	int	i;
 
 	if (cmd[0] != '-' || cmd[1] != 'n')
 		return (FALSE);

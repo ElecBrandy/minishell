@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 14:19:07 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 20:43:33 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:52:34 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	count_env(t_env *head_env);
 
-t_env *env_array_to_list(t_env *head_env, char **envp, char **home)
+t_env	*env_array_to_list(t_env *head_env, char **envp, char **home)
 {
 	int		i;
 	char	*key;

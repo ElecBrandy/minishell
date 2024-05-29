@@ -6,11 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:03 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 19:43:45 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:13:40 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 /*
 	ft_exit
@@ -28,7 +28,7 @@
 
 static int	exit_withoutarg(t_env *head_env);
 static int	exit_witharg(t_node *node, pid_t pid);
-static void ft_exit_error(int error, char *str);
+static void	ft_exit_error(int error, char *str);
 
 void	ft_exit(t_env *head_env, t_node *node, pid_t pid)
 {
@@ -50,16 +50,16 @@ void	ft_exit(t_env *head_env, t_node *node, pid_t pid)
 	}
 }
 
-static int   exit_withoutarg(t_env *head_env)
+static int	exit_withoutarg(t_env *head_env)
 {
 	free_env_list(head_env);
 	return (0);
 }
 
-static int   exit_witharg(t_node *node, pid_t pid)
+static int	exit_witharg(t_node *node, pid_t pid)
 {
 	long long	num;
-	int 		error;
+	int			error;
 	int			ll_flag;
 
 	if (pid < 0)
@@ -73,7 +73,7 @@ static int   exit_witharg(t_node *node, pid_t pid)
 	return (num % 256);
 }
 
-static void ft_exit_error(int error, char *str)
+static void	ft_exit_error(int error, char *str)
 {
 	if (error == 1)
 	{

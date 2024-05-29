@@ -6,11 +6,11 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:27:16 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 18:16:10 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 14:09:54 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 /*
 	Rule of env KEY
@@ -18,10 +18,11 @@
 	2. the rest of characters must be an alphabet, an underscore, or a digit
 */
 
-int is_valid_key(char *key)
+int	is_valid_key(char *key)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (!key)
 		return (FALSE);
 	if (ft_isdigit(key[0]))
@@ -44,11 +45,11 @@ int is_valid_key(char *key)
 	2. control characters are invalid
 	3. only printable characters are valid(in minishell)
 */
-
-int is_valid_value(char *value)
+int	is_valid_value(char *value)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (value == NULL || *value == '\0')
 	{
 		return (TRUE);
@@ -64,9 +65,9 @@ int is_valid_value(char *value)
 	return (TRUE);
 }
 
-int is_inenv(t_env *env, char *key)
+int	is_inenv(t_env *env, char *key)
 {
-	t_env *cur;
+	t_env	*cur;
 
 	cur = env;
 	while (cur)

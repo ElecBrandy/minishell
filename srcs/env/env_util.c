@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/16 16:31:14 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 20:44:21 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 13:55:34 by dongeunk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_env	*create_node_env(const char *cmd, const char *key, const char *value)
 {
-	t_env *new_node;
+	t_env	*new_node;
 
 	new_node = (t_env *)malloc(sizeof(t_env));
 	if (!new_node)
@@ -28,7 +28,7 @@ t_env	*create_node_env(const char *cmd, const char *key, const char *value)
 	else
 		new_node->value = ft_strdup(value);
 	new_node->next = NULL;
-	if (!new_node->cmd || !new_node->key|| !new_node->value)
+	if (!new_node->cmd || !new_node->key || !new_node->value)
 	{
 		ft_free((void **)&new_node->cmd);
 		ft_free((void **)&new_node->key);
@@ -54,22 +54,22 @@ void	append_node_env(t_env **head, t_env *new_node)
 	}
 }
 
-void	add_env_to_list(t_env **head, char *original_str, char *key, char *value)
+void	add_env_to_list(t_env **head, char *ori_str, char *key, char *value)
 {
-    t_env *new_node;
+	t_env	*new_node;
 
-	new_node = create_node_env(original_str, key, value);
-    if (!new_node)
+	new_node = create_node_env(ori_str, key, value);
+	if (!new_node)
 	{
-        // free_env_list(*head); // 메모리 해제
-        exit(1); // 실패 시 종료
-    }
-    append_node_env(head, new_node); // 성공 시 리스트에 노드 추가
+		// free_env_list(*head); // 메모리 해제
+		// exit(1); // 실패 시 종료
+	}
+	append_node_env(head, new_node);// 성공 시 리스트에 노드 추가
 }
 
 void	parse_env_str(char *env_str, char **key, char **value)
 {
-    char *sep_pos;
+	char	*sep_pos;
 
 	sep_pos = ft_strchr(env_str, '=');
 	if (!sep_pos) // '=' 이 없을 경우
@@ -87,8 +87,8 @@ void	parse_env_str(char *env_str, char **key, char **value)
 
 void	free_env_list(t_env *head)
 {
-	t_env *cur;
-	t_env *next;
+	t_env	*cur;
+	t_env	*next;
 
 	cur = head;
 	while (cur != NULL)
