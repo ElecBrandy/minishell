@@ -34,7 +34,7 @@ AddressSanitizer:DEADLYSIGNAL
 ### 시그널
 - cat | cat | cat 했을 때 SIGINT 주면 한번에 다 종료되는거
 
-- exit 88 | echo $? 했을 때 0 나오는지
+- exit 12 | echo $? 했을 때 0 나오는지
 
 - ./.  ./..  권한없음 등 execve 에러면 종료코드 126
 

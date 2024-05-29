@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 19:50:36 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:12:27 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 	2 : minishell: cd: path: No such file or directory
 	3 : minishell: cd: path: Permission denied
 	4 : minishell: cd: path: Not a directory
-	88 : malloc error;
+	12 : malloc error;
 	ex : perror
 */
 
@@ -109,14 +109,14 @@ static int	move_path(t_env *head_env, char *path)
 		return (1);
 	pre_path = getcwd(NULL, 0);
 	if (chdir(path) == -1)
-		return (88);
+		return (12);
 	if (!pre_path)
-		return (88);
+		return (12);
 	cur_path = getcwd(NULL, 0);
 	if (!cur_path)
 	{
 		ft_free((void **)&pre_path);
-		return (88);
+		return (12);
 	}
 	if (update_pwd(head_env, cur_path) == FALSE)
 		return (12);

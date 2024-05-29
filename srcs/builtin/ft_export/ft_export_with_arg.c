@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:21:36 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 22:02:19 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:12:27 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	export_witharg(t_env *head_env, t_node *node)
 	{
 		util.tmp = ft_strdup(node->cmd[i]);
 		if (!util.tmp)
-			return (88);
+			return (12);
 		parse_env_str(util.tmp, &util.key, &util.value);
 		if (is_valid_key(util.key) == FALSE || is_valid_value(util.value) == FALSE)
 		{
@@ -57,7 +57,7 @@ int    renew_env(t_env *cur, char *cmd, char *key, char *value)
 			{
 				ft_free((void **)&cur->cmd);
 				ft_free((void **)&cur->value);
-				return (88);
+				return (12);
 			}
 		}
 	}
@@ -72,7 +72,7 @@ int    add_env(t_env *head_env, char *cmd, char *key, char *value)
 	cur = head_env;
 	new_node = create_node_env(cmd, key, value);
 	if (!new_node)
-		return (88);
+		return (12);
 	append_node_env(&cur, new_node);
 	return (0);
 }

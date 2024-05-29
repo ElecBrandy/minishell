@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 20:55:00 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:12:27 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_execve(t_env **head_env, t_node *node, char *home, pid_t pid)
 	else
 	{
 		error = run_cmd(*head_env, node);
-		if (error == 88)
+		if (error == 12)
 			g_signal_error = 12;
 		print_error();
 	}
@@ -40,10 +40,10 @@ static int run_cmd(t_env *head_env, t_node *node)
 
 	envp = env_list_to_array(head_env);
 	if (!envp)
-		return (88);
+		return (12);
 	path = check_path(envp, node->cmd[0]);
 	if (!path)
-		return (88);
+		return (12);
 	if (execve(path, node->cmd, envp) == -1)
 		return (127);
 	return (0);

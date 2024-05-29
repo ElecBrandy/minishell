@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:03 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/28 19:43:45 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:12:27 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 	- 0 : Success
 	- 1 : minishell: exit: numeric argument required (shell exited)
 	- 2 : minishell: exit: too many arguments (shell not exited)
-	- 88 : malloc error (shell not exited)
+	- 12 : malloc error (shell not exited)
 	- ex : perror (shell exited)
 */
 
@@ -89,7 +89,7 @@ static void ft_exit_error(int error, char *str)
 		g_signal_error = 1;
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 	}
-	else if (error == 88)
+	else if (error == 12)
 	{
 		g_signal_error = 12;
 		print_error();
