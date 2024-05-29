@@ -64,7 +64,6 @@ int	check_pipeline(char ***str)
 int	check_line(char **str)
 {
 	int	i;
-	int	j;
 
 	i = -1;
 	if (str[0][0] == '|')

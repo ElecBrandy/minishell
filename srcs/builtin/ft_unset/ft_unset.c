@@ -43,8 +43,6 @@ void	ft_unset(t_env **head_env, t_node *node)
 static int	unset_witharg(t_env **head_env, t_node *node)
 {
 	int     i;
-	char    *key;
-	char    *value;
 
 	i = 1;
 	while (node->cmd[i])

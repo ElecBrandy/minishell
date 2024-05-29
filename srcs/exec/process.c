@@ -15,7 +15,7 @@
 static void	child_solo(t_env **head_env, t_node *node, char *home, int *cnt);
 static void	child_normal(t_env **head_env, t_node *node, char *home, int *cnt);
 static void	child_end(t_env **head_env, t_node *node, char *home, int *cnt);
-static void	is_inchild(char *cmd);
+//static void	is_inchild(char *cmd);
 
 int	fork_process(t_env **head_env, t_node *node, char *home, int node_cnt)
 {
@@ -119,12 +119,12 @@ static void	child_end(t_env **head_env, t_node *node, char *home, int *cnt)
 		(*cnt)++;
 }
 
-static void	is_inchild(char *cmd)
-{
+// static void	is_inchild(char *cmd)
+// {
 	
-	if (ft_strncmp(cmd, "./", 2))
-	{
-		signal(SIGINT, child_handler);
-		signal(SIGQUIT, child_handler);
-	}
-}
+// 	if (ft_strncmp(cmd, "./", 2))
+// 	{
+// 		signal(SIGINT, child_handler);
+// 		signal(SIGQUIT, child_handler);
+// 	}
+// }

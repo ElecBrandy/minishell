@@ -26,24 +26,23 @@
 	- ex : perror (shell exited)
 */
 
-static int	exit_withoutarg(t_env *head_env, t_node *node, pid_t pid);
-static int	exit_witharg(t_env *head_env, t_node *node, pid_t pid);
+static int	exit_withoutarg(t_env *head_env);
+static int	exit_witharg(t_node *node, pid_t pid);
 static void ft_exit_error(int error, char *str);
 
 void	ft_exit(t_env *head_env, t_node *node, pid_t pid)
 {
 	int		error;
-	char	**tmp;
 
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{
-		error = exit_withoutarg(head_env, node, pid);
+		error = exit_withoutarg(head_env);
 		ft_putstr_fd("exit\n", 2);
 		exit(error);
 	}
 	else
 	{
-		error = exit_witharg(head_env, node, pid);
+		error = exit_witharg(node, pid);
 		if (error == 0)
 			exit(error);
 		else
@@ -51,13 +50,13 @@ void	ft_exit(t_env *head_env, t_node *node, pid_t pid)
 	}
 }
 
-static int   exit_withoutarg(t_env *head_env, t_node *node, pid_t pid)
+static int   exit_withoutarg(t_env *head_env)
 {
 	free_env_list(head_env);
 	return (0);
 }
 
-static int   exit_witharg(t_env *head_env, t_node *node, pid_t pid)
+static int   exit_witharg(t_node *node, pid_t pid)
 {
 	long long	num;
 	int 		error;
@@ -66,7 +65,7 @@ static int   exit_witharg(t_env *head_env, t_node *node, pid_t pid)
 	if (pid < 0)
 		ft_putstr_fd("exit\n", 2);
 	ll_flag = TRUE;
-	error = check_first_arg(node, &num, &ll_flag, pid);
+	error = check_first_arg(node, &num, &ll_flag);
 	if (error != 0)
 		return (error);
 	if (ft_arrlen_2d(node->cmd) > 2)

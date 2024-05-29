@@ -34,14 +34,14 @@ int	export_witharg(t_env *head_env, t_node *node)
 		if (!cur)
 			add_env(head_env, node->cmd[i], util.key, util.value);
 		else
-			renew_env(cur, node->cmd[i], util.key, util.value);
+			renew_env(cur, node->cmd[i], util.value);
 		ft_free((void **)&util.tmp);
 		i++;
 	}
 	return (0);
 }
 
-int    renew_env(t_env *cur, char *cmd, char *key, char *value)
+int    renew_env(t_env *cur, char *cmd, char *value)
 {
 	if (ft_strchr(cmd, '=') == NULL)
 		return (0);

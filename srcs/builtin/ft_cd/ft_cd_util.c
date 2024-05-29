@@ -32,7 +32,7 @@ int update_pwd(t_env *head_env, char *cur_path)
 		new_cmd = ft_strjoin("PWD=", cur_path);
 		if (!new_cmd)
 			return (FALSE);
-		renew_env(cur, new_cmd, "PWD", cur_path);
+		renew_env(cur, new_cmd, cur_path);
 	}
 	ft_free((void **)&new_cmd);
 	return (TRUE);	
@@ -56,7 +56,7 @@ int update_oldpwd(t_env *head_env, char *cur_path)
 		new_cmd = ft_strjoin("OLDPWD=", cur_path);
 		if (!new_cmd)
 			return (FALSE);
-		renew_env(cur, new_cmd, "OLDPWD", cur_path);
+		renew_env(cur, new_cmd, cur_path);
 	}
 	ft_free((void **)&new_cmd);
 	return (TRUE);	

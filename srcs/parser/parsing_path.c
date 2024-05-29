@@ -98,6 +98,11 @@ static char	**find_path_two(char *cmd, t_env *e, t_node *node)
 	char	**path;
 	char	*env_path;
 
+	if (cmd[0] == 0)
+	{
+		check_file_or_cmd(cmd, NULL);
+		return (NULL);
+	}
 	env_path = ft_strdup(e->value);
 	if (!env_path)
 		return (NULL);

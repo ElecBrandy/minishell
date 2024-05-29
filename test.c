@@ -1,5 +1,33 @@
 #include "includes/minishell.h"
 
+int	ft_find_word(char *str, const char *word)
+{
+	int	i;
+	int	j;
+	int	start;
+	i = -1;
+	while (str[++i])
+	{
+		start = 0;
+		if (str[i] == word[start])
+		{
+			j = i;
+			printf("start\n");
+			while (str[j])
+			{
+				printf("ing~\n");
+				if (str[j] != word[start])
+					break ;
+				j++;
+				start++;
+				if (word[start] == 0)
+					return (1);
+			}
+		}
+	}
+	return (0);
+}
+
 int	main(void)
 {
 	const char	*cmds[18];
@@ -22,5 +50,12 @@ int	main(void)
 	cmds[15] = "rev";
 	cmds[16] = "sort";
 	cmds[17] = NULL;
+	// int i=-1;
+	// while (cmds[++i])
+	// {
+	// 	printf ("%d\n", i);
+		if (ft_find_word("cat", cmds[4]))
+			printf("ok\n");
+//	}
 	return (1);
 }

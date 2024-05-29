@@ -17,7 +17,7 @@ void	put_change_dollar(char *av, char *str, t_env *env, t_util *u)
 	if (av[u->i] == 34)
 		putin_doublequote(av, str, env, u);
 	else if (av[u->i] == '$' && av[u->i + 1] == '?')
-		put_errno(str, av, u->prev_errnum, u);
+		put_errno(str, u->prev_errnum, u);
 	else if (av[u->i] == 39)
 		put_str(str, av, &u->i, &u->idx);
 	else if (av[u->i] == '$' && is_print(av[u->i + 1]))

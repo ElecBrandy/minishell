@@ -24,7 +24,6 @@ void	ft_env(t_env *head_env, t_node *node)
 {
 	int		i;
 	t_env	*cur;
-	char	**env;
 
 	if (ft_arrlen_2d(node->cmd) != 1)
 		ft_env_error(1);

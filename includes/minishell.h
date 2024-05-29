@@ -118,7 +118,7 @@ char	*change_dollar(char *av, t_env *env, int env_len, int p_e);
 
 /* parsing_error.c*/
 int		get_numlen(int num);
-void	put_errno(char *str, char *av, int p_e, t_util *u);
+void	put_errno(char *str, int p_e, t_util *u);
 int		file_error(void);
 void	notfile_error(char *file);
 
@@ -131,10 +131,10 @@ int		find_cut(char *av);
 
 /* parsing_free.c */
 void	free_str(char **str);
-void	free_str_three(char ***str);
+int		free_str_three(char ***str);
 void	free_node(t_node *head);
 int		count_str(char **str);
-char	**free_all(char **cmd);
+char	**free_all(char **cmd, t_util *u);
 
 /* parsing_heredoc_dollar.c*/
 void	putin_doublequote(char *av, char *str, t_env *env, t_util *u);
@@ -200,7 +200,7 @@ void	ft_cd_error(int check, char *path);
 void	ft_echo(t_node *node);
 void	ft_env(t_env *head_env, t_node *node);
 void    ft_exit(t_env *head_env, t_node *node, pid_t pid);
-int		check_first_arg(t_node *node, long long *num, int *ll_flag, pid_t pid);
+int		check_first_arg(t_node *node, long long *num, int *ll_flag);
 int		is_numeric(char *str);
 
 void	ft_pwd(t_node *node);
@@ -212,7 +212,7 @@ void	ft_export(t_env *head_env, t_node *node);
 
 /* ft_export_witharg.c */
 int	export_witharg(t_env *head_env, t_node *node);
-int	renew_env(t_env *cur, char *cmd, char *key, char *value);
+int	renew_env(t_env *cur, char *cmd, char *value);
 int	add_env(t_env *head_env, char *cmd, char *key, char *value);
 int	ft_export_error(int error, char *path);
 
@@ -243,6 +243,7 @@ int exec_builtin(t_env **head_env, t_node *node, char *home, pid_t pid);
 
 /* exe.c */
 int	ft_execve(t_env **head_env, t_node *node, char *home, pid_t pid);
+void	is_inchild(char *cmd);
 
 /* process.c */
 int		fork_process(t_env **head_env, t_node *node, char *home, int node_cnt);

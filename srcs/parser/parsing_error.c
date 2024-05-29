@@ -27,7 +27,7 @@ int	get_numlen(int num)
 	return (i);
 }
 
-void	put_errno(char *str, char *av, int p_e, t_util *u)
+void	put_errno(char *str, int p_e, t_util *u)
 {
 	char	*word;
 	int		i;

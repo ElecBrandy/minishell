@@ -74,7 +74,6 @@ void	heredoc_process(char **str, int *i, t_node *node, t_env *env)
 
 void	heredoc_infile(char **str, int *i, t_node *node, t_env *env)
 {
-	struct termios	ter;
 	pid_t			pid;
 	int				status;
 

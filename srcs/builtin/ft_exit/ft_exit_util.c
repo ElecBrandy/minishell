@@ -30,7 +30,7 @@
 	- ...
 */
 
-int check_first_arg(t_node *node, long long *num, int *ll_flag, pid_t pid)
+int check_first_arg(t_node *node, long long *num, int *ll_flag)
 {
 	char	**tmp;
 

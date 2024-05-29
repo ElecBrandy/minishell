@@ -34,7 +34,7 @@ void	free_node(t_node *head)
 	head = NULL;
 }
 
-void	free_str_three(char ***str)
+int	free_str_three(char ***str)
 {
 	int	i;
 
@@ -43,6 +43,7 @@ void	free_str_three(char ***str)
 		free_str(str[i]);
 	ft_free((void **)&str);
 	str = NULL;
+	return (0);
 }
 
 void	free_str(char **str)
@@ -70,8 +71,9 @@ int	count_str(char **str)
 	return (i);
 }
 
-char	**free_all(char **cmd)
+char	**free_all(char **cmd, t_util *u)
 {
-	free(cmd);
+	cmd[u->flag] = NULL;
+	free_str(cmd);
 	return (NULL);
 }

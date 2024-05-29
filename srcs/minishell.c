@@ -58,6 +58,8 @@ int	minishell(char *av, t_env **env, char *home)
 	util_init(&u);
 	g_signal_error = 0;
 	str = parsing(av);
+	if (str[0][0][0] == 0)
+		return (free_str_three(str));
 	if (!str)
 		return (print_error());
 	while (str[++u.i])
@@ -109,6 +111,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1 || !argv || !envp)
 		exit (1);
+	env = NULL;
 	env = env_array_to_list(env, envp, &home); // 연결리스트로 만들기
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);

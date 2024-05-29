@@ -26,7 +26,7 @@
 	ex : perror
 */
 
-static int	cd_withoutarg(t_env *head_env, t_node *node);
+static int	cd_withoutarg(t_env *head_env);
 static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home);
 static int	check_path(char *path);
 static int	move_path(t_env *head_env, char *path);
@@ -37,7 +37,7 @@ void ft_cd(t_env *head_env, t_node *node, char *home)
 
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{
-		error = cd_withoutarg(head_env, node);
+		error = cd_withoutarg(head_env);
 		ft_cd_error(error, node->cmd[1]);
 	}
 	else
@@ -47,7 +47,7 @@ void ft_cd(t_env *head_env, t_node *node, char *home)
 	}
 }
 
-static int	cd_withoutarg(t_env *head_env, t_node *node)
+static int	cd_withoutarg(t_env *head_env)
 {
 	t_env	*env;
 

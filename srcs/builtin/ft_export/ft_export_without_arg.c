@@ -13,12 +13,11 @@
 #include "minishell.h"
 
 static int	print_arg(char *str, char *sep_pos);
-static int	forech_arg(t_env *head_env, char **str);
+static int	forech_arg(char **str);
 static int	sort_arr_2d(char **arr);
 
 int	export_withoutarg(t_env *head_env)
 {
-	int			i;
 	int			error;
 	char		**str;
 
@@ -28,20 +27,21 @@ int	export_withoutarg(t_env *head_env)
 	if (str == NULL)
 		return (88);
 	sort_arr_2d(str);
-	error = forech_arg(head_env, str);
+	error = forech_arg(str);
 	if (error != 0)
 		return (error);
 	ft_free_2d(str);
 	return (error);
 }
 
-static int	forech_arg(t_env *head_env, char **str)
+static int	forech_arg(char **str)
 {
 	int			i;
 	int			error;
 	char		*sep_pos;
 
 	i = 0;
+	sep_pos = NULL;
 	while(str[i])
 	{
 		error = print_arg(str[i], sep_pos);
