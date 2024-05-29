@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:27:02 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:14:26 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:37:24 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	check_first_arg(t_node *node, long long *num, int *ll_flag)
 
 	tmp = ft_split(node->cmd[1], ' ');
 	if (!tmp)
-		return (88);
+		return (12);
 	if (ft_arrlen_2d(tmp) > 1)
 	{
 		ft_free_2d(tmp);

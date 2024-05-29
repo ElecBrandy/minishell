@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:20:54 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:12:12 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:37:00 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	export_withoutarg(t_env *head_env)
 		return (1);
 	str = env_list_to_array(head_env);
 	if (str == NULL)
-		return (88);
+		return (12);
 	sort_arr_2d(str);
 	error = forech_arg(str);
 	if (error != 0)
@@ -73,7 +73,7 @@ static int	print_arg(char *str, char *sep_pos)
 			if (util.key && util.value)
 				printf("%s=\"%s\"\n", util.key, util.value);
 			else
-				error = 88;
+				error = 12;
 			ft_free((void **)&util.key);
 			ft_free((void **)&util.value);
 		}
@@ -116,7 +116,7 @@ static int	sort_arr_2d(char **arr)
 // 		return (1);
 // 	str = env_list_to_array(head_env);
 // 	if (str == NULL)
-// 		return (88);
+// 		return (12);
 // 	sort_arr_2d(str);
 // 	i = 0;
 // 	while(str[i])

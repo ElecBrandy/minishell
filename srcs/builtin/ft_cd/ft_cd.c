@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:16:39 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:38:14 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 	2 : minishell: cd: path: No such file or directory
 	3 : minishell: cd: path: Permission denied
 	4 : minishell: cd: path: Not a directory
-	88 : malloc error;
+	12 : malloc error;
 	ex : perror
 */
 
@@ -72,12 +72,18 @@ static int	cd_withoutarg(t_env *head_env)
 
 static int	cd_witharg(t_env *head_env, t_node *node, char *path, char *home)
 {
-	int	error;
+	int		error;
+	t_env	*cur;
 
 	if (ft_strlen(path) == 1 && path[0] == '~')
 		return (move_path(head_env, home));
 	else if (ft_strlen(path) == 1 && path[0] == '-')
-		return (move_path(head_env, is_env(head_env, "OLDPWD")->value));
+	{
+		cur = is_env(head_env, "OLDPWD");
+		if (!cur)
+			return (5);
+		return (move_path(head_env, cur->value));
+	}
 	error = check_path(node->cmd[1]);
 	if (error != 0)
 		return (error);
@@ -108,14 +114,14 @@ static int	move_path(t_env *head_env, char *path)
 		return (1);
 	pre_path = getcwd(NULL, 0);
 	if (chdir(path) == -1)
-		return (88);
+		return (12);
 	if (!pre_path)
-		return (88);
+		return (12);
 	cur_path = getcwd(NULL, 0);
 	if (!cur_path)
 	{
 		ft_free((void **)&pre_path);
-		return (88);
+		return (12);
 	}
 	if (update_pwd(head_env, cur_path) == FALSE)
 		return (12);

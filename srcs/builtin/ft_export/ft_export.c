@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:15 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:08:34 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:37:17 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 	- 0 : Success
 	- 1 : minishell: export: No such file or directory (no envp)
 	- 2 : minishell: export: `%s': not a valid identifier (invalid key or value)
-	- 88 : malloc error (shell not exited)
+	- 12 : malloc error (shell not exited)
 	- ex : perror (shell exited)
 */
 
@@ -58,7 +58,7 @@ int	ft_export_error(int error, char *path)
 			ft_putstr_fd(path, 2);
 		ft_putstr_fd("\': not a valid identifier\n", 2);
 	}
-	else if (error == 88)
+	else if (error == 12)
 	{
 		g_signal_error = 12;
 		print_error();

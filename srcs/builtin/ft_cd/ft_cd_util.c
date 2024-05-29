@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 21:55:25 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:17:39 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:37:42 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,11 @@ void	ft_cd_error(int error, char *path)
 			cd_error_print(path, "Permission denied");
 		else if (error == 4)
 			cd_error_print(path, "Not a directory");
-		else if (error == 88)
+		else if (error == 5)
+			cd_error_print("OLDPWD", "not set");
+		else if (error == 6)
+			cd_error_print("PWD", "not set");
+		else if (error == 12)
 		{
 			g_signal_error = 12;
 			print_error();

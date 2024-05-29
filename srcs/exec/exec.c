@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:04:56 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 16:36:43 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ static int	run_cmd(t_env *head_env, t_node *node)
 	envp = env_list_to_array(head_env);
 	if (!envp)
 		return (12);
-	if (execve(node->path, node->cmd, envp) == -1)
+	path = check_path(envp, node->cmd[0]);
+	if (!path)
+		return (12);
+	if (execve(path, node->cmd, envp) == -1)
 		return (127);
 	return (0);
 }
