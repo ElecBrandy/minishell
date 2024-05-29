@@ -99,7 +99,7 @@ char	*get_word(char *av, int *idx)
 	}
 	word = malloc(sizeof(char) * (u.cnt + 1));
 	if (!word)
-		return (NULL);
+		return (malloc_fail());
 	put_word(av, word, idx);
 	(*idx)--;
 	return (word);

@@ -107,6 +107,7 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 1 || !argv || !envp)
 		exit (1);
+	env = NULL;
 	set_home(envp, &home);
 	set_env_list(&env, envp);
 	tcgetattr(STDIN_FILENO, &term);

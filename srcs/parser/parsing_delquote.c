@@ -122,7 +122,10 @@ char	*del_quote(char *av)
 	util_init(&u);
 	str = malloc(sizeof(char) * (ft_strlen(av) - cut + 1));
 	if (!str)
+	{
+		g_signal_error = 12;
 		return (NULL);
+	}
 	u.i = -1;
 	while (av[++u.i])
 	{

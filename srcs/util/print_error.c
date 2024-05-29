@@ -17,11 +17,11 @@ static int	print_error_firsthalf(void);
 
 int	print_error(void)
 {
-	if (g_signal_error < 140)
+	if (g_signal_error < 100)
 	{
 		print_error_firsthalf();
 	}
-	else if (g_signal_error >= 140)
+	else if (g_signal_error >= 100)
 	{
 		print_error_latterhalf();
 	}

@@ -25,9 +25,14 @@ int	ft_execve(t_env **env, t_node *node, char *home, pid_t pid)
 	else
 	{
 		error = run_cmd(*env, node);
-		if (error == 12)
-			g_signal_error = 12;
-		print_error();
+		if (error)
+		{
+			if (error == 12)
+				g_signal_error = 12;
+			else
+				g_signal_error = 127;
+			print_error();
+		}
 	}
 	exit(g_signal_error);
 }
@@ -49,7 +54,6 @@ void	is_inchild(char *cmd)
 	char	**cmds;
 
 	cmds = malloc(sizeof(char *) * (18));
-	cmds[17] = NULL;
 	cmds[0] = ft_strdup("wc");
 	cmds[1] = ft_strdup("cmp");
 	cmds[2] = ft_strdup("awk");
@@ -77,13 +81,15 @@ static int	check_cmds(char **cmds, char *cmd)
 	int	i;
 
 	i = -1;
+	if (!cmd || cmd[0] == ' ' || cmd[0] == '\t' || cmd[0] == 0)
+		return (0);
 	while (cmds[++i])
 	{
 		if (ft_find_word(cmd, cmds[i]))
 		{
 			signal(SIGINT, child_handler);
 			signal(SIGQUIT, child_handler);
-			return (1);
+			return (0);
 		}
 	}
 	return (0);

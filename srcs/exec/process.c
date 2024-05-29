@@ -31,7 +31,7 @@ int	fork_process(t_env **env, t_node *node, char *home, int node_cnt)
 	t_node	*cur;
 	t_stdio	stdin_origin;
 
-	if (!node->cmd[0])
+	if (!node->cmd[0] || node->cmd[0][0] == 0)
 		return (0);
 	util_init(&u);
 	cur = node;
