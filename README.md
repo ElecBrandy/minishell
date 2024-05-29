@@ -2,6 +2,8 @@
 
 ## 05.25
 
+- temp에 norm 처리/ 시그널처리한 버전 있음
+
 ### errno 처리중...
 - g_signal_error 0이 아닐때 할당하는 번호
 - -1 -> ‘“ 안닫혀있을때 && | 뒤에 아무것도 없을때 -> syntax error errno = 258
