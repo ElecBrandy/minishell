@@ -18,19 +18,19 @@ int	parsing_minishell(t_node **head, char **str, t_env *env, int p_e)
 	t_util	u;
 
 	util_init(&u);
-	node = create_node(p_e); // 새 노드 생성
+	node = create_node(p_e);
 	if (!node)
 		return (12);
-	append_node(head, node); // 새 노드를 리스트에 추가
+	append_node(head, node);
 	u.j = -1;
 	while (str[++u.j])
 	{
 		if (u.j > 0)
 		{
-			node = create_node(p_e); // 추가 노드 생성
+			node = create_node(p_e);
 			if (!node)
-				return (12); // Error
-			append_node(head, node); // 추가 노드를 리스트에 추가
+				return (12);
+			append_node(head, node);
 		}
 		u.cnt = parsing_in_pipe(str[u.j], node, env, p_e);
 		if (u.cnt)
@@ -42,10 +42,7 @@ int	parsing_minishell(t_node **head, char **str, t_env *env, int p_e)
 int	parsing_check_errno(t_node **head, char **str, t_env *env, int p_e)
 {
 	if (parsing_minishell(head, str, env, p_e))
-	{
-		free_node(*head);
 		return (1);
-	}
 	return (0);
 }
 
@@ -55,24 +52,23 @@ int	minishell(char *av, t_env **env, char *home)
 	char	***str;
 	t_util	u;
 
-	util_init(&u);
-	g_signal_error = 0;
 	str = parsing(av);
-	if (str[0][0][0] == 0)
-		return (free_str_three(str));
 	if (!str)
 		return (print_error());
+	util_init(&u);
 	while (str[++u.i])
 	{
-		head = NULL;
-		if (parsing_check_errno(&head, str[u.i], *env, u.prev_errnum))
+		if (str[u.i][0][0] != 0)
 		{
-			free_str_three(str);
-			return (print_error()); // error print
+			u.prev_errnum = g_signal_error;
+			g_signal_error = 0;
+			head = NULL;
+			if (parsing_check_errno(&head, str[u.i], *env, u.prev_errnum))
+				print_error();
+			else
+				processing(env, head, home);
+			free_node(head);
 		}
-		u.cnt = count_node(head); // 노드 수 세기
-		fork_process(env, head, home, u.cnt); // 프로세스 실행
-		free_node(head); // 노드 메모리 해제
 	}
 	free_str_three(str);
 	return (0);

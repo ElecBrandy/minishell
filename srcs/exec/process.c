@@ -15,7 +15,15 @@
 static void	child_solo(t_env **head_env, t_node *node, char *home, int *cnt);
 static void	child_normal(t_env **head_env, t_node *node, char *home, int *cnt);
 static void	child_end(t_env **head_env, t_node *node, char *home, int *cnt);
-//static void	is_inchild(char *cmd);
+
+int	processing(t_env **env, t_node *head, char *home)
+{
+	int	i;
+
+	i = count_node(head);
+	fork_process(env, head, home, i);
+	return (0);
+}
 
 int	fork_process(t_env **head_env, t_node *node, char *home, int node_cnt)
 {

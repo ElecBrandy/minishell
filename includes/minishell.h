@@ -244,6 +244,7 @@ void		is_inchild(char *cmd);
 
 /* process.c */
 int			fork_process(t_env **head_env, t_node *node, char *home, int node_cnt);
+int			processing(t_env **env, t_node *head, char *home);
 
 /* process_util.c */
 int			count_node(t_node *node);
