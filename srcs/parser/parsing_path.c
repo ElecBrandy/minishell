@@ -18,12 +18,15 @@ static int	check_path(char **path, t_node *node, char *cmd, int *i);
 
 static int	check_path(char **path, t_node *node, char *cmd, int *i)
 {
-	if (access(cmd, X_OK) == 0)
+	if (cmd[0] == '.' || cmd[0] == '/')
 	{
-		node->path = ft_strdup(cmd);
-		if (!(node->path))
-			return (12);
-		return (0);
+		if (access(cmd, X_OK) == 0)
+		{
+			node->path = ft_strdup(cmd);
+			if (!(node->path))
+				return (12);
+			return (0);
+		}
 	}
 	while (path[++(*i)])
 	{
