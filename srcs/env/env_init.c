@@ -60,13 +60,13 @@ static int	env_array_to_list(t_env **env, char **envp)
 		util.tmp = ft_strdup(envp[i]);
 		if (!util.tmp)
 			return (FALSE);
-		parse_env_str(envp[i], &util.key, &util.value);
+		parse_env_str(envp[i], &(util.key), &(util.value));
 		if (add_env_to_list(env, util.tmp, util.key, util.value) == FALSE)
 		{
-			ft_free((void **)&util.tmp);
+			ft_free((void **)&(util.tmp));
 			return (FALSE);
 		}
-		ft_free((void **)&util.tmp);
+		ft_free((void **)&(util.tmp));
 		i++;
 	}
 	return (TRUE);
