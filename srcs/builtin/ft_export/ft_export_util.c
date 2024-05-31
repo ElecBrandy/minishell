@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:27:16 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 20:11:09 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:49:31 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 	2. the rest of characters must be an alphabet, an underscore, or a digit
 */
 
-int	is_valid_key(char *key)
+int	is_key(char *key)
 {
 	int	i;
 
@@ -45,7 +45,7 @@ int	is_valid_key(char *key)
 	2. control characters are invalid
 	3. only printable characters are valid(in minishell)
 */
-int	is_valid_value(char *value)
+int	is_value(char *value)
 {
 	int	i;
 

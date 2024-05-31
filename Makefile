@@ -1,8 +1,9 @@
 # Complie
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror # Norm
+CFLAGS = -Wall -Wextra -Werror # Norm
 # CFLAGS = -g -fsanitize=address # catch segfault error
-CFLAGS = -g
+# CFLAGS = -g
+
 # Readline - Cluster ver
 COMFILE_FLAGS = -lreadline -L/usr/local/lib
 OBJ_FLAGS = -I/usr/local/include/readline

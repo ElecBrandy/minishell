@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 16:21:36 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:49:44 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,17 +25,16 @@ int	export_witharg(t_env **env, t_node *node)
 		if (!util.tmp)
 			return (12);
 		parse_env_str(util.tmp, &util.key, &util.value);
-		if (is_valid_key(util.key) == FALSE
-			|| is_valid_value(util.value) == FALSE)
-		{
-			ft_free((void **)&util.tmp);
-			return (ft_export_error(2, node->cmd[i]));
-		}
-		cur = is_env(*env, util.key);
-		if (!cur)
-			add_env(env, node->cmd[i], util.key, util.value);
+		if (is_key(util.key) == FALSE || is_value(util.value) == FALSE)
+			ft_export_error(2, node->cmd[i]);
 		else
-			renew_env(cur, node->cmd[i], util.value);
+		{
+			cur = is_env(*env, util.key);
+			if (!cur)
+				add_env(env, node->cmd[i], util.key, util.value);
+			else
+				renew_env(cur, node->cmd[i], util.value);
+		}
 		ft_free((void **)&util.tmp);
 	}
 	return (0);
