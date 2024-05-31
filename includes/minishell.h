@@ -144,7 +144,7 @@ int			in_doublequote(char *av, int p_e, t_env *env, t_util *u);
 void		heredoc_infile(char **str, int *i, t_node *node, t_env *env);
 void		heredoc_process(char **str, int *i, t_node *node, t_env *env);
 char		*heredoc_check_dollar(char *av, t_env *env, t_node *node);
-int			heredoc_readline(char *av, char *limiter, t_node *node, t_env *env);
+int			heredoc_readline(char *av, char *str, t_node *node, t_env *env);
 
 /* parsing_in_pipe.c */
 int			parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e);

@@ -86,7 +86,7 @@ void	readline_minishell(t_env **env, char *home)
 		if (!av)
 		{
 			printf("exit\n");
-			exit (0);
+			exit (g_signal_error);
 		}
 		else if (*av == '\0')
 			free(av);
