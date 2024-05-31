@@ -34,12 +34,12 @@ static int	print_error_firsthalf(void)
 		g_signal_error = 12;
 	if (g_signal_error == -1)
 	{
-		printf("minishell: syntax error near unexpected end of file\n");
+		ft_putstr_fd("minishell: syntax error near unexpected end of file\n", 2);
 		g_signal_error = 258;
 	}
 	else if (g_signal_error == -2)
 	{
-		printf("minishell: syntax error near unexpected token `|'\n");
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
 		g_signal_error = 258;
 	}
 	else if (g_signal_error == 1)
@@ -73,54 +73,24 @@ static int	print_error_latterhalf(void)
 void	syntax_error(char *str, t_node *node)
 {
 	g_signal_error = 258;
-	printf("minishell: syntax error near unexpected token ");
+	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
 	if (node->in_fd != 0)
 		close(node->in_fd);
 	if (node->out_fd != 1)
 		close(node->out_fd);
 	if (!str)
-		printf("`newline'\n");
+		ft_putstr_fd("`newline'\n", 2);
 	else
 	{
 		if (str[0] == '<' && str[1] == '>')
-			printf("`<>'\n");
+			ft_putstr_fd("`<>'\n", 2);
 		else if (str[0] == '<' && str[1] == '<')
-			printf("`<<'\n");
+			ft_putstr_fd("`<<'\n", 2);
 		else if (str[0] == '<')
-			printf("`<'\n");
+			ft_putstr_fd("`<'\n", 2);
 		if (str[0] == '>' && str[1] == '>')
-			printf("`>>'\n");
+			ft_putstr_fd("`>>'\n", 2);
 		else if (str[0] == '>')
-			printf("`>'\n");
+			ft_putstr_fd("`>'\n", 2);
 	}
 }
-
-// int	print_error(void)
-// {
-// 	if (g_signal_error == 0)
-// 		g_signal_error = 12;
-// 	if (g_signal_error == -1)
-// 	{
-// 		printf("minishell: syntax error near unexpected end of file\n");
-// 		g_signal_error = 258;
-// 	}
-// 	else if (g_signal_error == -2)
-// 	{
-// 		printf("minishell: syntax error near unexpected token `|'\n");
-// 		g_signal_error = 258;
-// 	}
-// 	else if (g_signal_error == 127)
-// 		return (0);
-// 	else if (g_signal_error == 258)
-// 		return (0);
-// 	else if (g_signal_error == 126)
-// 		return (0);
-// 	else if (g_signal_error == 999)
-// 		g_signal_error = 1;
-// 	else
-// 	{
-// 		errno = g_signal_error;
-// 		perror("minishell");
-// 	}
-// 	return (0);
-// }

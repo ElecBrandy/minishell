@@ -53,7 +53,7 @@ void	notfile_error(char *file)
 	g_signal_error = 999;
 }
 
-char *malloc_fail(void)
+char	*malloc_fail(void)
 {
 	g_signal_error = 12;
 	return (NULL);

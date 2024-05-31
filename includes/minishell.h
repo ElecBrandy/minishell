@@ -117,7 +117,7 @@ int			get_numlen(int num);
 void		put_errno(char *str, int p_e, t_util *u);
 int			file_error(void);
 void		notfile_error(char *file);
-char 		*malloc_fail(void);
+char		*malloc_fail(void);
 
 /* parsing_find.c */
 int			find_flag(char *av, char flag);
