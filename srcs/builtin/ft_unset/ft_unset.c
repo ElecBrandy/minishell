@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:38 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/31 16:49:31 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	unset_witharg(t_env **env, t_node *node)
 	i = 1;
 	while (node->cmd[i])
 	{
-		if (!is_valid_key(node->cmd[i]))
+		if (!is_key(node->cmd[i]))
 			return (1);
 		else
 			delete_env(env, node->cmd[i]);

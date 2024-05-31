@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 20:41:01 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/31 18:40:25 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,11 +212,11 @@ int			renew_env(t_env *cur, char *cmd, char *value);
 int			add_env(t_env **env, char *cmd, char *key, char *value);
 int			ft_export_error(int error, char *path);
 int			export_withoutarg(t_env *env);
-int			is_valid_key(char *key);
-int			is_valid_value(char *value);
+int			is_key(char *key);
+int			is_value(char *value);
 
 /* builtin/ft_pwd */
-void		ft_pwd(t_node *node);
+void		ft_pwd(t_env *env, t_node *node);
 
 /* builtin/ft_unset */
 void		ft_unset(t_env **env, t_node *node);
