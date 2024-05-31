@@ -42,6 +42,8 @@ static int	print_error_firsthalf(void)
 		printf("minishell: syntax error near unexpected token `|'\n");
 		g_signal_error = 258;
 	}
+	else if (g_signal_error == 1)
+		return (0);
 	else
 	{
 		errno = g_signal_error;
