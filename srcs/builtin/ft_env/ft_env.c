@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/27 19:13:40 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,18 @@
 
 static void	ft_env_error(int error);
 
-void	ft_env(t_env *head_env, t_node *node)
+void	ft_env(t_env *env, t_node *node)
 {
 	int		i;
 	t_env	*cur;
 
 	if (ft_arrlen_2d(node->cmd) != 1)
 		ft_env_error(1);
-	if (head_env == NULL)
+	if (env == NULL)
 		ft_env_error(2);
 	else
 	{
-		cur = head_env;
+		cur = env;
 		i = 0;
 		while (cur != NULL)
 		{

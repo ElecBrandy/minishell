@@ -6,15 +6,15 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:05:30 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	child_solo(t_env **head_env, t_node *node, char *home, int *cnt);
-static void	child_normal(t_env **head_env, t_node *node, char *home, int *cnt);
-static void	child_end(t_env **head_env, t_node *node, char *home, int *cnt);
+static void	child_solo(t_env **env, t_node *node, char *home, int *cnt);
+static void	child_normal(t_env **env, t_node *node, char *home, int *cnt);
+static void	child_end(t_env **env, t_node *node, char *home, int *cnt);
 
 int	processing(t_env **env, t_node *head, char *home)
 {
@@ -25,27 +25,27 @@ int	processing(t_env **env, t_node *head, char *home)
 	return (0);
 }
 
-int	fork_process(t_env **head_env, t_node *node, char *home, int node_cnt)
+int	fork_process(t_env **env, t_node *node, char *home, int node_cnt)
 {
 	t_util	u;
 	t_node	*cur;
 	t_stdio	stdin_origin;
 
-	if (!node->cmd[0])
+	if (!node->cmd[0] || node->cmd[0][0] == 0)
 		return (0);
 	util_init(&u);
 	cur = node;
 	save_stdio(&stdin_origin);
 	if (node_cnt == 1)
-		child_solo(head_env, cur, home, &u.cnt);
+		child_solo(env, cur, home, &u.cnt);
 	else
 	{
 		while (++u.i < node_cnt - 1)
 		{
-			child_normal(head_env, cur, home, &u.cnt);
+			child_normal(env, cur, home, &u.cnt);
 			cur = cur->next;
 		}
-		child_end(head_env, cur, home, &u.cnt);
+		child_end(env, cur, home, &u.cnt);
 	}
 	wait_process(u.cnt);
 	restore_stdio(&stdin_origin);
@@ -54,7 +54,7 @@ int	fork_process(t_env **head_env, t_node *node, char *home, int node_cnt)
 	return (0);
 }
 
-void	child_solo(t_env **head_env, t_node *node, char *home, int *cnt)
+void	child_solo(t_env **env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
 
@@ -62,7 +62,7 @@ void	child_solo(t_env **head_env, t_node *node, char *home, int *cnt)
 	if (is_builtin(node) != 0)
 	{
 		redirect_io(node->in_fd, node->out_fd);
-		exec_builtin(head_env, node, home, pid);
+		exec_builtin(env, node, home, pid);
 	}
 	else
 	{
@@ -74,13 +74,13 @@ void	child_solo(t_env **head_env, t_node *node, char *home, int *cnt)
 		if (pid == 0)
 		{
 			redirect_io(node->in_fd, node->out_fd);
-			ft_execve(head_env, node, home, pid);
+			ft_execve(env, node, home, pid);
 		}
 		(*cnt)++;
 	}
 }
 
-static void	child_normal(t_env **head_env, t_node *node, char *home, int *cnt)
+static void	child_normal(t_env **env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
 	int		fd[2];
@@ -98,7 +98,7 @@ static void	child_normal(t_env **head_env, t_node *node, char *home, int *cnt)
 		close(fd[1]);
 		redirect_io(node->in_fd, node->out_fd);
 		close_pipe(fd);
-		ft_execve(head_env, node, home, pid);
+		ft_execve(env, node, home, pid);
 	}
 	else
 	{
@@ -109,7 +109,7 @@ static void	child_normal(t_env **head_env, t_node *node, char *home, int *cnt)
 	}
 }
 
-static void	child_end(t_env **head_env, t_node *node, char *home, int *cnt)
+static void	child_end(t_env **env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
 
@@ -121,7 +121,7 @@ static void	child_end(t_env **head_env, t_node *node, char *home, int *cnt)
 	if (pid == 0)
 	{
 		redirect_io(node->in_fd, node->out_fd);
-		ft_execve(head_env, node, home, pid);
+		ft_execve(env, node, home, pid);
 	}
 	else
 		(*cnt)++;

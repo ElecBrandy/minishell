@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:38 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:07:23 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,23 @@
 */
 
 static void	ft_unset_error(int error, char *path);
-static int	unset_witharg(t_env **head_env, t_node *node);
-static void	delete_env(t_env **head_env, char *key);
+static int	unset_witharg(t_env **env, t_node *node);
+static void	delete_env(t_env **env, char *key);
 
-void	ft_unset(t_env **head_env, t_node *node)
+void	ft_unset(t_env **env, t_node *node)
 {
 	int	error;
 
-	if (ft_arrlen_2d(node->cmd) == 1 || head_env == NULL)
+	if (ft_arrlen_2d(node->cmd) == 1 || env == NULL)
 		return ;
 	else
 	{
-		error = unset_witharg(head_env, node);
+		error = unset_witharg(env, node);
 		ft_unset_error(error, node->cmd[1]);
 	}
 }
 
-static int	unset_witharg(t_env **head_env, t_node *node)
+static int	unset_witharg(t_env **env, t_node *node)
 {
 	int	i;
 
@@ -50,18 +50,18 @@ static int	unset_witharg(t_env **head_env, t_node *node)
 		if (!is_valid_key(node->cmd[i]))
 			return (1);
 		else
-			delete_env(head_env, node->cmd[i]);
+			delete_env(env, node->cmd[i]);
 		i++;
 	}
 	return (0);
 }
 
-static void	delete_env(t_env **head_env, char *key)
+static void	delete_env(t_env **env, char *key)
 {
 	t_env	*cur;
 	t_env	*prev;
 
-	cur = *head_env;
+	cur = *env;
 	prev = NULL;
 	while (cur)
 	{
@@ -70,7 +70,7 @@ static void	delete_env(t_env **head_env, char *key)
 			if (prev)
 				prev->next = cur->next;
 			else
-				*head_env = cur->next;
+				*env = cur->next;
 			ft_free((void **)&cur->cmd);
 			ft_free((void **)&cur->key);
 			ft_free((void **)&cur->value);

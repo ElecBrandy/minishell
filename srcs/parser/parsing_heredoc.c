@@ -30,18 +30,29 @@ char	*heredoc_check_dollar(char *av, t_env *env, t_node *node)
 	return (str);
 }
 
-int	heredoc_readline(char *av, char *limiter, t_node *node, t_env *env)
+int	heredoc_readline(char *av, char *str, t_node *node, t_env *env)
 {
+	char	*limiter;
+	int		flag;
+
+	if (ft_strchr(str, 34) || ft_strchr(str, 39))
+		limiter = del_quote(str);
+	else
+	{
+		limiter = ft_strdup(str);
+		flag = 1;
+	}
+	if (!limiter)
+		return (12);
 	add_history(av);
 	if ((ft_strncmp(limiter, av, ft_strlen(limiter)) == 0)
 		&& (ft_strlen(limiter) == ft_strlen(av)))
 		return (1);
-	av = heredoc_check_dollar(av, env, node);
+	free(limiter);
+	if (flag != 1)
+		av = heredoc_check_dollar(av, env, node);
 	if (!av)
-	{
-		g_signal_error = 12;
-		return (-1);
-	}
+		return (12);
 	write(node->in_fd, av, ft_strlen(av));
 	write(node->in_fd, "\n", 1);
 	free(av);
@@ -51,9 +62,7 @@ int	heredoc_readline(char *av, char *limiter, t_node *node, t_env *env)
 void	heredoc_process(char **str, int *i, t_node *node, t_env *env)
 {
 	char	*av;
-	char	*limiter;
 
-	limiter = del_quote(str[(*i)]);
 	signal(SIGINT, heredoc_handler);
 	while (1)
 	{
@@ -64,11 +73,10 @@ void	heredoc_process(char **str, int *i, t_node *node, t_env *env)
 			free(av);
 		else
 		{
-			if (heredoc_readline(av, limiter, node, env))
+			if (heredoc_readline(av, str[(*i)], node, env))
 				break ;
 		}
 	}
-	free(limiter);
 	exit (g_signal_error);
 }
 
@@ -93,6 +101,7 @@ void	heredoc_infile(char **str, int *i, t_node *node, t_env *env)
 	if (pid == 0)
 		heredoc_process(str, i, node, env);
 	wait(&status);
+	g_signal_error = WEXITSTATUS(status);
 	close(node->in_fd);
 	node->in_fd = open(".heredoc_tmp", O_RDONLY);
 	signal(SIGINT, sig_handler);

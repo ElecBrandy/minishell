@@ -6,22 +6,23 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/25 15:42:21 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:18:53 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:24:50 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static long long	get_longlong(const char *str, int *signal, int sign);
+static long long	get_ll(const char *str, int *flag, int sign);
+static int			check_ll(long long result, int digit, int sign, int *flag);
 
-long long	ft_strtoll(const char *str, int *signal)
+long long	ft_strtoll(const char *str, int *flag)
 {
 	long long	result;
 	int			sign;
 
 	result = 0;
 	sign = 1;
-	*signal = TRUE;
+	*flag = TRUE;
 	while (*str == ' ' || (*str >= 9 && *str <= 13))
 		str++;
 	if (*str == '-' || *str == '+')
@@ -30,13 +31,13 @@ long long	ft_strtoll(const char *str, int *signal)
 			sign = -1;
 		str++;
 	}
-	result = get_longlong(str, signal, sign);
-	if (*signal == FALSE)
+	result = get_ll(str, flag, sign);
+	if (*flag == FALSE)
 		return (FALSE);
 	return (sign * result);
 }
 
-static long long	get_longlong(const char *str, int *signal, int sign)
+static long long	get_ll(const char *str, int *flag, int sign)
 {
 	int			i;
 	long long	result;
@@ -47,7 +48,7 @@ static long long	get_longlong(const char *str, int *signal, int sign)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		digit = str[i] - '0';
-		if (!check_longlong(result, digit, sign, signal))
+		if (!check_ll(result, digit, sign, flag))
 			return (FALSE);
 		result = result * 10 + digit;
 		i++;
@@ -55,25 +56,26 @@ static long long	get_longlong(const char *str, int *signal, int sign)
 	return (result);
 }
 
-int	check_longlong(long long result, int digit, int sign, int *signal)
+static int	check_ll(long long result, int digit, int sign, int *flag)
 {
-	if (sign == 1) // Check for overflow
+	if (sign == 1)
 	{
-		if (result > MAX_LONGLONG / 10
-			|| (result == MAX_LONGLONG / 10 && digit > MAX_LONGLONG % 10))
+		if (result > MAX_LL / 10
+			|| (result == MAX_LL / 10 && digit > MAX_LL % 10))
 		{
 			errno = ERANGE;
-			*signal = FALSE;
+			*flag = FALSE;
 			return (FALSE);
 		}
 	}
-	else // Check for underflow
+	else
 	{
-		if (-result < (MIN_LONGLONG / 10)
-			|| (-result == MIN_LONGLONG / 10 && -digit < MIN_LONGLONG % 10))
+		if ((-1 * result < (((-1) * MAX_LL - 1) / 10) \
+		|| (-1 * result == ((-1) * MAX_LL - 1) / 10 && -1 * \
+			digit < ((-1) * MAX_LL - 1) % 10)))
 		{
 			errno = ERANGE;
-			*signal = FALSE;
+			*flag = FALSE;
 			return (FALSE);
 		}
 	}

@@ -6,74 +6,88 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 17:56:07 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:31:36 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static int	cd_withoutarg(t_env **head_env);
-static int	cd_witharg(t_env **head_env, t_node *node, char *path, char *home);
-static int	check_path(char *path);
-static int	move_path(t_env **head_env, char *path);
+/*
+	ft_cd
+	- Change directory
 
-void	ft_cd(t_env **head_env, t_node *node, char *home)
+	error_log
+	0 : Success
+	1 : minishell: cd: HOME not set
+	2 : minishell: cd: path: No such file or directory
+	3 : minishell: cd: path: Permission denied
+	4 : minishell: cd: path: Not a directory
+	12 : malloc error;
+	ex : perror
+*/
+
+static int	cd_withoutarg(t_env **env);
+static int	cd_witharg(t_env **env, t_node *node, char *path, char *home);
+static int	check_path(char *path);
+static int	move_path(t_env **env, char *path);
+
+void	ft_cd(t_env **env, t_node *node, char *home)
 {
 	int	error;
 
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{
-		error = cd_withoutarg(head_env);
+		error = cd_withoutarg(env);
 		ft_cd_error(error, node->cmd[1]);
 	}
 	else
 	{
-		error = cd_witharg(head_env, node, node->cmd[1], home);
+		error = cd_witharg(env, node, node->cmd[1], home);
 		ft_cd_error(error, node->cmd[1]);
 	}
 }
 
-static int	cd_withoutarg(t_env **head_env)
+static int	cd_withoutarg(t_env **env)
 {
-	t_env	*env;
+	t_env	*cur;
 
-	env = is_env(*head_env, "HOME");
-	if (!env)
+	cur = is_env(*env, "HOME");
+	if (!cur)
 		return (1);
 	else
 	{
-		if (ft_strncmp(env->cmd, "HOME", ft_strlen(env->cmd)) == 0)
+		if (ft_strncmp(cur->cmd, "HOME", ft_strlen(cur->cmd)) == 0)
 			return (1);
-		else if (ft_strncmp(env->cmd, "HOME=", ft_strlen(env->cmd)) == 0)
+		else if (ft_strncmp(cur->cmd, "HOME=", ft_strlen(cur->cmd)) == 0)
 		{
-			return (move_path(head_env, "."));
+			return (move_path(env, "."));
 		}
 		else
 		{
-			return (move_path(head_env, env->value));
+			return (move_path(env, cur->value));
 		}
 	}
 	return (0);
 }
 
-static int	cd_witharg(t_env **head_env, t_node *node, char *path, char *home)
+static int	cd_witharg(t_env **env, t_node *node, char *path, char *home)
 {
 	int		error;
 	t_env	*cur;
 
 	if (ft_strlen(path) == 1 && path[0] == '~')
-		return (move_path(head_env, home));
+		return (move_path(env, home));
 	else if (ft_strlen(path) == 1 && path[0] == '-')
 	{
-		cur = is_env(*head_env, "OLDPWD");
+		cur = is_env(*env, "OLDPWD");
 		if (!cur)
 			return (5);
-		return (move_path(head_env, cur->value));
+		return (move_path(env, cur->value));
 	}
 	error = check_path(node->cmd[1]);
 	if (error != 0)
 		return (error);
-	return (move_path(head_env, node->cmd[1]));
+	return (move_path(env, node->cmd[1]));
 }
 
 static int	check_path(char *path)
@@ -91,12 +105,12 @@ static int	check_path(char *path)
 	return (0);
 }
 
-static int	move_path(t_env **head_env, char *path)
+static int	move_path(t_env **env, char *path)
 {
 	char	*cur_path;
 	char	*pre_path;
 
-	if (!head_env)
+	if (!env)
 		return (1);
 	pre_path = getcwd(NULL, 0);
 	if (chdir(path) == -1)
@@ -109,9 +123,9 @@ static int	move_path(t_env **head_env, char *path)
 		ft_free((void **)&pre_path);
 		return (12);
 	}
-	if (update_pwd(head_env, cur_path) == FALSE)
+	if (update_pwd(env, cur_path) == FALSE)
 		return (12);
-	if (update_oldpwd(head_env, pre_path) == FALSE)
+	if (update_oldpwd(env, pre_path) == FALSE)
 		return (12);
 	ft_free((void **)&pre_path);
 	ft_free((void **)&cur_path);

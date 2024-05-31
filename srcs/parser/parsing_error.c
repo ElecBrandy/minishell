@@ -52,3 +52,9 @@ void	notfile_error(char *file)
 	printf("minishell: %s: %s\n", file, strerror(2));
 	g_signal_error = 999;
 }
+
+char	*malloc_fail(void)
+{
+	g_signal_error = 12;
+	return (NULL);
+}

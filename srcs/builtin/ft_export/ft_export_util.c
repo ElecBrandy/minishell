@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/18 14:27:16 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 14:09:54 by dongeunk         ###   ########.fr       */
+/*   Updated: 2024/05/29 20:11:09 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,19 +63,4 @@ int	is_valid_value(char *value)
 		i++;
 	}
 	return (TRUE);
-}
-
-int	is_inenv(t_env *env, char *key)
-{
-	t_env	*cur;
-
-	cur = env;
-	while (cur)
-	{
-		if (ft_strlen(cur->key) == ft_strlen(key) \
-		&& ft_strncmp(cur->key, key, ft_strlen(key)) == 0)
-			return (TRUE);
-		cur = cur->next;
-	}
-	return (FALSE);
 }
