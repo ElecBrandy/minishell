@@ -1,6 +1,6 @@
 # Complie
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror # Norm
+CFLAGS = -Wall -Wextra -Werror # Norm
 # CFLAGS = -g -fsanitize=address # catch segfault error
 
 # Readline - Cluster ver

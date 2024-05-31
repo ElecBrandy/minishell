@@ -82,7 +82,7 @@ void	readline_minishell(t_env **env, char *home)
 	{
 		signal(SIGINT, sig_handler);
 		signal(SIGQUIT, SIG_IGN);
-		av = readline("mimishell$ ");
+		av = readline("minishell$ ");
 		if (!av)
 		{
 			printf("exit\n");
