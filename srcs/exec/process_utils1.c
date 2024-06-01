@@ -56,7 +56,7 @@ void	wait_process(int cnt)
 			g_signal_error = 130;
 		else if (g_signal_error == -5)
 			g_signal_error = 131;
-		else
+		else if (g_signal_error == 0)
 			g_signal_error = WEXITSTATUS(status);
 		i++;
 	}

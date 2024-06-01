@@ -50,8 +50,8 @@ void	fork_process(t_env **env, t_node *node, int node_cnt)
 		}
 		child_end(env, cur, &u.cnt);
 	}
-	restore_stdio(&stdin_origin);
 	wait_process(u.cnt);
+	restore_stdio(&stdin_origin);
 }
 
 // void make_child(t_env **env, t_node *node, int node_cnt, t_util *u)
