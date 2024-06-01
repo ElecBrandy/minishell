@@ -18,8 +18,6 @@ static int	ft_find_word(char *str, char *word);
 
 int	ft_execve(t_env **env, t_node *node, char *home, pid_t pid)
 {
-	int	error;
-
 	if (is_builtin(node) != 0)
 		exec_builtin(env, node, home, pid);
 	else

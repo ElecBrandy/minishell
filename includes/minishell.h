@@ -156,7 +156,7 @@ char		*file_check_dollar(char *av, t_env *env, int p_e);
 int			check_file(char *str);
 
 /* parsing_node.c */
-int			save_in_node(t_node *node, char **cmd, t_env *env);
+int			save_in_node(t_node *node, char **cmd);
 t_node		*create_node(int p_e);
 void		append_node(t_node **head, t_node *new_node);
 void		util_init(t_util *util);

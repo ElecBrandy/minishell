@@ -100,6 +100,6 @@ int	parsing_in_pipe(char *av, t_node *node, t_env *env, int p_e)
 	cmd = check_cmd(cmd);
 	if (!cmd)
 		return (12);
-	g_signal_error = save_in_node(node, cmd, env);
+	g_signal_error = save_in_node(node, cmd);
 	return (g_signal_error);
 }
