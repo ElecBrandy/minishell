@@ -112,7 +112,7 @@ static void	child_normal(t_env **env, t_node *node, char *home, int *cnt)
 static void	child_end(t_env **env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
-	
+
 	pid = fork();
 	signal(SIGINT, SIG_IGN);
 	is_inchild(node->cmd[0]);

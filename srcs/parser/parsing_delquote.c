@@ -50,7 +50,6 @@ int	split_space_main(char *tmp, char **str, t_util *u)
 			str[++(u->i)] = save_in(tmp, u);
 			if (!str[u->i])
 			{
-				free(tmp);
 				free_str(str);
 				return (1);
 			}
@@ -87,7 +86,7 @@ char	**split_space(char *av, int len)
 		str[++u.i] = save_in(tmp, &u);
 	else
 		str[++u.i] = save_in(tmp, &u);
-	free(tmp);
+	ft_free((void **)&tmp);
 	if (!str[u.i])
 	{
 		free_str(str);
