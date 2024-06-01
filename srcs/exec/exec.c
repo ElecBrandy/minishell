@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/06/01 16:13:42 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:43:58 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ static int	run_cmd(t_env *env, t_node *node);
 static int	check_cmds(char **cmds, char *cmd);
 static int	ft_find_word(char *str, char *word);
 
-int	ft_execve(t_env **env, t_node *node, char *home, pid_t pid)
+int	ft_execve(t_env **env, t_node *node, pid_t pid)
 {
 	if (is_builtin(node) != 0)
-		exec_builtin(env, node, home, pid);
+		exec_builtin(env, node, pid);
 	else
 	{
 		if (run_cmd(*env, node))

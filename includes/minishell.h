@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/06/01 16:08:55 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:45:34 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ int		g_signal_error;
 /* PARSER */
 
 /* minishell.c */
-void		readline_minishell(t_env **env, char *home);
-int			minishell(char *av, t_env **env, char *home);
+void		readline_minishell(t_env **env);
+int			minishell(char *av, t_env **env);
 int			parsing_minishell(t_node **head, char **str, t_env *env, int p_e);
 
 /* parsing_dollar_find.c */
@@ -188,7 +188,7 @@ int			split_flag_save(char *av, char **str, t_util *u, char flag);
 /* EXEC */
 
 /* builtin/ft_cd */
-void		ft_cd(t_env **env, t_node *node, char *home);
+void		ft_cd(t_env **env, t_node *node);
 void		ft_cd_error(int check, char *path);
 int			update_pwd(t_env **env, char *cur_path);
 int			update_oldpwd(t_env **env, char *cur_path);
@@ -222,7 +222,6 @@ void		ft_pwd(t_env *env, t_node *node);
 void		ft_unset(t_env **env, t_node *node);
 
 /* env/env_init.c */
-void		set_home(char **envp, char **home);
 void		set_env_list(t_env **env, char **envp);
 char		**env_list_to_array(t_env *env);
 
@@ -235,15 +234,15 @@ void		free_env_list(t_env *head);
 
 /* exec/builtin.c */
 int			is_builtin(t_node *node);
-int			exec_builtin(t_env **env, t_node *node, char *home, pid_t pid);
+int			exec_builtin(t_env **env, t_node *node, pid_t pid);
 
 /* exec/exe.c */
-int			ft_execve(t_env **env, t_node *node, char *home, pid_t pid);
+int			ft_execve(t_env **env, t_node *node,  pid_t pid);
 void		is_inchild(char *cmd);
 
 /* exec/process.c */
-int			fork_process(t_env **env, t_node *node, char *home, int node_cnt);
-int			processing(t_env **env, t_node *head, char *home);
+void		fork_process(t_env **env, t_node *node, int node_cnt);
+int			processing(t_env **env, t_node *head);
 
 /* exec/process_util1.c */
 int			count_node(t_node *node);

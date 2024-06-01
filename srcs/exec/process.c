@@ -6,56 +6,76 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/06/01 16:16:03 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:50:08 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	child_solo(t_env **env, t_node *node, char *home, int *cnt);
-static void	child_normal(t_env **env, t_node *node, char *home, int *cnt);
-static void	child_end(t_env **env, t_node *node, char *home, int *cnt);
-static void child_error();
+static void	child_solo(t_env **env, t_node *node, int *cnt);
+static void	child_normal(t_env **env, t_node *node, int *cnt);
+static void	child_end(t_env **env, t_node *node, int *cnt);
 
-int	processing(t_env **env, t_node *head, char *home)
+int	processing(t_env **env, t_node *head)
 {
 	int	i;
 
 	i = count_node(head);
-	fork_process(env, head, home, i);
+	fork_process(env, head, i);
 	return (0);
 }
 
-int	fork_process(t_env **env, t_node *node, char *home, int node_cnt)
+void	fork_process(t_env **env, t_node *node, int node_cnt)
 {
 	t_util	u;
 	t_node	*cur;
 	t_stdio	stdin_origin;
 
 	if (!node->cmd[0] || node->cmd[0][0] == 0)
-		return (0);
+		return ;
 	util_init(&u);
 	cur = node;
 	save_stdio(&stdin_origin);
 	g_signal_error = find_path(cur->cmd[0], (*env), cur);
+	// make_child(env, node, node_cnt, &u);
 	if (node_cnt == 1)
-		child_solo(env, cur, home, &u.cnt);
+		child_solo(env, cur, &u.cnt);
 	else
 	{
 		while (++u.i < node_cnt - 1)
 		{
-			child_normal(env, cur, home, &u.cnt);
+			child_normal(env, cur, &u.cnt);
 			cur = cur->next;
 			g_signal_error = find_path(cur->cmd[0], (*env), cur);
 		}
-		child_end(env, cur, home, &u.cnt);
+		child_end(env, cur, &u.cnt);
 	}
 	wait_process(u.cnt);
 	restore_stdio(&stdin_origin);
-	return (0);
 }
 
-void	child_solo(t_env **env, t_node *node, char *home, int *cnt)
+// void make_child(t_env **env, t_node *node, int node_cnt, t_util *u)
+// {
+// 	t_node *cur = node;
+
+// 	if (node_cnt == 1)
+// 	{
+// 		child_solo(env, cur, &u->cnt);
+// 	}
+// 	else
+// 	{
+// 		while (++u->i < node_cnt - 1)
+// 		{
+// 			child_normal(env, cur, &u->cnt);
+// 			cur = cur->next;
+// 			g_signal_error = find_path(cur->cmd[0], (*env), cur);
+// 		}
+// 		child_end(env, cur, &u->cnt);
+// 	}
+// }
+
+
+void	child_solo(t_env **env, t_node *node, int *cnt)
 {
 	pid_t	pid;
 
@@ -63,7 +83,7 @@ void	child_solo(t_env **env, t_node *node, char *home, int *cnt)
 	if (is_builtin(node) != 0)
 	{
 		redirect_io(node->in_fd, node->out_fd);
-		exec_builtin(env, node, home, pid);
+		exec_builtin(env, node, pid);
 	}
 	else
 	{
@@ -75,13 +95,13 @@ void	child_solo(t_env **env, t_node *node, char *home, int *cnt)
 		if (pid == 0)
 		{
 			redirect_io(node->in_fd, node->out_fd);
-			ft_execve(env, node, home, pid);
+			ft_execve(env, node, pid);
 		}
 		(*cnt)++;
 	}
 }
 
-static void	child_normal(t_env **env, t_node *node, char *home, int *cnt)
+static void	child_normal(t_env **env, t_node *node, int *cnt)
 {
 	pid_t	pid;
 	int		fd[2];
@@ -99,7 +119,7 @@ static void	child_normal(t_env **env, t_node *node, char *home, int *cnt)
 		close(fd[1]);
 		redirect_io(node->in_fd, node->out_fd);
 		close_pipe(fd);
-		ft_execve(env, node, home, pid);
+		ft_execve(env, node, pid);
 	}
 	else
 	{
@@ -110,7 +130,7 @@ static void	child_normal(t_env **env, t_node *node, char *home, int *cnt)
 	}
 }
 
-static void	child_end(t_env **env, t_node *node, char *home, int *cnt)
+static void	child_end(t_env **env, t_node *node, int *cnt)
 {
 	pid_t	pid;
 
@@ -122,7 +142,7 @@ static void	child_end(t_env **env, t_node *node, char *home, int *cnt)
 	if (pid == 0)
 	{
 		redirect_io(node->in_fd, node->out_fd);
-		ft_execve(env, node, home, pid);
+		ft_execve(env, node, pid);
 	}
 	else
 		(*cnt)++;

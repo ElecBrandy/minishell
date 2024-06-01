@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 20:31:36 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:49:39 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@
 */
 
 static int	cd_withoutarg(t_env **env);
-static int	cd_witharg(t_env **env, t_node *node, char *path, char *home);
+static int	cd_witharg(t_env **env, t_node *node, char *path);
 static int	check_path(char *path);
 static int	move_path(t_env **env, char *path);
 
-void	ft_cd(t_env **env, t_node *node, char *home)
+void	ft_cd(t_env **env, t_node *node)
 {
 	int	error;
 
@@ -42,7 +42,7 @@ void	ft_cd(t_env **env, t_node *node, char *home)
 	}
 	else
 	{
-		error = cd_witharg(env, node, node->cmd[1], home);
+		error = cd_witharg(env, node, node->cmd[1]);
 		ft_cd_error(error, node->cmd[1]);
 	}
 }
@@ -70,21 +70,16 @@ static int	cd_withoutarg(t_env **env)
 	return (0);
 }
 
-static int	cd_witharg(t_env **env, t_node *node, char *path, char *home)
+static int	cd_witharg(t_env **env, t_node *node, char *path)
 {
 	int		error;
 	t_env	*cur;
 
-	if (ft_strlen(path) == 1 && path[0] == '~')
-		return (move_path(env, home));
-	else if (ft_strlen(path) == 1 && path[0] == '-')
-	{
-		cur = is_env(*env, "OLDPWD");
-		if (!cur)
-			return (5);
-		return (move_path(env, cur->value));
-	}
-	error = check_path(node->cmd[1]);
+	if ((ft_strlen(path) == 1 && path[0] == '~') \
+	|| (ft_strlen(path) == 1 && path[0] == '-'))
+		error = 2;
+	else
+		error = check_path(node->cmd[1]);
 	if (error != 0)
 		return (error);
 	return (move_path(env, node->cmd[1]));
