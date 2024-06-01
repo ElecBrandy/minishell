@@ -46,7 +46,7 @@ int	save_in_node(t_node *node, char **cmd, t_env *env)
 		}
 	}
 	node->cmd[i] = NULL;
-	g_signal_error = find_path(cmd[0], env, node);
+	//g_signal_error = find_path(cmd[0], env, node);
 	free_str(cmd);
 	return (g_signal_error);
 }

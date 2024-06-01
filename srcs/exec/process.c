@@ -36,6 +36,7 @@ int	fork_process(t_env **env, t_node *node, char *home, int node_cnt)
 	util_init(&u);
 	cur = node;
 	save_stdio(&stdin_origin);
+	g_signal_error = find_path(cur->cmd[0], (*env), cur);
 	if (node_cnt == 1)
 		child_solo(env, cur, home, &u.cnt);
 	else
@@ -44,13 +45,12 @@ int	fork_process(t_env **env, t_node *node, char *home, int node_cnt)
 		{
 			child_normal(env, cur, home, &u.cnt);
 			cur = cur->next;
+			g_signal_error = find_path(cur->cmd[0], (*env), cur);
 		}
 		child_end(env, cur, home, &u.cnt);
 	}
 	wait_process(u.cnt);
 	restore_stdio(&stdin_origin);
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
 
@@ -112,7 +112,7 @@ static void	child_normal(t_env **env, t_node *node, char *home, int *cnt)
 static void	child_end(t_env **env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
-
+	
 	pid = fork();
 	signal(SIGINT, SIG_IGN);
 	is_inchild(node->cmd[0]);

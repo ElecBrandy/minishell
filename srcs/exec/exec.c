@@ -24,15 +24,8 @@ int	ft_execve(t_env **env, t_node *node, char *home, pid_t pid)
 		exec_builtin(env, node, home, pid);
 	else
 	{
-		error = run_cmd(*env, node);
-		if (error)
-		{
-			if (error == 12)
-				g_signal_error = 12;
-			else
-				g_signal_error = 127;
+		if (run_cmd(*env, node))
 			print_error();
-		}
 	}
 	exit(g_signal_error);
 }
@@ -43,9 +36,15 @@ static int	run_cmd(t_env *env, t_node *node)
 
 	envp = env_list_to_array(env);
 	if (!envp)
+	{
+		g_signal_error = 12;
 		return (12);
+	}
 	if (execve(node->path, node->cmd, envp) == -1)
+	{
+		g_signal_error = 127;
 		return (127);
+	}
 	return (0);
 }
 

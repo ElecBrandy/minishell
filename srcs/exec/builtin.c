@@ -47,6 +47,7 @@ int	exec_builtin(t_env **env, t_node *node, char *home, pid_t pid)
 {
 	int	builtin;
 
+	g_signal_error = 0;
 	builtin = is_builtin(node);
 	if (builtin == 0)
 		return (0);
