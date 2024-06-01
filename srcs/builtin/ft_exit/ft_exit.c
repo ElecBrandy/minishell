@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:22:03 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:54:09 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,55 +26,43 @@
 	- ex : perror (shell exited)
 */
 
-static int	exit_withoutarg(t_env *env);
-static int	exit_witharg(t_node *node, pid_t pid);
-static void	ft_exit_error(int error, char *str);
+static int	exit_witharg(t_node *node, int *error);
+static void	ft_exit_error(int error, char *str, t_env *env);
 
 void	ft_exit(t_env *env, t_node *node, pid_t pid)
 {
-	int		error;
+	int	error;
+	int	result;
 
-	if (ft_arrlen_2d(node->cmd) == 1)
-	{
-		error = exit_withoutarg(env);
-		if (pid < 0)
-			ft_putstr_fd("exit\n", 2);
-		exit(error);
-	}
+	error = 0;
+	result = 0;
+	if (ft_arrlen_2d(node->cmd) > 1)
+		result = exit_witharg(node, &error);
+	if (pid < 0)
+		ft_putstr_fd("exit\n", 2);
+	if (error != 0)
+		ft_exit_error(error, node->cmd[1], env);
 	else
 	{
-		error = exit_witharg(node, pid);
-		if (error == 0)
-			exit(error);
-		else
-			ft_exit_error(error, node->cmd[1]);
-	}
+		g_signal_error = result;
+		free_env_list(env);
+		exit(g_signal_error);
+	}	
 }
 
-static int	exit_withoutarg(t_env *env)
-{
-	free_env_list(env);
-	return (0);
-}
-
-static int	exit_witharg(t_node *node, pid_t pid)
+static int	exit_witharg(t_node *node, int *error)
 {
 	long long	num;
-	int			error;
-	int			ll_flag;
 
-	if (pid < 0)
-		ft_putstr_fd("exit\n", 1);
-	ll_flag = TRUE;
-	error = check_first_arg(node, &num, &ll_flag);
-	if (error != 0)
-		return (error);
+	num = check_first_arg(node, error);
+	if (*error != 0)
+		return (0);
 	if (ft_arrlen_2d(node->cmd) > 2)
-		return (2);
+		*error = 2;
 	return (num % 256);
 }
 
-static void	ft_exit_error(int error, char *str)
+static void	ft_exit_error(int error, char *str, t_env *env)
 {
 	if (error == 1)
 	{
@@ -82,6 +70,7 @@ static void	ft_exit_error(int error, char *str)
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(str, 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
+		free_env_list(env);
 		exit(g_signal_error);
 	}
 	else if (error == 2)
@@ -93,11 +82,13 @@ static void	ft_exit_error(int error, char *str)
 	{
 		g_signal_error = 12;
 		print_error();
+		free_env_list(env);
 		exit(g_signal_error);
 	}
 	else
 	{
 		g_signal_error = error;
+		free_env_list(env);
 		exit(g_signal_error);
 	}
 }

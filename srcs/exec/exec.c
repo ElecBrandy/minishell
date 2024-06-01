@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:52:46 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:43:58 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,14 @@ static int	run_cmd(t_env *env, t_node *node);
 static int	check_cmds(char **cmds, char *cmd);
 static int	ft_find_word(char *str, char *word);
 
-int	ft_execve(t_env **env, t_node *node, char *home, pid_t pid)
+int	ft_execve(t_env **env, t_node *node, pid_t pid)
 {
-	int	error;
-
 	if (is_builtin(node) != 0)
-		exec_builtin(env, node, home, pid);
+		exec_builtin(env, node, pid);
 	else
 	{
-		error = run_cmd(*env, node);
-		if (error)
-		{
-			if (error == 12)
-				g_signal_error = 12;
-			else
-				g_signal_error = 127;
+		if (run_cmd(*env, node))
 			print_error();
-		}
 	}
 	exit(g_signal_error);
 }
@@ -43,9 +34,15 @@ static int	run_cmd(t_env *env, t_node *node)
 
 	envp = env_list_to_array(env);
 	if (!envp)
+	{
+		g_signal_error = 12;
 		return (12);
+	}
 	if (execve(node->path, node->cmd, envp) == -1)
+	{
+		g_signal_error = 127;
 		return (127);
+	}
 	return (0);
 }
 

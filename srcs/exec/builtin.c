@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:56:28 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:44:08 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,20 @@ int	is_builtin(t_node *node)
 	return (0);
 }
 
-int	exec_builtin(t_env **env, t_node *node, char *home, pid_t pid)
+int	exec_builtin(t_env **env, t_node *node, pid_t pid)
 {
 	int	builtin;
 
+	g_signal_error = 0;
 	builtin = is_builtin(node);
 	if (builtin == 0)
 		return (0);
 	if (builtin == 7)
 		ft_echo(node);
 	if (builtin == 6)
-		ft_cd(env, node, home);
+		ft_cd(env, node);
 	if (builtin == 5)
-		ft_pwd(node);
+		ft_pwd(*env, node);
 	if (builtin == 4)
 		ft_export(env, node);
 	if (builtin == 3)

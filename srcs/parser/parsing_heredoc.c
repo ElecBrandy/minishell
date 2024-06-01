@@ -35,6 +35,7 @@ int	heredoc_readline(char *av, char *str, t_node *node, t_env *env)
 	char	*limiter;
 	int		flag;
 
+	flag = 0;
 	if (ft_strchr(str, 34) || ft_strchr(str, 39))
 		limiter = del_quote(str);
 	else
@@ -44,12 +45,11 @@ int	heredoc_readline(char *av, char *str, t_node *node, t_env *env)
 	}
 	if (!limiter)
 		return (12);
-	add_history(av);
 	if ((ft_strncmp(limiter, av, ft_strlen(limiter)) == 0)
 		&& (ft_strlen(limiter) == ft_strlen(av)))
 		return (1);
 	free(limiter);
-	if (flag != 1)
+	if (flag == 1)
 		av = heredoc_check_dollar(av, env, node);
 	if (!av)
 		return (12);
@@ -73,6 +73,7 @@ void	heredoc_process(char **str, int *i, t_node *node, t_env *env)
 			free(av);
 		else
 		{
+			add_history(av);
 			if (heredoc_readline(av, str[(*i)], node, env))
 				break ;
 		}

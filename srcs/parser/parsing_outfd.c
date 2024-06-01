@@ -121,7 +121,7 @@ char	**find_fd(char **str, t_node *node, t_env *env, int p_e)
 		else if (get_cmd(cmd, &u, str) == 1)
 			return (NULL);
 		if (g_signal_error)
-			return (free_all(cmd, &u));
+			return (free_all(cmd, u.flag));
 	}
 	cmd[u.flag] = NULL;
 	return (cmd);

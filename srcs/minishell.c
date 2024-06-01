@@ -46,7 +46,7 @@ int	parsing_check_errno(t_node **head, char **str, t_env *env, int p_e)
 	return (0);
 }
 
-int	minishell(char *av, t_env **env, char *home)
+int	minishell(char *av, t_env **env)
 {
 	t_node	*head;
 	char	***str;
@@ -66,7 +66,7 @@ int	minishell(char *av, t_env **env, char *home)
 			if (parsing_check_errno(&head, str[u.i], *env, u.prev_errnum))
 				print_error();
 			else
-				processing(env, head, home);
+				processing(env, head);
 			free_node(head);
 		}
 	}
@@ -74,7 +74,7 @@ int	minishell(char *av, t_env **env, char *home)
 	return (0);
 }
 
-void	readline_minishell(t_env **env, char *home)
+void	readline_minishell(t_env **env)
 {
 	char	*av;
 
@@ -93,7 +93,7 @@ void	readline_minishell(t_env **env, char *home)
 		else
 		{
 			add_history(av);
-			minishell(av, env, home);
+			minishell(av, env);
 			free(av);
 		}
 	}
@@ -103,16 +103,14 @@ int	main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
 	t_env			*env;
-	char			*home;
 
 	if (argc != 1 || !argv || !envp)
 		exit (1);
 	env = NULL;
-	set_home(envp, &home);
 	set_env_list(&env, envp);
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-	readline_minishell(&env, home);
+	readline_minishell(&env);
 	exit (g_signal_error);
 }

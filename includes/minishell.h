@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 20:41:01 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:45:34 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ int		g_signal_error;
 /* PARSER */
 
 /* minishell.c */
-void		readline_minishell(t_env **env, char *home);
-int			minishell(char *av, t_env **env, char *home);
+void		readline_minishell(t_env **env);
+int			minishell(char *av, t_env **env);
 int			parsing_minishell(t_node **head, char **str, t_env *env, int p_e);
 
 /* parsing_dollar_find.c */
@@ -131,7 +131,7 @@ void		free_str(char **str);
 int			free_str_three(char ***str);
 void		free_node(t_node *head);
 int			count_str(char **str);
-char		**free_all(char **cmd, t_util *u);
+char		**free_all(char **cmd, int idx);
 
 /* parsing_heredoc_dollar.c*/
 void		putin_doublequote(char *av, char *str, t_env *env, t_util *u);
@@ -156,7 +156,7 @@ char		*file_check_dollar(char *av, t_env *env, int p_e);
 int			check_file(char *str);
 
 /* parsing_node.c */
-int			save_in_node(t_node *node, char **cmd, t_env *env);
+int			save_in_node(t_node *node, char **cmd);
 t_node		*create_node(int p_e);
 void		append_node(t_node **head, t_node *new_node);
 void		util_init(t_util *util);
@@ -188,7 +188,7 @@ int			split_flag_save(char *av, char **str, t_util *u, char flag);
 /* EXEC */
 
 /* builtin/ft_cd */
-void		ft_cd(t_env **env, t_node *node, char *home);
+void		ft_cd(t_env **env, t_node *node);
 void		ft_cd_error(int check, char *path);
 int			update_pwd(t_env **env, char *cur_path);
 int			update_oldpwd(t_env **env, char *cur_path);
@@ -203,7 +203,7 @@ void		ft_env(t_env *env, t_node *node);
 /* builtin/ft_exit */
 void		ft_exit(t_env *env, t_node *node, pid_t pid);
 int			is_numeric(char *str);
-int			check_first_arg(t_node *node, long long *num, int *ll_flag);
+long long	check_first_arg(t_node *node, int *error);
 
 /* builtin/ft_export */
 void		ft_export(t_env **env, t_node *node);
@@ -212,17 +212,16 @@ int			renew_env(t_env *cur, char *cmd, char *value);
 int			add_env(t_env **env, char *cmd, char *key, char *value);
 int			ft_export_error(int error, char *path);
 int			export_withoutarg(t_env *env);
-int			is_valid_key(char *key);
-int			is_valid_value(char *value);
+int			is_key(char *key);
+int			is_value(char *value);
 
 /* builtin/ft_pwd */
-void		ft_pwd(t_node *node);
+void		ft_pwd(t_env *env, t_node *node);
 
 /* builtin/ft_unset */
 void		ft_unset(t_env **env, t_node *node);
 
 /* env/env_init.c */
-void		set_home(char **envp, char **home);
 void		set_env_list(t_env **env, char **envp);
 char		**env_list_to_array(t_env *env);
 
@@ -235,15 +234,15 @@ void		free_env_list(t_env *head);
 
 /* exec/builtin.c */
 int			is_builtin(t_node *node);
-int			exec_builtin(t_env **env, t_node *node, char *home, pid_t pid);
+int			exec_builtin(t_env **env, t_node *node, pid_t pid);
 
 /* exec/exe.c */
-int			ft_execve(t_env **env, t_node *node, char *home, pid_t pid);
+int			ft_execve(t_env **env, t_node *node,  pid_t pid);
 void		is_inchild(char *cmd);
 
 /* exec/process.c */
-int			fork_process(t_env **env, t_node *node, char *home, int node_cnt);
-int			processing(t_env **env, t_node *head, char *home);
+void		fork_process(t_env **env, t_node *node, int node_cnt);
+int			processing(t_env **env, t_node *head);
 
 /* exec/process_util1.c */
 int			count_node(t_node *node);
