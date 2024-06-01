@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/31 18:40:25 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:08:55 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,7 @@ void		ft_env(t_env *env, t_node *node);
 /* builtin/ft_exit */
 void		ft_exit(t_env *env, t_node *node, pid_t pid);
 int			is_numeric(char *str);
-int			check_first_arg(t_node *node, long long *num, int *ll_flag);
+long long	check_first_arg(t_node *node, int *error);
 
 /* builtin/ft_export */
 void		ft_export(t_env **env, t_node *node);

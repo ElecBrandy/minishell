@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 20:16:06 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:16:03 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static void	child_solo(t_env **env, t_node *node, char *home, int *cnt);
 static void	child_normal(t_env **env, t_node *node, char *home, int *cnt);
 static void	child_end(t_env **env, t_node *node, char *home, int *cnt);
+static void child_error();
 
 int	processing(t_env **env, t_node *head, char *home)
 {
@@ -112,7 +113,7 @@ static void	child_normal(t_env **env, t_node *node, char *home, int *cnt)
 static void	child_end(t_env **env, t_node *node, char *home, int *cnt)
 {
 	pid_t	pid;
-	
+
 	pid = fork();
 	signal(SIGINT, SIG_IGN);
 	is_inchild(node->cmd[0]);

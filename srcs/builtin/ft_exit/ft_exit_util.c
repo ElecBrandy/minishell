@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/27 17:27:02 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/29 16:37:24 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 15:41:45 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,31 +29,26 @@
 	- ...
 */
 
-int	check_first_arg(t_node *node, long long *num, int *ll_flag)
+long long	check_first_arg(t_node *node, int *error)
 {
-	char	**tmp;
+	int			ll_flag;
+	long long	result;
+	char		**tmp;
 
+	result = 0;
 	tmp = ft_split(node->cmd[1], ' ');
 	if (!tmp)
 		return (12);
 	if (ft_arrlen_2d(tmp) > 1)
-	{
-		ft_free_2d(tmp);
-		return (1);
-	}
+		*error = 1;
 	else
 	{
-		*num = ft_strtoll(tmp[0], ll_flag);
-		if (is_numeric(tmp[0]) == FALSE)
-		{
-			ft_free_2d(tmp);
-			return (1);
-		}
-		ft_free_2d(tmp);
-		if (*ll_flag == FALSE)
-			return (1);
+		result = ft_strtoll(tmp[0], &ll_flag);
+		if (is_numeric(tmp[0]) == FALSE || ll_flag == FALSE)
+			*error = 1;
 	}
-	return (0);
+	ft_free_2d(tmp);
+	return (result);
 }
 
 int	is_numeric(char *str)
