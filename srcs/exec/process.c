@@ -50,8 +50,8 @@ void	fork_process(t_env **env, t_node *node, int node_cnt)
 		}
 		child_end(env, cur, &u.cnt);
 	}
-	wait_process(u.cnt);
 	restore_stdio(&stdin_origin);
+	wait_process(u.cnt);
 }
 
 // void make_child(t_env **env, t_node *node, int node_cnt, t_util *u)
@@ -75,7 +75,7 @@ void	fork_process(t_env **env, t_node *node, int node_cnt)
 // }
 
 
-void	child_solo(t_env **env, t_node *node, int *cnt)
+static void	child_solo(t_env **env, t_node *node, int *cnt)
 {
 	pid_t	pid;
 
@@ -123,10 +123,10 @@ static void	child_normal(t_env **env, t_node *node, int *cnt)
 		close_pipe(fd);
 		ft_execve(env, node, pid);
 	}
-		(*cnt)++;
-		dup2(fd[0], STDIN);
-		close(fd[0]);
-		close_pipe(fd);
+	(*cnt)++;
+	dup2(fd[0], STDIN);
+	close(fd[0]);
+	close_pipe(fd);
 }
 
 static void	child_end(t_env **env, t_node *node, int *cnt)
@@ -144,6 +144,5 @@ static void	child_end(t_env **env, t_node *node, int *cnt)
 		redirect_io(node->in_fd, node->out_fd);
 		ft_execve(env, node, pid);
 	}
-	else
-		(*cnt)++;
+	(*cnt)++;
 }
