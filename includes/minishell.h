@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/01 17:22:33 by dongwook          #+#    #+#             */
-/*   Updated: 2024/06/01 16:45:34 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 18:48:33 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 
 # define STDIN 0
 # define STDOUT 1
+
+# define PATH_MAX 1024
 
 # define MAX_LL 9223372036854775807LL
 
@@ -189,10 +191,12 @@ int			split_flag_save(char *av, char **str, t_util *u, char flag);
 
 /* builtin/ft_cd */
 void		ft_cd(t_env **env, t_node *node);
-void		ft_cd_error(int check, char *path);
 int			update_pwd(t_env **env, char *cur_path);
 int			update_oldpwd(t_env **env, char *cur_path);
 t_env		*is_env(t_env *env, char *key);
+void		ft_cd_error1(int error, char *path);
+void		ft_cd_error2(int error);
+void		cd_error_print(char *path, char *log);
 
 /* builtin/ft_echo */
 void		ft_echo(t_node *node);
@@ -216,7 +220,7 @@ int			is_key(char *key);
 int			is_value(char *value);
 
 /* builtin/ft_pwd */
-void		ft_pwd(t_env *env, t_node *node);
+void		ft_pwd(void);
 
 /* builtin/ft_unset */
 void		ft_unset(t_env **env, t_node *node);

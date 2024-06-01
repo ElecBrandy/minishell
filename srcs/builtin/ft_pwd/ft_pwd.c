@@ -6,34 +6,26 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/19 17:48:20 by dongwook          #+#    #+#             */
-/*   Updated: 2024/05/31 16:50:11 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 19:09:45 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-void	ft_pwd(t_env *env, t_node *node)
+void	ft_pwd(void)
 {
-	t_env	*cur;
-	char	*str;
+	char	buff[PATH_MAX];
 
-	cur = is_env(env, "PWD");
-	if (cur)
+	if (getcwd(buff, PATH_MAX) == NULL)
 	{
-		ft_putstr_fd(env->value, node->out_fd);
-		write(node->out_fd, "\n", 1);
+		g_signal_error = 1;
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd("Failed to get current directory.\n", 2);
 	}
 	else
 	{
-		str = getcwd(NULL, 0);
-		if (!str)
-		{
-			g_signal_error = 1;
-			print_error();
-			return ;
-		}
-		ft_putstr_fd(str, node->out_fd);
-		write(node->out_fd, "\n", 1);
-		ft_free((void **)&str);
+		ft_putstr_fd(buff, 2);
+		write(1, "\n", 1);
 	}
 }
+

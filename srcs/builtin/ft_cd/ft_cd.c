@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/06/01 17:02:07 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 19:04:35 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,12 @@ void	ft_cd(t_env **env, t_node *node)
 	if (ft_arrlen_2d(node->cmd) == 1)
 	{
 		error = cd_withoutarg(env);
-		ft_cd_error(error, node->cmd[1]);
+		ft_cd_error1(error, node->cmd[1]);
 	}
 	else
 	{
 		error = cd_witharg(env, node, node->cmd[1]);
-		ft_cd_error(error, node->cmd[1]);
+		ft_cd_error1(error, node->cmd[1]);
 	}
 }
 
@@ -101,27 +101,23 @@ static int	check_path(char *path)
 
 static int	move_path(t_env **env, char *path)
 {
-	char	*cur_path;
-	char	*pre_path;
+	int		error;
+	char	pwd[PATH_MAX];
+	char	oldpwd[PATH_MAX];
 
 	if (!env)
 		return (1);
-	pre_path = getcwd(NULL, 0);
+	error = 0;
+	if (getcwd(oldpwd, PATH_MAX) == NULL)
+		ft_cd_error2(1);
+	else
+		error = update_oldpwd(env, oldpwd);
 	if (chdir(path) == -1)
-		return (12);
-	if (!pre_path)
-		return (12);
-	cur_path = getcwd(NULL, 0);
-	if (!cur_path)
-	{
-		ft_free((void **)&pre_path);
-		return (12);
-	}
-	if (update_pwd(env, cur_path) == FALSE)
-		return (12);
-	if (update_oldpwd(env, pre_path) == FALSE)
-		return (12);
-	ft_free((void **)&pre_path);
-	ft_free((void **)&cur_path);
-	return (0);
+		ft_cd_error2(3);
+	if (getcwd(pwd, PATH_MAX) == NULL)
+		ft_cd_error2(2);
+	else
+		error = update_pwd(env, pwd);
+	
+	return (error);
 }

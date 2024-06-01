@@ -1,6 +1,6 @@
 # Complie
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CC = cc -g
+# CFLAGS = -Wall -Wextra -Werror
 # CFLAGS = -g -fsanitize=address # catch segfault error
 
 # Readline - Cluster ver
@@ -36,7 +36,8 @@ SRCS_P = \
 
 SRCS_E = \
 	srcs/builtin/ft_cd/ft_cd.c						\
-	srcs/builtin/ft_cd/ft_cd_util.c					\
+	srcs/builtin/ft_cd/ft_cd_util1.c				\
+	srcs/builtin/ft_cd/ft_cd_util2.c				\
 	srcs/builtin/ft_echo/ft_echo.c					\
 	srcs/builtin/ft_env/ft_env.c					\
 	srcs/builtin/ft_exit/ft_exit.c					\

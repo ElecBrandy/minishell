@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 18:56:28 by dongwook          #+#    #+#             */
-/*   Updated: 2024/06/01 16:44:08 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 18:29:34 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	exec_builtin(t_env **env, t_node *node, pid_t pid)
 	if (builtin == 6)
 		ft_cd(env, node);
 	if (builtin == 5)
-		ft_pwd(*env, node);
+		ft_pwd();
 	if (builtin == 4)
 		ft_export(env, node);
 	if (builtin == 3)
