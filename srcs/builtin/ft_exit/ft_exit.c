@@ -64,6 +64,12 @@ static int	exit_witharg(t_node *node, int *error)
 
 static void	ft_exit_error(int error, char *str, t_env *env)
 {
+	if (error == 2)
+	{
+		g_signal_error = 1;
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		return ;
+	}
 	if (error == 1)
 	{
 		g_signal_error = 255;
@@ -73,11 +79,6 @@ static void	ft_exit_error(int error, char *str, t_env *env)
 		free_env_list(env);
 		exit(g_signal_error);
 	}
-	else if (error == 2)
-	{
-		g_signal_error = 1;
-		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-	}
 	else if (error == 12)
 	{
 		g_signal_error = 12;
@@ -85,10 +86,7 @@ static void	ft_exit_error(int error, char *str, t_env *env)
 		free_env_list(env);
 		exit(g_signal_error);
 	}
-	else
-	{
 		g_signal_error = error;
 		free_env_list(env);
 		exit(g_signal_error);
-	}
 }

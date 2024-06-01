@@ -37,7 +37,6 @@ void	fork_process(t_env **env, t_node *node, int node_cnt)
 	cur = node;
 	save_stdio(&stdin_origin);
 	g_signal_error = find_path(cur->cmd[0], (*env), cur);
-	// make_child(env, node, node_cnt, &u);
 	if (node_cnt == 1)
 		child_solo(env, cur, &u.cnt);
 	else
@@ -53,27 +52,6 @@ void	fork_process(t_env **env, t_node *node, int node_cnt)
 	restore_stdio(&stdin_origin);
 	wait_process(u.cnt);
 }
-
-// void make_child(t_env **env, t_node *node, int node_cnt, t_util *u)
-// {
-// 	t_node *cur = node;
-
-// 	if (node_cnt == 1)
-// 	{
-// 		child_solo(env, cur, &u->cnt);
-// 	}
-// 	else
-// 	{
-// 		while (++u->i < node_cnt - 1)
-// 		{
-// 			child_normal(env, cur, &u->cnt);
-// 			cur = cur->next;
-// 			g_signal_error = find_path(cur->cmd[0], (*env), cur);
-// 		}
-// 		child_end(env, cur, &u->cnt);
-// 	}
-// }
-
 
 static void	child_solo(t_env **env, t_node *node, int *cnt)
 {

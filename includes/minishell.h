@@ -237,7 +237,7 @@ int			is_builtin(t_node *node);
 int			exec_builtin(t_env **env, t_node *node, pid_t pid);
 
 /* exec/exe.c */
-int			ft_execve(t_env **env, t_node *node,  pid_t pid);
+int			ft_execve(t_env **env, t_node *node, pid_t pid);
 void		is_inchild(char *cmd);
 
 /* exec/process.c */
