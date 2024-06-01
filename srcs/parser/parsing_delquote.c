@@ -56,7 +56,16 @@ int	split_space_main(char *tmp, char **str, t_util *u)
 			}
 		}
 		else
+		{
 			u->idx = find_other(tmp, u->idx);
+			if (u->idx == -1)
+			{
+				g_signal_error = -1;
+				ft_free((void **)&tmp);
+				free_all(str, u->i + 1);
+				return (-1);
+			}
+		}
 	}
 	return (0);
 }
@@ -68,7 +77,7 @@ char	**split_space(char *av, int len)
 	t_util	u;
 
 	util_init(&u);
-	tmp = ft_strtrim(av, " ");
+	tmp = ft_strtrim(av, " \t");
 	str = (char **)malloc(sizeof(char *) * (len + 2));
 	if (!str)
 		return (NULL);
