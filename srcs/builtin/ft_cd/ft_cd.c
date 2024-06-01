@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 15:21:26 by dongwook          #+#    #+#             */
-/*   Updated: 2024/06/01 16:49:39 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 17:02:07 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ static int	cd_withoutarg(t_env **env)
 static int	cd_witharg(t_env **env, t_node *node, char *path)
 {
 	int		error;
-	t_env	*cur;
 
 	if ((ft_strlen(path) == 1 && path[0] == '~') \
 	|| (ft_strlen(path) == 1 && path[0] == '-'))

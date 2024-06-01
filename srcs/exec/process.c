@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/06/01 16:59:51 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 17:02:21 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	fork_process(t_env **env, t_node *node, int node_cnt)
 	}
 	restore_stdio(&stdin_origin);
 	wait_process(u.cnt);
-	return (0);
 }
 
 // void make_child(t_env **env, t_node *node, int node_cnt, t_util *u)

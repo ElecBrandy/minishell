@@ -103,7 +103,6 @@ int	main(int argc, char **argv, char **envp)
 {
 	struct termios	term;
 	t_env			*env;
-	char			*home;
 
 	if (argc != 1 || !argv || !envp)
 		exit (1);
