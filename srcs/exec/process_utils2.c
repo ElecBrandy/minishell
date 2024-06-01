@@ -26,6 +26,4 @@ void	restore_stdio(t_stdio *backup)
 	dup2(backup->stdout_backup, STDOUT_FILENO);
 	close(backup->stdin_backup);
 	close(backup->stdout_backup);
-	signal(SIGINT, sig_handler);
-	signal(SIGQUIT, SIG_IGN);
 }

@@ -49,8 +49,8 @@ int	fork_process(t_env **env, t_node *node, char *home, int node_cnt)
 		}
 		child_end(env, cur, home, &u.cnt);
 	}
-	wait_process(u.cnt);
 	restore_stdio(&stdin_origin);
+	wait_process(u.cnt);
 	return (0);
 }
 
@@ -68,6 +68,7 @@ void	child_solo(t_env **env, t_node *node, char *home, int *cnt)
 	{
 		pid = fork();
 		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		is_inchild(node->cmd[0]);
 		if (pid == -1)
 			exit(1);
@@ -89,6 +90,7 @@ static void	child_normal(t_env **env, t_node *node, char *home, int *cnt)
 		exit(1);
 	pid = fork();
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	is_inchild(node->cmd[0]);
 	if (pid == -1)
 		exit(1);
@@ -100,13 +102,10 @@ static void	child_normal(t_env **env, t_node *node, char *home, int *cnt)
 		close_pipe(fd);
 		ft_execve(env, node, home, pid);
 	}
-	else
-	{
 		(*cnt)++;
 		dup2(fd[0], STDIN);
 		close(fd[0]);
 		close_pipe(fd);
-	}
 }
 
 static void	child_end(t_env **env, t_node *node, char *home, int *cnt)
@@ -115,6 +114,7 @@ static void	child_end(t_env **env, t_node *node, char *home, int *cnt)
 
 	pid = fork();
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	is_inchild(node->cmd[0]);
 	if (pid == -1)
 		exit(1);

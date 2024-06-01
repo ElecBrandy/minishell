@@ -52,11 +52,16 @@ void	wait_process(int cnt)
 	while (i < cnt)
 	{
 		wait(&status);
-		if (g_signal_error == 0 || g_signal_error == 126
-			|| g_signal_error == 127)
+		if (g_signal_error == -4)
+			g_signal_error = 130;
+		else if (g_signal_error == -5)
+			g_signal_error = 131;
+		else
 			g_signal_error = WEXITSTATUS(status);
 		i++;
 	}
+	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	close_pipe(int *fd)
