@@ -28,12 +28,14 @@ void	child_handler(int signal)
 	if (signal == SIGINT)
 	{
 		printf("\n");
-		g_signal_error = 130;
+		if (g_signal_error == 0)
+			g_signal_error = -4;
 	}
 	else if (signal == SIGQUIT)
 	{
 		printf("Quit: 3\n");
-		g_signal_error = 131;
+		if (g_signal_error == 0)
+			g_signal_error = -5;
 	}
 }
 

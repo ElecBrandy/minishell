@@ -71,9 +71,9 @@ int	count_str(char **str)
 	return (i);
 }
 
-char	**free_all(char **cmd, t_util *u)
+char	**free_all(char **cmd, int idx)
 {
-	cmd[u->flag] = NULL;
+	cmd[idx] = NULL;
 	free_str(cmd);
 	return (NULL);
 }

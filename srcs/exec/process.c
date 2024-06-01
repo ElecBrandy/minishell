@@ -6,7 +6,7 @@
 /*   By: dongwook <dongwook@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/03 16:52:50 by dongwook          #+#    #+#             */
-/*   Updated: 2024/06/01 16:50:08 by dongwook         ###   ########.fr       */
+/*   Updated: 2024/06/01 16:59:51 by dongwook         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ void	fork_process(t_env **env, t_node *node, int node_cnt)
 		}
 		child_end(env, cur, &u.cnt);
 	}
-	wait_process(u.cnt);
 	restore_stdio(&stdin_origin);
+	wait_process(u.cnt);
+	return (0);
 }
 
 // void make_child(t_env **env, t_node *node, int node_cnt, t_util *u)
@@ -89,6 +90,7 @@ void	child_solo(t_env **env, t_node *node, int *cnt)
 	{
 		pid = fork();
 		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		is_inchild(node->cmd[0]);
 		if (pid == -1)
 			exit(1);
@@ -110,6 +112,7 @@ static void	child_normal(t_env **env, t_node *node, int *cnt)
 		exit(1);
 	pid = fork();
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	is_inchild(node->cmd[0]);
 	if (pid == -1)
 		exit(1);
@@ -121,13 +124,10 @@ static void	child_normal(t_env **env, t_node *node, int *cnt)
 		close_pipe(fd);
 		ft_execve(env, node, pid);
 	}
-	else
-	{
 		(*cnt)++;
 		dup2(fd[0], STDIN);
 		close(fd[0]);
 		close_pipe(fd);
-	}
 }
 
 static void	child_end(t_env **env, t_node *node, int *cnt)
@@ -136,6 +136,7 @@ static void	child_end(t_env **env, t_node *node, int *cnt)
 
 	pid = fork();
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	is_inchild(node->cmd[0]);
 	if (pid == -1)
 		exit(1);
